@@ -4,10 +4,10 @@
     <title>eleven26</title>
     <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
 </description>
-    <link>http://wildflame.me/</link>
-    <atom:link href="http://wildflame.me/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 11 Oct 2016 20:48:54 +0800</pubDate>
-    <lastBuildDate>Tue, 11 Oct 2016 20:48:54 +0800</lastBuildDate>
+    <link>http://eleven26.github.io/</link>
+    <atom:link href="http://eleven26.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 11 Oct 2016 21:33:08 +0800</pubDate>
+    <lastBuildDate>Tue, 11 Oct 2016 21:33:08 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -31,6 +31,12 @@
 &lt;h5 id=&quot;header-5&quot;&gt;Header 5&lt;/h5&gt;
 
 &lt;h6 id=&quot;header-6&quot;&gt;Header 6&lt;/h6&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;function test($a, $b) {
+	$sum = $a + $b;
+	return $sum;
+}
+#=&amp;gt; echo test(10, 20);&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;lists&quot;&gt;Lists:&lt;/h3&gt;
 
@@ -126,8 +132,8 @@
 &lt;/div&gt;
 </description>
         <pubDate>Sun, 03 Jul 2016 00:00:00 +0800</pubDate>
-        <link>http://wildflame.me/jekyll/2016/07/03/styles-for-simple.html</link>
-        <guid isPermaLink="true">http://wildflame.me/jekyll/2016/07/03/styles-for-simple.html</guid>
+        <link>http://eleven26.github.io/jekyll/2016/07/03/styles-for-simple.html</link>
+        <guid isPermaLink="true">http://eleven26.github.io/jekyll/2016/07/03/styles-for-simple.html</guid>
         
         
         <category>jekyll</category>
@@ -168,8 +174,8 @@
 
 </description>
         <pubDate>Sun, 19 Jun 2016 21:06:26 +0800</pubDate>
-        <link>http://wildflame.me/jekyll/2016/06/19/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://wildflame.me/jekyll/2016/06/19/welcome-to-jekyll.html</guid>
+        <link>http://eleven26.github.io/jekyll/2016/06/19/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">http://eleven26.github.io/jekyll/2016/06/19/welcome-to-jekyll.html</guid>
         
         
         <category>jekyll</category>

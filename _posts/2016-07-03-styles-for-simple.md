@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Styles at a glance
-category: jekyll 
+category: jekyll
 description: Simple is a beautiful but functional jekyll theme. The font-type setting looks really good when writers use CJK mixed with English.
 ---
 
@@ -24,6 +24,14 @@ First of all, let's have a glance at the basic styles: [link](http://github.com/
 ##### Header 5
 
 ###### Header 6
+
+{% highlight php %}
+function test($a, $b) {
+	$sum = $a + $b;
+	return $sum;
+}
+#=> echo test(10, 20);
+{% endhighlight %}
 
 ### Lists:
 
