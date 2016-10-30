@@ -5,9 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Home</title>
-  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-">
+  <title>python socket传输文件demo</title>
+  <meta name="description" content="demo中的客户端和服务端脚本在同一文件夹服务端 server.py#!/usr/bin/env pythonimport datetimeimport timestart = time.mktime(datetime.datetime.now().timetuple())import sockethost = ...">
 
   <!-- evil icon -->
 
@@ -17,7 +16,7 @@
   <!-- todo: include this into main.css -->
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://eleven26.github.io/">
+  <link rel="canonical" href="http://eleven26.github.io/2016/10/30/python-socket-demo.html">
   <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://eleven26.github.io/feed.xml">
 </head>
 
@@ -59,20 +58,15 @@
 
         <div class="nine columns" style="z-index:100;">
           <div class="wrapper">
-            <div class="home">
-  <div class="post-list">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-    
+  <header class="artilce_header">
+    <h1 class="artilce_title" itemprop="name headline">python socket传输文件demo</h1>
+    <p class="artilce_meta"><time datetime="2016-10-30T00:00:00+08:00" itemprop="datePublished">Oct 30, 2016</time></p>
+  </header>
 
-    <article class="post_card post">
-      <header class="post_header">
-        <h2 class="post_title"><a href="/2016/10/30/python-socket-demo.html">python socket传输文件demo</a></h2>
-        <time class="post_date">30 October 2016, Sunday</time>
-      </header>
-      <div class="post_excerpt">
-        <p>
-          
-          <p>demo中的客户端和服务端脚本在同一文件夹</p>
+  <div class="article-content" itemprop="articleBody">
+    <p>demo中的客户端和服务端脚本在同一文件夹</p>
 
 <p>服务端 server.py</p>
 
@@ -169,33 +163,42 @@
 当send_file.read()中参数为4096的时候，占用总共为30%左右。</p>
 </blockquote>
 
-          
-          <a class="read-more" href="/2016/10/30/python-socket-demo.html"> »  </a>
-        </p>
-      </div>
-      <footer class="post_meta">
-
-
-        
-        <!--
-        
-        -->
-
-        <!--
-        
-        -->
-
-        <!--p class="readmore">
-          <a href=""><data data-icon="ei-arrow-right"></data>Read this article  </a>
-        </p-->
-      </footer>
-      <hr/>
-    </article>
-    
-
-    <div class="pagination older-post"><a href="./archive"><data data-icon="ei-arrow-right"></data> Archive  </a></div>
   </div>
-</div>
+
+  <footer class="article-footer">
+
+  <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+
+
+  <hr/>
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/img/icon.jpg)"></div>
+  <div class="authorinfo box">
+    <p>Author | eleven26</p>
+    <p class="bio">
+      Currently a php programmer.
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  
+
+
+</article>
 
           </div>
         </div>

@@ -1,12 +1,12 @@
 ---
 published: true
-title: 2016-10-30-python-socket-传输文件-demo.md
+title: python socket传输文件demo
 layout: post
 ---
 demo中的客户端和服务端脚本在同一文件夹
 
 服务端 server.py
-```python
+{% highlight python %}
 #!/usr/bin/env python
 
 import datetime
@@ -47,10 +47,10 @@ if minute < 1:
     print "run time: %s" % second
 else:
     print "run time: %sm%ss" % (minute, second)
-```
+{% endhighlight %}
 
 客户端client.py
-```python
+{% highlight python %}
 #!/usr/bin/env python
 
 import datetime
@@ -88,10 +88,10 @@ if minute < 1:
     print "run time: %s" % second
 else:
     print "run time: %sm%ss" % (minute, second)
-```
+{% endhighlight %}
 
->测试传输的文件大小为3.8G 
+>测试传输的文件大小为3.8G
 
 >data = send_file.read(4096000)
-这里每次读取大小和服务端每次写多少依据具体情况而定，测试时候发现cpu占用略高，i5-6500 3.4GHz服务器端和客户端各占了10%左右，
-当send_file.read()中参数为4096的时候，占用总共为30%左右。
+>这里每次读取大小和服务端每次写多少依据具体情况而定，测试时候发现cpu占用略高，i5-6500 3.4GHz服务器端和客户端各占了10%左右，
+>当send_file.read()中参数为4096的时候，占用总共为30%左右。
