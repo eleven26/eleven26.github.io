@@ -6,8 +6,8 @@
 </description>
     <link>http://eleven26.github.io/</link>
     <atom:link href="http://eleven26.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 30 Oct 2016 10:50:08 +0800</pubDate>
-    <lastBuildDate>Sun, 30 Oct 2016 10:50:08 +0800</lastBuildDate>
+    <pubDate>Sun, 30 Oct 2016 22:12:21 +0800</pubDate>
+    <lastBuildDate>Sun, 30 Oct 2016 22:12:21 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -110,9 +110,11 @@
 &lt;/blockquote&gt;
 </description>
         <pubDate>Sun, 30 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://eleven26.github.io/2016/10/30/python-socket-demo.html</link>
-        <guid isPermaLink="true">http://eleven26.github.io/2016/10/30/python-socket-demo.html</guid>
+        <link>http://eleven26.github.io/python/2016/10/30/python-socket-demo.html</link>
+        <guid isPermaLink="true">http://eleven26.github.io/python/2016/10/30/python-socket-demo.html</guid>
         
+        
+        <category>python</category>
         
       </item>
     
