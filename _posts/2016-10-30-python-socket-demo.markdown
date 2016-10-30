@@ -1,6 +1,6 @@
 ---
 published: true
-title: python socket传输文件demo
+title: 2016-10-30-python-socket-传输文件-demo.md
 layout: post
 ---
 demo中的客户端和服务端脚本在同一文件夹
