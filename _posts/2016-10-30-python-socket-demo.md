@@ -27,8 +27,8 @@ conn, addr = s.accept()
 print "connected"
 save_file = open(file_name, 'wb')
 while True:
-    data = conn.recv(4096000)
-    if len(data) == 0:
+    data = conn.recv(3072000)
+    if not data:
         break
     save_file.write(data)
 
@@ -68,8 +68,8 @@ print "connected"
 
 send_file = open(file_name, 'rb')
 while True:
-    data = send_file.read(4096000)
-    if len(data) == 0:
+    data = send_file.read(3072000)
+    if not data:
         break
     s.sendall(data)
 
