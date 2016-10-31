@@ -5,9 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Home</title>
-  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-">
+  <title>C++使用函数指针</title>
+  <meta name="description" content="函数指针是存储函数地址以便后续通过该地址调用函数的指针，下面例子中compare函数可以传入不同的函数指针，根据传入的函数指针，我们可以得到同一个数组按照不同方法排序后的结果。#include&lt;iostream&gt;#include&lt;cstdlib&gt;using namespace std;#i...">
 
   <!-- evil icon -->
 
@@ -17,7 +16,7 @@
   <!-- todo: include this into main.css -->
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://eleven26.github.io/">
+  <link rel="canonical" href="http://eleven26.github.io/c++/2016/10/31/use-c-function-pointer.html">
   <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://eleven26.github.io/feed.xml">
 </head>
 
@@ -59,20 +58,15 @@
 
         <div class="nine columns" style="z-index:100;">
           <div class="wrapper">
-            <div class="home">
-  <div class="post-list">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-    
+  <header class="artilce_header">
+    <h1 class="artilce_title" itemprop="name headline">C++使用函数指针</h1>
+    <p class="artilce_meta"><time datetime="2016-10-31T00:00:00+08:00" itemprop="datePublished">Oct 31, 2016</time></p>
+  </header>
 
-    <article class="post_card post">
-      <header class="post_header">
-        <h2 class="post_title"><a href="/c++/2016/10/31/use-c-function-pointer.html">C++使用函数指针</a></h2>
-        <time class="post_date">31 October 2016, Monday</time>
-      </header>
-      <div class="post_excerpt">
-        <p>
-          
-          <p>函数指针是存储函数地址以便后续通过该地址调用函数的指针，下面例子中compare函数可以传入不同的函数指针，根据传入的函数指针，我们可以得到同一个数组按照不同方法排序后的结果。</p>
+  <div class="article-content" itemprop="articleBody">
+    <p>函数指针是存储函数地址以便后续通过该地址调用函数的指针，下面例子中compare函数可以传入不同的函数指针，根据传入的函数指针，我们可以得到同一个数组按照不同方法排序后的结果。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include&lt;iostream&gt;
 #include&lt;cstdlib&gt;
@@ -153,170 +147,42 @@ descending order : 5 4 3 2 1
 ascending order : 1 2 3 4 5</code></pre></figure>
 
 
-          
-          <a class="read-more" href="/c++/2016/10/31/use-c-function-pointer.html"> »  </a>
-        </p>
-      </div>
-      <footer class="post_meta">
-
-
-        
-        <!--
-        
-        <a href="/category/C++">
-          <data data-icon="ei-archive"></data>
-          C++</a>
-        
-        -->
-
-        <!--
-        
-        -->
-
-        <!--p class="readmore">
-          <a href=""><data data-icon="ei-arrow-right"></data>Read this article  </a>
-        </p-->
-      </footer>
-      <hr/>
-    </article>
-    
-
-    <article class="post_card post">
-      <header class="post_header">
-        <h2 class="post_title"><a href="/python/2016/10/30/python-socket-demo.html">python socket传输文件demo</a></h2>
-        <time class="post_date">30 October 2016, Sunday</time>
-      </header>
-      <div class="post_excerpt">
-        <p>
-          
-          <p>demo中的客户端和服务端脚本在同一文件夹</p>
-
-<p>服务端 server.py</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python
-</span>
-
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-
-<span class="kn">import</span> <span class="nn">socket</span>
-
-<span class="n">host</span> <span class="o">=</span> <span class="s">'127.0.0.1'</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mi">9090</span>
-<span class="n">file_name</span> <span class="o">=</span> <span class="s">'destination.iso'</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-<span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
-<span class="n">s</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">"connected"</span>
-<span class="n">save_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">3072000</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-        <span class="k">break</span>
-    <span class="n">save_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-<span class="k">print</span> <span class="s">"finish receive!"</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">save_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-<span class="n">run_time</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
-
-<span class="n">minute</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">/</span> <span class="mi">60</span>
-<span class="n">second</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">-</span> <span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span>
-
-<span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s second"</span> <span class="o">%</span> <span class="n">run_time</span>
-<span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span></code></pre></figure>
-
-<p>客户端client.py</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python
-</span>
-
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="n">host</span> <span class="o">=</span> <span class="s">"127.0.0.1"</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mi">9090</span>
-<span class="n">file_name</span> <span class="o">=</span> <span class="s">'source.iso'</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-<span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
-<span class="k">print</span> <span class="s">"connected"</span>
-
-<span class="n">send_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">send_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3072000</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-        <span class="k">break</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-<span class="k">print</span> <span class="s">"finish send!"</span>
-<span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">send_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-<span class="n">run_time</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
-
-<span class="n">minute</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">/</span> <span class="mi">60</span>
-<span class="n">second</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">-</span> <span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span>
-
-<span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s second"</span> <span class="o">%</span> <span class="n">run_time</span>
-<span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span></code></pre></figure>
-
-<blockquote>
-  <p>测试传输的文件大小为3.8G</p>
-</blockquote>
-
-<blockquote>
-  <p>data = send_file.read(4096000)
-这里每次读取大小和服务端每次写多少依据具体情况而定，测试时候发现cpu占用略高，i5-6500 3.4GHz服务器端和客户端各占了10%左右，
-当send_file.read()中参数为4096的时候，占用总共为30%左右。</p>
-</blockquote>
-
-          
-          <a class="read-more" href="/python/2016/10/30/python-socket-demo.html"> »  </a>
-        </p>
-      </div>
-      <footer class="post_meta">
-
-
-        
-        <!--
-        
-        <a href="/category/python">
-          <data data-icon="ei-archive"></data>
-          python</a>
-        
-        -->
-
-        <!--
-        
-        -->
-
-        <!--p class="readmore">
-          <a href=""><data data-icon="ei-arrow-right"></data>Read this article  </a>
-        </p-->
-      </footer>
-      <hr/>
-    </article>
-    
-
-    <div class="pagination older-post"><a href="./archive"><data data-icon="ei-arrow-right"></data> Archive  </a></div>
   </div>
-</div>
+
+  <footer class="article-footer">
+
+  <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+
+
+  <hr/>
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/img/icon.jpg)"></div>
+  <div class="authorinfo box">
+    <p>Author | eleven26</p>
+    <p class="bio">
+      Currently a php programmer.
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  
+
+
+</article>
 
           </div>
         </div>
