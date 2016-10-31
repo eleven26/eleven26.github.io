@@ -60,22 +60,22 @@ int* compare(int array[], int len, short (*sort_function)(int, int)){
 }
 
 int main(){
-    int array[5] = {5,2,4,3,1};
-    int array_len = sizeof(array) / sizeof(int);
+  int array[5] = {5,2,4,3,1};
+  int array_len = sizeof(array) / sizeof(int);
 #ifdef DEBUG
-    cout << "array_len = " << array_len << endl;
+  cout << "array_len = " << array_len << endl;
 #endif
-    cout << "source array : ";
-    print_arr(array, array_len);
+  cout << "source array : ";
+  print_arr(array, array_len);
 
-    int *temp = (int*)calloc(array_len, sizeof(int));
-    memcpy(temp, compare(array, array_len, descend), sizeof(int)*array_len);
-    cout << "descending order : ";
-    print_arr(temp, array_len);
-    memcpy(temp, compare(array, array_len, ascend), sizeof(int)*array_len);
-    cout << "ascending order : ";
-    print_arr(temp, array_len);
-    return 0;
+  int *temp = (int*)calloc(array_len, sizeof(int));
+  memcpy(temp, compare(array, array_len, descend), sizeof(int)*array_len);
+  cout << "descending order : ";
+  print_arr(temp, array_len);
+  memcpy(temp, compare(array, array_len, ascend), sizeof(int)*array_len);
+  cout << "ascending order : ";
+  print_arr(temp, array_len);
+  return 0;
 }
 {% endhighlight %}
 
