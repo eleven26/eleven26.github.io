@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>C++函数指针(译)</title>
+  <meta name="description" content="　　函数指针是一个存储函数地址以便后续调用的指针变量。这是一个非常有用的功能，因为函数封装了行为。例如，每次你需要一个特定行为如画一条线，你就可以使用函数调用代替写一大堆重复代码。但有时候你想使用本质上相同的代码在不同的调用中选择不同的行为。继续阅读下面的具体例子。使用函数指针的例子使用函数做其他函数的参数　　如...">
+
+  <!-- evil icon -->
+
+  <link rel="stylesheet" href="/assets/evil-icons.min.css">
+  <script src="/assets/evil-icons.min.js"></script>
+
+  <!-- todo: include this into main.css -->
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://eleven26.github.io/c++/2016/11/01/c++-function-pointer.html">
+  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://eleven26.github.io/feed.xml">
+</head>
+
+  <body>
+    <div class="page-content">
+      <div class="container">
+        <div class="three columns">
+          <header class="site-header">
+
+  <h2 class="logo"><a href="/">eleven26</a></h2>
+
+  <div class="nav">
+    
+    <label for="menu-toggle" class="menu-icon">
+        <!--div data-icon="ei-navicon"></div-->
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+    </label>
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="site-nav">
+      <nav>
+        <ul class="page-link">
+          <li><a href="/">Home</a></li>
+          <li><a href="/archive">Posts</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</header>
+
+        </div>
+
+        <div class="nine columns" style="z-index:100;">
+          <div class="wrapper">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="artilce_header">
+    <h1 class="artilce_title" itemprop="name headline">C++函数指针(译)</h1>
+    <p class="artilce_meta"><time datetime="2016-11-01T00:00:00+08:00" itemprop="datePublished">Nov 1, 2016</time></p>
+  </header>
+
+  <div class="article-content" itemprop="articleBody">
+    <p>　　函数指针是一个存储函数地址以便后续调用的指针变量。这是一个非常有用的功能，因为函数封装了行为。例如，每次你需要一个特定行为如画一条线，你就可以使用函数调用代替写一大堆重复代码。但有时候你想使用本质上相同的代码在不同的调用中选择不同的行为。继续阅读下面的具体例子。</p>
+
+<h2 id="section">使用函数指针的例子</h2>
+
+<h4 id="section-1">使用函数做其他函数的参数</h4>
+
+<p>　　如果你要写一个排序函数，你可能会允许函数调用者选择数据排序的顺序，一部分程序员可能需要有小到大排序，其他人可能需要与此类似的由大到小排序。让你的用户选择哪种方式的一个方法是给函数提供一个标志位作为参数，但这样不方便，因为排序函数有固定的比较类型集合(如顺序和逆序)。</p>
+
+<p>　　让用户选择排序数据方式的一个更好的方法是，让用户传递一个函数给排序函数。这个函数可能需要两个参数来实现两个参数之间的比较。我们将会探讨一些函数指针的语法。</p>
+
+<h4 id="section-2">回调函数</h4>
+<p>　　函数指针的另外一个用法是，设置当某个特定事件发生的时候的调用的”listener”或者”callback”函数。回调函数被调用的时候会执行回调函数内的代码。</p>
+
+<p>　　你为什么会在你的代码中使用回调函数？你在使用其他人写的类库的时候可能经常会看到回调函数。一个例子是当你写图形用户界面(GUI)的时候，大部分时间，用户都是在移动鼠标指针和重新绘制界面的循环中。然而，有些时候，用户按下一个按钮并在表单域输入一串文本，这些操作就是需要你的程序进行一些特定的处理来响应的”事件”。使用回调函数可以让你的代码知道正在发生什么。用户的点击应该导致界面去调用一个函数来处理这个点击事件。</p>
+
+<p>　　为了对此有一个更加具体的了解，想一下当你使用一个有”create_fnction”函数的GUI库的时候会发生什么。那会占用屏幕上按钮本来应该出现的地方，并带有文本和一个点击的时候调用的函数。假定目前C(和C++)有一个通用的带有”函数指针”类型参数的函数，它看起来应该像下面那样。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">create_button</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">text</span><span class="p">,</span> <span class="n">function</span> <span class="n">callback_func</span><span class="p">);</span></code></pre></figure>
+
+<p>　　无论什么时候按钮被点击，callback_func会被调用。callback_func具体做了什么依赖于那个按钮，这就是create_button函数使用函数指针非常有用的原因。</p>
+
+<h2 id="section-3">函数指针语法</h2>
+<p>　　声明函数指针的语法一眼看上去可能有点凌乱，但当你明白明白发生了什么的时候，就会发现其实非常直截了当。让我们看下下面这个简单的例子：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span></code></pre></figure>
+
+<p>　　在这个例子中，foo是有一个整形参数，返回值为void类型的函数指针。它看起来像是你声明了一个名字为”<em>foo”，参数为一个整型参数，返回值为void类型的函数。如果 *foo 是一个函数，那么foo必须指向一个函数。(与此类似，像int *x的声明可以读作</em>x是一个整数，因此x必须是一个指向整数的指针。)</p>
+
+<p>　　声明函数指针的关键是，使用(*func_name)代替通常情况下的func_name。</p>
+
+<h4 id="section-4">阅读函数指针声明</h4>
+<p>　　当更多*号出现在函数指针声明中的时候人们会感到困惑：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span></code></pre></figure>
+
+<p>　　在这里，阅读的关键是由内到外，你们应该注意到最内层的表达式元素是<em>foo，其他部分看起来像是一个正常的函数声明。</em>foo应该指向一个返回值类型为void *和需要一个int *参数的函数。因此，foo是一个指向这样一个函数的指针。</p>
+
+<h4 id="section-5">初始化函数指针</h4>
+<p>　　为了初始化函数指针，你必须把函数地址赋给函数指针。语法类似其他指针变量：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">my_int_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>int main()
+{
+    void (<em>foo)(int);
+    /</em> 取地址符实际上是可选的 */
+    foo = &amp;my_int_func;</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>return 0; }
+</code></pre>
+</div>
+
+<h4 id="section-6">使用函数指针</h4>
+<p>　　为了使用函数指针指向的函数，你可以把函数指针当做你要调用的函数。调用函数指针的行为会自动进行解引用的操作，而不需要手动解引用：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">my_int_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">my_int_func</span><span class="p">;</span>
+
+    <span class="cm">/* 调用my_int_func (注意:你不需要写成 (*foo)(2)) */</span>
+    <span class="n">foo</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="cm">/* 但如果你想这样做也可以 */</span>
+    <span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>　　函数指针比较灵活，它和大部分指针的用法一致，甚至可以省略部分语法。这类似于数组，空数组会退化为一个指针，但你同样可以使用&amp;获取它的地址。</p>
+
+<h4 id="section-7">真实环境的函数指针</h4>
+<p>　　(Let’s go back to the sorting example where I suggested using a function pointer to write a generic sorting routine where the exact order could be specified by the programmer calling the sorting function.)(还没想好怎么翻译),其实C语言的函数qsort就是那样做的。</p>
+
+<p>　　从linux的手册页可以看到以下定义：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">qsort</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">nmemb</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span>
+           <span class="kt">int</span><span class="p">(</span><span class="o">*</span><span class="n">compar</span><span class="p">)(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">));</span></code></pre></figure>
+
+<p>　　void<em>的使用允许qsort操作任何类型的数据(在C++中，你通常会使用模板来完成这类任务，但是C++通用允许使用void</em>指针)，因为void<em>指针能指向任何类型。由于我们不知道void</em> array中的具体元素数量，我们必须把待排序的数组的元素数量nmemb传给qsort，而不是一般情况下的输入长度、大小。</p>
+
+<p>　　但我们感兴趣的是传递给qsort的参与比较的参数:这是一个带有两个void*类型参数并返回一个int型的函数指针。这允许任何人指定怎么排序这些数组的元素而不用写一个特定的排序算法。同样需要注意的是，比较返回一个int型数字，函数指针指向的函数应该返回-1如果第一个参数小于第二个参数，如果相等返回0，如果第二个参数小于第一个参数则返回1。</p>
+
+<p>　　例如，把一个数组升序排列，我们可以写成下面这样:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include&lt;stdlib.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">int_sorter</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">first_arg</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">second_arg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">first_arg</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">second_arg</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">second</span><span class="p">){</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">second</span><span class="p">){</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">first</span> <span class="o">&gt;</span> <span class="n">second</span><span class="p">){</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="cm">/* fill array*/</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="n">int_sorter</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="c">使用多态和虚函数代替函数指针(C++)</h4>
+<p>　　通过虚函数你通常可以避免使用具体的函数指针。例如，你可以使用含有名字为compare的虚函数的类对象指针代替函数指针。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">Sorter</span>
+<span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">compare</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">second</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">//cpp_qsort, a qsort using C++ features like virtual functions
+</span><span class="kt">void</span> <span class="n">cpp_qsort</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">base</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">nmemb</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">Sorter</span> <span class="o">*</span><span class="n">compar</span><span class="p">);</span></code></pre></figure>
+
+<p>　　在cpp_qsort内部，无论什么时候需要比较，compar-&gt;compare应该被调用。对于那些重写了这个虚函数的类，排序例程将会获得那个虚函数的行为，例如:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">AscendSorter</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Sorter</span>
+<span class="p">{</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">compare</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">first_arg</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">second_arg</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">second</span><span class="p">){</span>
+          <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">second</span><span class="p">){</span>
+          <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>　　然后你就可以传递一个AscendSorter实例的指针给cpp_qsort来对整数进行升序排列。</p>
+
+<h4 id="section-8">但是你真的没有使用函数指针吗？</h4>
+<p>　　虚函数背后是用函数指针实现的，因此你还是在使用函数指针，它仅仅在编译器层面帮你完成了函数指针的工作。使用多态是一个比较合适的策略，但是会带来创建对象的开销，而不是简单地传递一个函数指针。</p>
+
+<h3 id="section-9">函数指针概括</h3>
+
+<h4 id="section-10">语法</h4>
+<ul>
+  <li>声明
+　　声明一个函数指针与声明函数类似，除了函数名使用*foo而不是foo:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span></code></pre></figure>
+
+<ul>
+  <li>初始化
+你可以通过函数名来获取函数的地址:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">foo</span><span class="p">();</span>
+<span class="n">func_pointer</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span></code></pre></figure>
+
+<p>　　或者在函数名前使用取地址符:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">foo</span><span class="p">();</span>
+<span class="n">func_pointer</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">foo</span><span class="p">;</span></code></pre></figure>
+
+<ul>
+  <li>调用
+调用函数指针指向的函数和调用函数一样:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">func_pointer</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">);</span></code></pre></figure>
+
+<p>　　或者你也可以选择在调用函数之前对函数指针进行解引用:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">(</span><span class="o">*</span><span class="n">func_pointer</span><span class="p">)(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">);</span></code></pre></figure>
+
+<ul>
+  <li>使用函数指针的好处:
+函数指针提供了一个传递怎样做一件事的指令的方式;
+通过允许开发者传递不同的函数指针作为参数，你可以写出灵活的函数和类库;
+虚函数同样可以通过虚函数实现。</li>
+</ul>
+
+<blockquote>
+  <p>译自: <a href="http://www.cprogramming.com/tutorial/function-pointers.html">http://www.cprogramming.com/tutorial/function-pointers.html</a></p>
+</blockquote>
+
+  </div>
+
+  <footer class="article-footer">
+
+  <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+
+
+  <hr/>
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/img/icon.jpg)"></div>
+  <div class="authorinfo box">
+    <p>Author | eleven26</p>
+    <p class="bio">
+      Currently a php programmer.
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  
+
+
+</article>
+
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+  <div class="container">
+    <div class="footer left column one-half">
+      <section class="small-font">
+        Theme <a href="https://github.com/wild-flame/jekyll-simple"> Simple </a> by <a href="http://wildflame.me">wildflame</a>
+        © 2016
+        Powered by <a href="https://github.com/jekyll/jekyll">jekyll</a>
+      </section>
+    </div>
+
+    <div class="footer right column one-half">
+      <section class="small-font">
+        
+        <a href="https://github.com/eleven26"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span></a>
+
+        
+        <!--
+        
+      -->
+      </section>
+    </div>
+  </div>
+</footer>
+ 
+    </div>
+  </body>
+</html>
