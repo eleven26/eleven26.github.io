@@ -115,17 +115,16 @@
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">my_int_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="cm">/* 取地址符实际上是可选的 */</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">my_int_func</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
-
-<p>int main()
-{
-    void (<em>foo)(int);
-    /</em> 取地址符实际上是可选的 */
-    foo = &amp;my_int_func;</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>return 0; }
-</code></pre>
-</div>
 
 <h4 id="section-6">使用函数指针</h4>
 <p>　　为了使用函数指针指向的函数，你可以把函数指针当做你要调用的函数。调用函数指针的行为会自动进行解引用的操作，而不需要手动解引用：</p>

@@ -50,7 +50,6 @@ void my_int_func(int x)
 {
     printf("%d\n", x);
 }
-{% endhighlight %}
 
 int main()
 {
@@ -60,6 +59,7 @@ int main()
 
     return 0;
 }
+{% endhighlight %}
 
 #### 使用函数指针
 　　为了使用函数指针指向的函数，你可以把函数指针当做你要调用的函数。调用函数指针的行为会自动进行解引用的操作，而不需要手动解引用：
