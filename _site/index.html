@@ -66,6 +66,110 @@
 
     <article class="post_card post">
       <header class="post_header">
+        <h2 class="post_title"><a href="/python/2016/11/03/python-use-socket-download-picture-via-http-protocol.html">Python使用socket下载图片(使用http协议)</a></h2>
+        <time class="post_date">03 November 2016, Thursday</time>
+      </header>
+      <div class="post_excerpt">
+        <p>
+          
+          <p>　　本文的目的并不是真的让大家学习用socket去下载东西，这样做的意义(造轮子)其实不大，毕竟这些东西前辈们已经做过了，下面会说到。</p>
+
+<p>　　下面是一个无比繁杂的例子，还没去优化，特别的低效，因为以行的方式遍历了整个二进制格式图片文件，事实上应该有更好的方法，想到了应该怎么做，但是还不知道用python应该怎么实现，http协议报文格式一个比较显著的特征是: 请求头(响应头)-<strong>空行</strong>-请求实体(响应)，一般情况下我们需要的信息其实只是实体部分。</p>
+
+<p>　　当我们通过socket连接上某个网站，并请求了图片资源之后，socket接收到的只是字节流，响应的实体部分就是我们的图片了，我们要做的是把http响应实体从http报文中分离出来保存到文件中。(注意: 不要把接收到的所有信息全部保存到文件中，那样做系统识别不了其中包含的图片)</p>
+
+<p>download_picture.py</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s">'localhost'</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span> <span class="c"># 通过socket与服务器连接</span>
+
+<span class="c"># http请求头，下载服务器上uri为'/test.jpg'的图片</span>
+<span class="n">http_request</span> <span class="o">=</span> <span class="s">"""
+GET /test.jpg HTTP/1.1
+Host: localhost
+
+"""</span>
+<span class="c"># 发送http请求，把响应先保存在test.jpg中，这个test.jpg并不是正确的图片格式，里面还包含有http响应头，如果不做转换是没法打开的</span>
+<span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">http_request</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'test.jpg'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">http_response</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">9192</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">http_response</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">http_response</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">message</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c"># 把实际下载的图片保存在new.jpg中</span>
+<span class="n">jpg</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'test.jpg'</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span>
+<span class="n">new</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'new.jpg'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
+
+<span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">jpg</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+    <span class="c"># 空行是区分http响应头和响应实体的标志，因为http头是不能有空行的</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">'</span><span class="se">\r\n</span><span class="s">'</span> <span class="ow">or</span> <span class="n">line</span> <span class="o">==</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span> <span class="ow">or</span> <span class="n">line</span> <span class="o">==</span> <span class="s">'</span><span class="se">\r</span><span class="s">'</span><span class="p">:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+<span class="c"># 下载完成后关闭文件资源</span>
+<span class="n">jpg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">new</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></figure>
+
+<p>　　上面的例子做了很繁琐的处理，实际上这类工作在Python已经有非常成熟的第三方库了，如urllib2:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="n">http_response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">'http://localhost/test.jpg'</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'download.jpg'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">http_response</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></figure>
+
+<p>　　这里用几行就实现了下载的功能，虽然看起来是只有几行，实际上urllib2已经帮我们做了所有的重复性工作。</p>
+
+<p>　　summary: 写本文只是了解一下http协议报文格式。</p>
+
+          
+          <a class="read-more" href="/python/2016/11/03/python-use-socket-download-picture-via-http-protocol.html"> »  </a>
+        </p>
+      </div>
+      <footer class="post_meta">
+
+
+        
+        <!--
+        
+        <a href="/category/Python">
+          <data data-icon="ei-archive"></data>
+          Python</a>
+        
+        -->
+
+        <!--
+        
+        -->
+
+        <!--p class="readmore">
+          <a href=""><data data-icon="ei-arrow-right"></data>Read this article  </a>
+        </p-->
+      </footer>
+      <hr/>
+    </article>
+    
+
+    <article class="post_card post">
+      <header class="post_header">
         <h2 class="post_title"><a href="/c++/2016/11/01/c++-function-pointer.html">C++函数指针(译)</a></h2>
         <time class="post_date">01 November 2016, Tuesday</time>
       </header>
