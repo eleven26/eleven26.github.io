@@ -25,7 +25,8 @@ GET /test.jpg HTTP/1.1
 Host: localhost
 
 """
-# 发送http请求，把响应先保存在test.jpg中，这个test.jpg并不是正确的图片格式，里面还包含有http响应头，如果不做转换是没法打开的
+# 发送http请求，把响应先保存在test.jpg中，这个test.jpg并不是正确的图片格式，
+# 里面还包含有http响应头，如果不做转换是没法打开的
 s.sendall(http_request)
 f = open('test.jpg', 'wb')
 try:
