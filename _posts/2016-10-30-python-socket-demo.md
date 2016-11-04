@@ -2,7 +2,7 @@
 published: true
 title: python socket传输文件demo
 layout: post
-category: python
+category: Python
 ---
 demo中的客户端和服务端脚本在同一文件夹
 

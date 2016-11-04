@@ -93,7 +93,8 @@ GET /test.jpg HTTP/1.1
 Host: localhost
 
 """</span>
-<span class="c"># 发送http请求，把响应先保存在test.jpg中，这个test.jpg并不是正确的图片格式，里面还包含有http响应头，如果不做转换是没法打开的</span>
+<span class="c"># 发送http请求，把响应先保存在test.jpg中，这个test.jpg并不是正确的图片格式，</span>
+<span class="c"># 里面还包含有http响应头，如果不做转换是没法打开的</span>
 <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">http_request</span><span class="p">)</span>
 <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'test.jpg'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
@@ -638,9 +639,9 @@ ascending order : 1 2 3 4 5</code></pre></figure>
         
         <!--
         
-        <a href="/category/python">
+        <a href="/category/Python">
           <data data-icon="ei-archive"></data>
-          python</a>
+          Python</a>
         
         -->
 
