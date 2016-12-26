@@ -7,7 +7,7 @@ category: Python
 demo中的客户端和服务端脚本在同一文件夹
 
 服务端 server.py
-```python
+{% highlight python %}
 #!/usr/bin/env python
 
 import datetime
@@ -48,10 +48,10 @@ if minute < 1:
     print "run time: %s" % second
 else:
     print "run time: %sm%ss" % (minute, second)
-```
+{% endhighlight %}
 
 客户端client.py
-```python
+{% highlight python %}
 #!/usr/bin/env python
 
 import datetime
@@ -89,7 +89,7 @@ if minute < 1:
     print "run time: %s" % second
 else:
     print "run time: %sm%ss" % (minute, second)
-```
+{% endhighlight %}
 
 >测试传输的文件大小为3.8G
 
