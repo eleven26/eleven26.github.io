@@ -16,8 +16,8 @@
   <!-- todo: include this into main.css -->
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://eleven26.github.io/javascript/2016/11/27/2016-11-27-javascript-apply-usage.html">
-  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://eleven26.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/javascript/2016/11/27/javascript-apply-usage.html">
+  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://localhost:4000/feed.xml">
 </head>
 
   <body>
@@ -73,10 +73,10 @@
   <li>apply的其他巧妙用法</li>
 </ol>
 
-<h5 id="applycall">apply和call的区别</h5>
+<h5 id="apply和call的区别">apply和call的区别</h5>
 <p>apply和call的主要区别是apply第二个参数为数组，而call用参数列表来代替这个数组。</p>
 
-<h5 id="applycall-1">apply和call的用法</h5>
+<h5 id="apply和call的用法">apply和call的用法</h5>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply">apply方法的定义</a>
 apply()方法使用一个this对象和数组做为参数来调用对应的function，如</p>
 
@@ -114,10 +114,10 @@ apply()方法使用一个this对象和数组做为参数来调用对应的functi
 <span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">min</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">);</span></code></pre></figure>
 
-<h5 id="applycall-2">什么情况用apply，什么情况用call</h5>
+<h5 id="什么情况用apply什么情况用call">什么情况用apply，什么情况用call</h5>
 <p>在给对象参数的情况下，如果参数是数组，并且和调用apply的函数列表参数顺序一致，则可以采用apply，上面的person和student的例子中，如果person中的参数列表是形如age,name的话，这样我们就不能使用apply了，因为student中的参数顺序是name,age,grade，直接用apply传arguments数组过去的话，就是把name赋值给age了，这种情况我们就需要使用call了，Person.call(age,name,grade)</p>
 
-<h5 id="apply">apply的其他巧妙用法</h5>
+<h5 id="apply的其他巧妙用法">apply的其他巧妙用法</h5>
 <p>上面的例子中，在调用Person的时候，Person需要的不是数组，但是为什么我们给它一个数组它仍然可以解析为一个一个的参数。
 这个就是apply的巧妙之处，可以将一个数组转换了一个参数列表。
 另外一个用法，使用push结合apply进行数组合并：</p>

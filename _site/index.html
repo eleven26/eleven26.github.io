@@ -17,8 +17,8 @@
   <!-- todo: include this into main.css -->
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://eleven26.github.io/">
-  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://eleven26.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/">
+  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://localhost:4000/feed.xml">
 </head>
 
   <body>
@@ -66,7 +66,7 @@
 
     <article class="post_card post">
       <header class="post_header">
-        <h2 class="post_title"><a href="/javascript/2016/11/27/2016-11-27-javascript-apply-usage.html">javascript中apply和call的用法</a></h2>
+        <h2 class="post_title"><a href="/javascript/2016/11/27/javascript-apply-usage.html">javascript中apply和call的用法</a></h2>
         <time class="post_date">27 November 2016, Sunday</time>
       </header>
       <div class="post_excerpt">
@@ -79,10 +79,10 @@
   <li>apply的其他巧妙用法</li>
 </ol>
 
-<h5 id="applycall">apply和call的区别</h5>
+<h5 id="apply和call的区别">apply和call的区别</h5>
 <p>apply和call的主要区别是apply第二个参数为数组，而call用参数列表来代替这个数组。</p>
 
-<h5 id="applycall-1">apply和call的用法</h5>
+<h5 id="apply和call的用法">apply和call的用法</h5>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply">apply方法的定义</a>
 apply()方法使用一个this对象和数组做为参数来调用对应的function，如</p>
 
@@ -120,10 +120,10 @@ apply()方法使用一个this对象和数组做为参数来调用对应的functi
 <span class="kd">var</span> <span class="nx">max</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">min</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">numbers</span><span class="p">);</span></code></pre></figure>
 
-<h5 id="applycall-2">什么情况用apply，什么情况用call</h5>
+<h5 id="什么情况用apply什么情况用call">什么情况用apply，什么情况用call</h5>
 <p>在给对象参数的情况下，如果参数是数组，并且和调用apply的函数列表参数顺序一致，则可以采用apply，上面的person和student的例子中，如果person中的参数列表是形如age,name的话，这样我们就不能使用apply了，因为student中的参数顺序是name,age,grade，直接用apply传arguments数组过去的话，就是把name赋值给age了，这种情况我们就需要使用call了，Person.call(age,name,grade)</p>
 
-<h5 id="apply">apply的其他巧妙用法</h5>
+<h5 id="apply的其他巧妙用法">apply的其他巧妙用法</h5>
 <p>上面的例子中，在调用Person的时候，Person需要的不是数组，但是为什么我们给它一个数组它仍然可以解析为一个一个的参数。
 这个就是apply的巧妙之处，可以将一个数组转换了一个参数列表。
 另外一个用法，使用push结合apply进行数组合并：</p>
@@ -134,7 +134,7 @@ apply()方法使用一个this对象和数组做为参数来调用对应的functi
 
 
           
-          <a class="read-more" href="/javascript/2016/11/27/2016-11-27-javascript-apply-usage.html"> »  </a>
+          <a class="read-more" href="/javascript/2016/11/27/javascript-apply-usage.html"> »  </a>
         </p>
       </div>
       <footer class="post_meta">
@@ -276,15 +276,15 @@ Host: localhost
           
           <p>　　函数指针是一个存储函数地址以便后续调用的指针变量。这是一个非常有用的功能，因为函数封装了行为。例如，每次你需要一个特定行为如画一条线，你就可以使用函数调用代替写一大堆重复代码。但有时候你想使用本质上相同的代码在不同的调用中选择不同的行为。继续阅读下面的具体例子。</p>
 
-<h2 id="section">使用函数指针的例子</h2>
+<h2 id="使用函数指针的例子">使用函数指针的例子</h2>
 
-<h4 id="section-1">使用函数做其他函数的参数</h4>
+<h4 id="使用函数做其他函数的参数">使用函数做其他函数的参数</h4>
 
 <p>　　如果你要写一个排序函数，你可能会允许函数调用者选择数据排序的顺序，一部分程序员可能需要有小到大排序，其他人可能需要与此类似的由大到小排序。让你的用户选择哪种方式的一个方法是给函数提供一个标志位作为参数，但这样不方便，因为排序函数有固定的比较类型集合(如顺序和逆序)。</p>
 
 <p>　　让用户选择排序数据方式的一个更好的方法是，让用户传递一个函数给排序函数。这个函数可能需要两个参数来实现两个参数之间的比较。我们将会探讨一些函数指针的语法。</p>
 
-<h4 id="section-2">回调函数</h4>
+<h4 id="回调函数">回调函数</h4>
 <p>　　函数指针的另外一个用法是，设置当某个特定事件发生的时候的调用的”listener”或者”callback”函数。回调函数被调用的时候会执行回调函数内的代码。</p>
 
 <p>　　你为什么会在你的代码中使用回调函数？你在使用其他人写的类库的时候可能经常会看到回调函数。一个例子是当你写图形用户界面(GUI)的时候，大部分时间，用户都是在移动鼠标指针和重新绘制界面的循环中。然而，有些时候，用户按下一个按钮并在表单域输入一串文本，这些操作就是需要你的程序进行一些特定的处理来响应的”事件”。使用回调函数可以让你的代码知道正在发生什么。用户的点击应该导致界面去调用一个函数来处理这个点击事件。</p>
@@ -295,7 +295,7 @@ Host: localhost
 
 <p>　　无论什么时候按钮被点击，callback_func会被调用。callback_func具体做了什么依赖于那个按钮，这就是create_button函数使用函数指针非常有用的原因。</p>
 
-<h2 id="section-3">函数指针语法</h2>
+<h2 id="函数指针语法">函数指针语法</h2>
 <p>　　声明函数指针的语法一眼看上去可能有点凌乱，但当你明白明白发生了什么的时候，就会发现其实非常直截了当。让我们看下下面这个简单的例子：</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span><span class="p">);</span></code></pre></figure>
@@ -304,14 +304,14 @@ Host: localhost
 
 <p>　　声明函数指针的关键是，使用(*func_name)代替通常情况下的func_name。</p>
 
-<h4 id="section-4">阅读函数指针声明</h4>
+<h4 id="阅读函数指针声明">阅读函数指针声明</h4>
 <p>　　当更多*号出现在函数指针声明中的时候人们会感到困惑：</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">foo</span><span class="p">)(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span></code></pre></figure>
 
 <p>　　在这里，阅读的关键是由内到外，你们应该注意到最内层的表达式元素是<em>foo，其他部分看起来像是一个正常的函数声明。</em>foo应该指向一个返回值类型为void *和需要一个int *参数的函数。因此，foo是一个指向这样一个函数的指针。</p>
 
-<h4 id="section-5">初始化函数指针</h4>
+<h4 id="初始化函数指针">初始化函数指针</h4>
 <p>　　为了初始化函数指针，你必须把函数地址赋给函数指针。语法类似其他指针变量：</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">my_int_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
@@ -328,7 +328,7 @@ Host: localhost
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<h4 id="section-6">使用函数指针</h4>
+<h4 id="使用函数指针">使用函数指针</h4>
 <p>　　为了使用函数指针指向的函数，你可以把函数指针当做你要调用的函数。调用函数指针的行为会自动进行解引用的操作，而不需要手动解引用：</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">my_int_func</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
@@ -351,7 +351,7 @@ Host: localhost
 
 <p>　　函数指针比较灵活，它和大部分指针的用法一致，甚至可以省略部分语法。这类似于数组，空数组会退化为一个指针，但你同样可以使用&amp;获取它的地址。</p>
 
-<h4 id="section-7">真实环境的函数指针</h4>
+<h4 id="真实环境的函数指针">真实环境的函数指针</h4>
 <p>　　(Let’s go back to the sorting example where I suggested using a function pointer to write a generic sorting routine where the exact order could be specified by the programmer calling the sorting function.)(还没想好怎么翻译),其实C语言的函数qsort就是那样做的。</p>
 
 <p>　　从linux的手册页可以看到以下定义：</p>
@@ -396,7 +396,7 @@ Host: localhost
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<h4 id="c">使用多态和虚函数代替函数指针(C++)</h4>
+<h4 id="使用多态和虚函数代替函数指针c">使用多态和虚函数代替函数指针(C++)</h4>
 <p>　　通过虚函数你通常可以避免使用具体的函数指针。例如，你可以使用含有名字为compare的虚函数的类对象指针代替函数指针。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">Sorter</span>
@@ -428,12 +428,12 @@ Host: localhost
 
 <p>　　然后你就可以传递一个AscendSorter实例的指针给cpp_qsort来对整数进行升序排列。</p>
 
-<h4 id="section-8">但是你真的没有使用函数指针吗？</h4>
+<h4 id="但是你真的没有使用函数指针吗">但是你真的没有使用函数指针吗？</h4>
 <p>　　虚函数背后是用函数指针实现的，因此你还是在使用函数指针，它仅仅在编译器层面帮你完成了函数指针的工作。使用多态是一个比较合适的策略，但是会带来创建对象的开销，而不是简单地传递一个函数指针。</p>
 
-<h3 id="section-9">函数指针概括</h3>
+<h3 id="函数指针概括">函数指针概括</h3>
 
-<h4 id="section-10">语法</h4>
+<h4 id="语法">语法</h4>
 <ul>
   <li>声明
 　　声明一个函数指针与声明函数类似，除了函数名使用*foo而不是foo:</li>
@@ -632,9 +632,7 @@ ascending order : 1 2 3 4 5</code></pre></figure>
           <p>demo中的客户端和服务端脚本在同一文件夹</p>
 
 <p>服务端 server.py</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python
-</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -673,12 +671,12 @@ ascending order : 1 2 3 4 5</code></pre></figure>
 <span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span></code></pre></figure>
+    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
+</code></pre>
+</div>
 
 <p>客户端client.py</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python
-</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -714,7 +712,9 @@ ascending order : 1 2 3 4 5</code></pre></figure>
 <span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span></code></pre></figure>
+    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
+</code></pre>
+</div>
 
 <blockquote>
   <p>测试传输的文件大小为3.8G</p>

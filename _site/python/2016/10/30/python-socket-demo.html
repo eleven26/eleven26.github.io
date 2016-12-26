@@ -16,8 +16,8 @@
   <!-- todo: include this into main.css -->
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://eleven26.github.io/python/2016/10/30/python-socket-demo.html">
-  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://eleven26.github.io/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/python/2016/10/30/python-socket-demo.html">
+  <link rel="alternate" type="application/rss+xml" title="eleven26" href="http://localhost:4000/feed.xml">
 </head>
 
   <body>
@@ -69,9 +69,7 @@
     <p>demo中的客户端和服务端脚本在同一文件夹</p>
 
 <p>服务端 server.py</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python
-</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -110,12 +108,12 @@
 <span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span></code></pre></figure>
+    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
+</code></pre>
+</div>
 
 <p>客户端client.py</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python
-</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -151,7 +149,9 @@
 <span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span></code></pre></figure>
+    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
+</code></pre>
+</div>
 
 <blockquote>
   <p>测试传输的文件大小为3.8G</p>

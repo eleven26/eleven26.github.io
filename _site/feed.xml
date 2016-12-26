@@ -4,11 +4,11 @@
     <title>eleven26</title>
     <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
 </description>
-    <link>http://eleven26.github.io/</link>
-    <atom:link href="http://eleven26.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 27 Nov 2016 10:03:00 +0800</pubDate>
-    <lastBuildDate>Sun, 27 Nov 2016 10:03:00 +0800</lastBuildDate>
-    <generator>Jekyll v3.2.1</generator>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 26 Dec 2016 12:56:32 +0800</pubDate>
+    <lastBuildDate>Mon, 26 Dec 2016 12:56:32 +0800</lastBuildDate>
+    <generator>Jekyll v3.3.1</generator>
     
       <item>
         <title>javascript中apply和call的用法</title>
@@ -19,10 +19,10 @@
   &lt;li&gt;apply的其他巧妙用法&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h5 id=&quot;applycall&quot;&gt;apply和call的区别&lt;/h5&gt;
+&lt;h5 id=&quot;apply和call的区别&quot;&gt;apply和call的区别&lt;/h5&gt;
 &lt;p&gt;apply和call的主要区别是apply第二个参数为数组，而call用参数列表来代替这个数组。&lt;/p&gt;
 
-&lt;h5 id=&quot;applycall-1&quot;&gt;apply和call的用法&lt;/h5&gt;
+&lt;h5 id=&quot;apply和call的用法&quot;&gt;apply和call的用法&lt;/h5&gt;
 &lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply&quot;&gt;apply方法的定义&lt;/a&gt;
 apply()方法使用一个this对象和数组做为参数来调用对应的function，如&lt;/p&gt;
 
@@ -60,10 +60,10 @@ apply()方法使用一个this对象和数组做为参数来调用对应的functi
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h5 id=&quot;applycall-2&quot;&gt;什么情况用apply，什么情况用call&lt;/h5&gt;
+&lt;h5 id=&quot;什么情况用apply什么情况用call&quot;&gt;什么情况用apply，什么情况用call&lt;/h5&gt;
 &lt;p&gt;在给对象参数的情况下，如果参数是数组，并且和调用apply的函数列表参数顺序一致，则可以采用apply，上面的person和student的例子中，如果person中的参数列表是形如age,name的话，这样我们就不能使用apply了，因为student中的参数顺序是name,age,grade，直接用apply传arguments数组过去的话，就是把name赋值给age了，这种情况我们就需要使用call了，Person.call(age,name,grade)&lt;/p&gt;
 
-&lt;h5 id=&quot;apply&quot;&gt;apply的其他巧妙用法&lt;/h5&gt;
+&lt;h5 id=&quot;apply的其他巧妙用法&quot;&gt;apply的其他巧妙用法&lt;/h5&gt;
 &lt;p&gt;上面的例子中，在调用Person的时候，Person需要的不是数组，但是为什么我们给它一个数组它仍然可以解析为一个一个的参数。
 这个就是apply的巧妙之处，可以将一个数组转换了一个参数列表。
 另外一个用法，使用push结合apply进行数组合并：&lt;/p&gt;
@@ -74,8 +74,8 @@ apply()方法使用一个this对象和数组做为参数来调用对应的functi
 
 </description>
         <pubDate>Sun, 27 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://eleven26.github.io/javascript/2016/11/27/2016-11-27-javascript-apply-usage.html</link>
-        <guid isPermaLink="true">http://eleven26.github.io/javascript/2016/11/27/2016-11-27-javascript-apply-usage.html</guid>
+        <link>http://localhost:4000/javascript/2016/11/27/javascript-apply-usage.html</link>
+        <guid isPermaLink="true">http://localhost:4000/javascript/2016/11/27/javascript-apply-usage.html</guid>
         
         
         <category>Javascript</category>
@@ -154,8 +154,8 @@ Host: localhost
 &lt;p&gt;　　summary: 写本文只是了解一下http协议报文格式。&lt;/p&gt;
 </description>
         <pubDate>Thu, 03 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://eleven26.github.io/python/2016/11/03/python-use-socket-download-picture-via-http-protocol.html</link>
-        <guid isPermaLink="true">http://eleven26.github.io/python/2016/11/03/python-use-socket-download-picture-via-http-protocol.html</guid>
+        <link>http://localhost:4000/python/2016/11/03/python-use-socket-download-picture-via-http-protocol.html</link>
+        <guid isPermaLink="true">http://localhost:4000/python/2016/11/03/python-use-socket-download-picture-via-http-protocol.html</guid>
         
         
         <category>Python</category>
@@ -166,15 +166,15 @@ Host: localhost
         <title>C++函数指针(译)</title>
         <description>&lt;p&gt;　　函数指针是一个存储函数地址以便后续调用的指针变量。这是一个非常有用的功能，因为函数封装了行为。例如，每次你需要一个特定行为如画一条线，你就可以使用函数调用代替写一大堆重复代码。但有时候你想使用本质上相同的代码在不同的调用中选择不同的行为。继续阅读下面的具体例子。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;使用函数指针的例子&lt;/h2&gt;
+&lt;h2 id=&quot;使用函数指针的例子&quot;&gt;使用函数指针的例子&lt;/h2&gt;
 
-&lt;h4 id=&quot;section-1&quot;&gt;使用函数做其他函数的参数&lt;/h4&gt;
+&lt;h4 id=&quot;使用函数做其他函数的参数&quot;&gt;使用函数做其他函数的参数&lt;/h4&gt;
 
 &lt;p&gt;　　如果你要写一个排序函数，你可能会允许函数调用者选择数据排序的顺序，一部分程序员可能需要有小到大排序，其他人可能需要与此类似的由大到小排序。让你的用户选择哪种方式的一个方法是给函数提供一个标志位作为参数，但这样不方便，因为排序函数有固定的比较类型集合(如顺序和逆序)。&lt;/p&gt;
 
 &lt;p&gt;　　让用户选择排序数据方式的一个更好的方法是，让用户传递一个函数给排序函数。这个函数可能需要两个参数来实现两个参数之间的比较。我们将会探讨一些函数指针的语法。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;回调函数&lt;/h4&gt;
+&lt;h4 id=&quot;回调函数&quot;&gt;回调函数&lt;/h4&gt;
 &lt;p&gt;　　函数指针的另外一个用法是，设置当某个特定事件发生的时候的调用的”listener”或者”callback”函数。回调函数被调用的时候会执行回调函数内的代码。&lt;/p&gt;
 
 &lt;p&gt;　　你为什么会在你的代码中使用回调函数？你在使用其他人写的类库的时候可能经常会看到回调函数。一个例子是当你写图形用户界面(GUI)的时候，大部分时间，用户都是在移动鼠标指针和重新绘制界面的循环中。然而，有些时候，用户按下一个按钮并在表单域输入一串文本，这些操作就是需要你的程序进行一些特定的处理来响应的”事件”。使用回调函数可以让你的代码知道正在发生什么。用户的点击应该导致界面去调用一个函数来处理这个点击事件。&lt;/p&gt;
@@ -185,7 +185,7 @@ Host: localhost
 
 &lt;p&gt;　　无论什么时候按钮被点击，callback_func会被调用。callback_func具体做了什么依赖于那个按钮，这就是create_button函数使用函数指针非常有用的原因。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-3&quot;&gt;函数指针语法&lt;/h2&gt;
+&lt;h2 id=&quot;函数指针语法&quot;&gt;函数指针语法&lt;/h2&gt;
 &lt;p&gt;　　声明函数指针的语法一眼看上去可能有点凌乱，但当你明白明白发生了什么的时候，就会发现其实非常直截了当。让我们看下下面这个简单的例子：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -194,14 +194,14 @@ Host: localhost
 
 &lt;p&gt;　　声明函数指针的关键是，使用(*func_name)代替通常情况下的func_name。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-4&quot;&gt;阅读函数指针声明&lt;/h4&gt;
+&lt;h4 id=&quot;阅读函数指针声明&quot;&gt;阅读函数指针声明&lt;/h4&gt;
 &lt;p&gt;　　当更多*号出现在函数指针声明中的时候人们会感到困惑：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;　　在这里，阅读的关键是由内到外，你们应该注意到最内层的表达式元素是&lt;em&gt;foo，其他部分看起来像是一个正常的函数声明。&lt;/em&gt;foo应该指向一个返回值类型为void *和需要一个int *参数的函数。因此，foo是一个指向这样一个函数的指针。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-5&quot;&gt;初始化函数指针&lt;/h4&gt;
+&lt;h4 id=&quot;初始化函数指针&quot;&gt;初始化函数指针&lt;/h4&gt;
 &lt;p&gt;　　为了初始化函数指针，你必须把函数地址赋给函数指针。语法类似其他指针变量：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_int_func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -218,7 +218,7 @@ Host: localhost
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h4 id=&quot;section-6&quot;&gt;使用函数指针&lt;/h4&gt;
+&lt;h4 id=&quot;使用函数指针&quot;&gt;使用函数指针&lt;/h4&gt;
 &lt;p&gt;　　为了使用函数指针指向的函数，你可以把函数指针当做你要调用的函数。调用函数指针的行为会自动进行解引用的操作，而不需要手动解引用：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_int_func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -241,7 +241,7 @@ Host: localhost
 
 &lt;p&gt;　　函数指针比较灵活，它和大部分指针的用法一致，甚至可以省略部分语法。这类似于数组，空数组会退化为一个指针，但你同样可以使用&amp;amp;获取它的地址。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-7&quot;&gt;真实环境的函数指针&lt;/h4&gt;
+&lt;h4 id=&quot;真实环境的函数指针&quot;&gt;真实环境的函数指针&lt;/h4&gt;
 &lt;p&gt;　　(Let’s go back to the sorting example where I suggested using a function pointer to write a generic sorting routine where the exact order could be specified by the programmer calling the sorting function.)(还没想好怎么翻译),其实C语言的函数qsort就是那样做的。&lt;/p&gt;
 
 &lt;p&gt;　　从linux的手册页可以看到以下定义：&lt;/p&gt;
@@ -286,7 +286,7 @@ Host: localhost
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h4 id=&quot;c&quot;&gt;使用多态和虚函数代替函数指针(C++)&lt;/h4&gt;
+&lt;h4 id=&quot;使用多态和虚函数代替函数指针c&quot;&gt;使用多态和虚函数代替函数指针(C++)&lt;/h4&gt;
 &lt;p&gt;　　通过虚函数你通常可以避免使用具体的函数指针。例如，你可以使用含有名字为compare的虚函数的类对象指针代替函数指针。&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c--&quot; data-lang=&quot;c++&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Sorter&lt;/span&gt;
@@ -318,12 +318,12 @@ Host: localhost
 
 &lt;p&gt;　　然后你就可以传递一个AscendSorter实例的指针给cpp_qsort来对整数进行升序排列。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-8&quot;&gt;但是你真的没有使用函数指针吗？&lt;/h4&gt;
+&lt;h4 id=&quot;但是你真的没有使用函数指针吗&quot;&gt;但是你真的没有使用函数指针吗？&lt;/h4&gt;
 &lt;p&gt;　　虚函数背后是用函数指针实现的，因此你还是在使用函数指针，它仅仅在编译器层面帮你完成了函数指针的工作。使用多态是一个比较合适的策略，但是会带来创建对象的开销，而不是简单地传递一个函数指针。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-9&quot;&gt;函数指针概括&lt;/h3&gt;
+&lt;h3 id=&quot;函数指针概括&quot;&gt;函数指针概括&lt;/h3&gt;
 
-&lt;h4 id=&quot;section-10&quot;&gt;语法&lt;/h4&gt;
+&lt;h4 id=&quot;语法&quot;&gt;语法&lt;/h4&gt;
 &lt;ul&gt;
   &lt;li&gt;声明
 　　声明一个函数指针与声明函数类似，除了函数名使用*foo而不是foo:&lt;/li&gt;
@@ -367,8 +367,8 @@ Host: localhost
 &lt;/blockquote&gt;
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://eleven26.github.io/c++/2016/11/01/c++-function-pointer.html</link>
-        <guid isPermaLink="true">http://eleven26.github.io/c++/2016/11/01/c++-function-pointer.html</guid>
+        <link>http://localhost:4000/c++/2016/11/01/c++-function-pointer.html</link>
+        <guid isPermaLink="true">http://localhost:4000/c++/2016/11/01/c++-function-pointer.html</guid>
         
         
         <category>C++</category>
@@ -459,8 +459,8 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 </description>
         <pubDate>Mon, 31 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://eleven26.github.io/c++/2016/10/31/use-c-function-pointer.html</link>
-        <guid isPermaLink="true">http://eleven26.github.io/c++/2016/10/31/use-c-function-pointer.html</guid>
+        <link>http://localhost:4000/c++/2016/10/31/use-c-function-pointer.html</link>
+        <guid isPermaLink="true">http://localhost:4000/c++/2016/10/31/use-c-function-pointer.html</guid>
         
         
         <category>C++</category>
@@ -472,9 +472,7 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <description>&lt;p&gt;demo中的客户端和服务端脚本在同一文件夹&lt;/p&gt;
 
 &lt;p&gt;服务端 server.py&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python
-&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python&lt;/span&gt;
 
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
@@ -513,12 +511,12 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;客户端client.py&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python
-&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python&lt;/span&gt;
 
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
@@ -554,7 +552,9 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;测试传输的文件大小为3.8G&lt;/p&gt;
@@ -567,8 +567,8 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;/blockquote&gt;
 </description>
         <pubDate>Sun, 30 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://eleven26.github.io/python/2016/10/30/python-socket-demo.html</link>
-        <guid isPermaLink="true">http://eleven26.github.io/python/2016/10/30/python-socket-demo.html</guid>
+        <link>http://localhost:4000/python/2016/10/30/python-socket-demo.html</link>
+        <guid isPermaLink="true">http://localhost:4000/python/2016/10/30/python-socket-demo.html</guid>
         
         
         <category>Python</category>
