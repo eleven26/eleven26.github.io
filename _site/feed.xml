@@ -6,9 +6,164 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 26 Dec 2016 12:56:32 +0800</pubDate>
-    <lastBuildDate>Mon, 26 Dec 2016 12:56:32 +0800</lastBuildDate>
-    <generator>Jekyll v3.3.1</generator>
+    <pubDate>Sun, 19 Mar 2017 13:16:30 +0800</pubDate>
+    <lastBuildDate>Sun, 19 Mar 2017 13:16:30 +0800</lastBuildDate>
+    <generator>Jekyll v3.4.2</generator>
+    
+      <item>
+        <title>像我这种菜鸡怎么理解Closure的bind和bindTo</title>
+        <description>&lt;p&gt;bind是bindTo的静态版本，因此只说bind吧。(还不是太了解为什么要弄出两个版本)&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;官方文档: 复制一个闭包，绑定指定的$this对象和类作用域。
+其实后半句表述很不清楚。
+我的理解: 把一个闭包转换为某个类的方法(只是这个方法不需要通过对象调用), 这样闭包中的$this、static、self就转换成了对应的对象或类。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;因为有几种情况:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;1、只绑定$this对象.&lt;/li&gt;
+  &lt;li&gt;2、只绑定类作用域.&lt;/li&gt;
+  &lt;li&gt;3、同时绑定$this对象和类作用域.(文档的说法)&lt;/li&gt;
+  &lt;li&gt;4、都不绑定.(这样一来只是纯粹的复制, 文档说法是使用cloning代替bind或bindTo)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面详细讲解这几种情况:&lt;/p&gt;
+
+&lt;h4 id=&quot;1只绑定this对象&quot;&gt;1、只绑定$this对象&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;$closure = function ($name, $age) {
+    $this-&amp;gt;name = $name;
+    $this-&amp;gt;age = $age;
+};
+
+class Person {
+    public $name;
+    public $age;
+
+    public function say() {
+        echo &quot;My name is {$this-&amp;gt;name}, I'm {$this-&amp;gt;age} years old.\n&quot;;
+    }
+}
+
+$person = new Person();
+
+//把$closure中的$this绑定为$person
+//这样在$bound_closure中设置name和age的时候实际上是设置$person的name和age
+//也就是绑定了指定的$this对象($person)
+$bound_closure = Closure::bind($closure, $person);
+
+$bound_closure('php', 100);
+$person-&amp;gt;say();&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;My name is php, I’m 100 years old.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意: 在上面的这个例子中，是不可以在$closure中使用static的，如果需要使用static，通过第三个参数传入带命名空间的类名。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;2只绑定类作用域&quot;&gt;2、只绑定类作用域.&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;$closure = function ($name, $age) {
+  static::$name =  $name;
+  static::$age = $age;
+};
+
+class Person {
+    static $name;
+    static $age;
+
+    public static function say()
+    {
+        echo &quot;My name is &quot; . static::$name . &quot;, I'm &quot; . static::$age. &quot; years old.\n&quot;;
+    }
+}
+
+//把$closure中的static绑定为Person类
+//这样在$bound_closure中设置name和age的时候实际上是设置Person的name和age
+//也就是绑定了指定的static(Person)
+$bound_closure = Closure::bind($closure, null, Person::class);
+
+$bound_closure('php', 100);
+
+Person::say();&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;My name is php, I’m 100 years old.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意: 在上面的例子中，是不可以在$closure中使用$this的，因为我们的bind只绑定了类名，也就是static，如果需要使用$this，新建一个对象作为bind的第二个参数传入。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;3同时绑定this对象和类作用域文档的说法&quot;&gt;3、同时绑定$this对象和类作用域.(文档的说法)&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;$closure = function ($name, $age, $sex) {
+    $this-&amp;gt;name = $name;
+    $this-&amp;gt;age = $age;
+    static::$sex = $sex;
+};
+
+class Person {
+    public $name;
+    public $age;
+
+    static $sex;
+
+    public function say()
+    {
+        echo &quot;My name is {$this-&amp;gt;name}, I'm {$this-&amp;gt;age} years old.\n&quot;;
+        echo &quot;Sex: &quot; . static::$sex . &quot;.\n&quot;;
+    }
+}
+
+$person = new Person();
+
+//把$closure中的static绑定为Person类, $this绑定为$person对象
+$bound_closure = Closure::bind($closure, $person, Person::class);
+$bound_closure('php', 100, 'female');
+
+$person-&amp;gt;say();&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;My name is php, I’m 100 years old.
+Sex: female.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;在这个例子中可以在$closure中同时使用$this和static&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;4都不绑定这样一来只是纯粹的复制-文档说法是使用cloning代替bind或bindto&quot;&gt;4、都不绑定.(这样一来只是纯粹的复制, 文档说法是使用cloning代替bind或bindTo)&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;$closure = function () {
+    echo &quot;bind nothing.\n&quot;;
+};
+
+//与$bound_closure = clone $closure;的效果一样
+$bound_closure = Closure::bind($closure, null);
+
+$bound_closure();&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;bind nothing.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;这个就用clone好了吧…&lt;/p&gt;
+&lt;/blockquote&gt;
+
+</description>
+        <pubDate>Sun, 19 Mar 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/php/2017/03/19/how-to-apprehend-Closure's-bind-and-bindTo.html</link>
+        <guid isPermaLink="true">http://localhost:4000/php/2017/03/19/how-to-apprehend-Closure's-bind-and-bindTo.html</guid>
+        
+        
+        <category>php</category>
+        
+      </item>
     
       <item>
         <title>javascript中apply和call的用法</title>
@@ -472,7 +627,9 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <description>&lt;p&gt;demo中的客户端和服务端脚本在同一文件夹&lt;/p&gt;
 
 &lt;p&gt;服务端 server.py&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python&lt;/span&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python
+&lt;/span&gt;
 
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
@@ -511,12 +668,12 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;客户端client.py&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python&lt;/span&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python
+&lt;/span&gt;
 
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
@@ -552,9 +709,7 @@ ascending order : 1 2 3 4 5&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;run time: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ss&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;测试传输的文件大小为3.8G&lt;/p&gt;

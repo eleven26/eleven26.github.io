@@ -66,6 +66,186 @@
 
     <article class="post_card post">
       <header class="post_header">
+        <h2 class="post_title"><a href="/php/2017/03/19/how-to-apprehend-Closure's-bind-and-bindTo.html">像我这种菜鸡怎么理解Closure的bind和bindTo</a></h2>
+        <time class="post_date">19 March 2017, Sunday</time>
+      </header>
+      <div class="post_excerpt">
+        <p>
+          
+          <p>bind是bindTo的静态版本，因此只说bind吧。(还不是太了解为什么要弄出两个版本)</p>
+
+<blockquote>
+  <p>官方文档: 复制一个闭包，绑定指定的$this对象和类作用域。
+其实后半句表述很不清楚。
+我的理解: 把一个闭包转换为某个类的方法(只是这个方法不需要通过对象调用), 这样闭包中的$this、static、self就转换成了对应的对象或类。</p>
+</blockquote>
+
+<p>因为有几种情况:</p>
+<ul>
+  <li>1、只绑定$this对象.</li>
+  <li>2、只绑定类作用域.</li>
+  <li>3、同时绑定$this对象和类作用域.(文档的说法)</li>
+  <li>4、都不绑定.(这样一来只是纯粹的复制, 文档说法是使用cloning代替bind或bindTo)</li>
+</ul>
+
+<p>下面详细讲解这几种情况:</p>
+
+<h4 id="1只绑定this对象">1、只绑定$this对象</h4>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">$closure = function ($name, $age) {
+    $this-&gt;name = $name;
+    $this-&gt;age = $age;
+};
+
+class Person {
+    public $name;
+    public $age;
+
+    public function say() {
+        echo "My name is {$this-&gt;name}, I'm {$this-&gt;age} years old.\n";
+    }
+}
+
+$person = new Person();
+
+//把$closure中的$this绑定为$person
+//这样在$bound_closure中设置name和age的时候实际上是设置$person的name和age
+//也就是绑定了指定的$this对象($person)
+$bound_closure = Closure::bind($closure, $person);
+
+$bound_closure('php', 100);
+$person-&gt;say();</code></pre></figure>
+
+<blockquote>
+  <p>My name is php, I’m 100 years old.</p>
+</blockquote>
+
+<blockquote>
+  <p>注意: 在上面的这个例子中，是不可以在$closure中使用static的，如果需要使用static，通过第三个参数传入带命名空间的类名。</p>
+</blockquote>
+
+<h4 id="2只绑定类作用域">2、只绑定类作用域.</h4>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">$closure = function ($name, $age) {
+  static::$name =  $name;
+  static::$age = $age;
+};
+
+class Person {
+    static $name;
+    static $age;
+
+    public static function say()
+    {
+        echo "My name is " . static::$name . ", I'm " . static::$age. " years old.\n";
+    }
+}
+
+//把$closure中的static绑定为Person类
+//这样在$bound_closure中设置name和age的时候实际上是设置Person的name和age
+//也就是绑定了指定的static(Person)
+$bound_closure = Closure::bind($closure, null, Person::class);
+
+$bound_closure('php', 100);
+
+Person::say();</code></pre></figure>
+
+<blockquote>
+  <p>My name is php, I’m 100 years old.</p>
+</blockquote>
+
+<blockquote>
+  <p>注意: 在上面的例子中，是不可以在$closure中使用$this的，因为我们的bind只绑定了类名，也就是static，如果需要使用$this，新建一个对象作为bind的第二个参数传入。</p>
+</blockquote>
+
+<h4 id="3同时绑定this对象和类作用域文档的说法">3、同时绑定$this对象和类作用域.(文档的说法)</h4>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">$closure = function ($name, $age, $sex) {
+    $this-&gt;name = $name;
+    $this-&gt;age = $age;
+    static::$sex = $sex;
+};
+
+class Person {
+    public $name;
+    public $age;
+
+    static $sex;
+
+    public function say()
+    {
+        echo "My name is {$this-&gt;name}, I'm {$this-&gt;age} years old.\n";
+        echo "Sex: " . static::$sex . ".\n";
+    }
+}
+
+$person = new Person();
+
+//把$closure中的static绑定为Person类, $this绑定为$person对象
+$bound_closure = Closure::bind($closure, $person, Person::class);
+$bound_closure('php', 100, 'female');
+
+$person-&gt;say();</code></pre></figure>
+
+<blockquote>
+  <p>My name is php, I’m 100 years old.
+Sex: female.</p>
+</blockquote>
+
+<blockquote>
+  <p>在这个例子中可以在$closure中同时使用$this和static</p>
+</blockquote>
+
+<h4 id="4都不绑定这样一来只是纯粹的复制-文档说法是使用cloning代替bind或bindto">4、都不绑定.(这样一来只是纯粹的复制, 文档说法是使用cloning代替bind或bindTo)</h4>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">$closure = function () {
+    echo "bind nothing.\n";
+};
+
+//与$bound_closure = clone $closure;的效果一样
+$bound_closure = Closure::bind($closure, null);
+
+$bound_closure();</code></pre></figure>
+
+<blockquote>
+  <p>bind nothing.</p>
+</blockquote>
+
+<blockquote>
+  <p>这个就用clone好了吧…</p>
+</blockquote>
+
+
+          
+          <a class="read-more" href="/php/2017/03/19/how-to-apprehend-Closure's-bind-and-bindTo.html"> »  </a>
+        </p>
+      </div>
+      <footer class="post_meta">
+
+
+        
+        <!--
+        
+        <a href="/category/php">
+          <data data-icon="ei-archive"></data>
+          php</a>
+        
+        -->
+
+        <!--
+        
+        -->
+
+        <!--p class="readmore">
+          <a href=""><data data-icon="ei-arrow-right"></data>Read this article  </a>
+        </p-->
+      </footer>
+      <hr/>
+    </article>
+    
+
+    <article class="post_card post">
+      <header class="post_header">
         <h2 class="post_title"><a href="/javascript/2016/11/27/javascript-apply-usage.html">javascript中apply和call的用法</a></h2>
         <time class="post_date">27 November 2016, Sunday</time>
       </header>
@@ -606,139 +786,6 @@ ascending order : 1 2 3 4 5</code></pre></figure>
         <a href="/category/C++">
           <data data-icon="ei-archive"></data>
           C++</a>
-        
-        -->
-
-        <!--
-        
-        -->
-
-        <!--p class="readmore">
-          <a href=""><data data-icon="ei-arrow-right"></data>Read this article  </a>
-        </p-->
-      </footer>
-      <hr/>
-    </article>
-    
-
-    <article class="post_card post">
-      <header class="post_header">
-        <h2 class="post_title"><a href="/python/2016/10/30/python-socket-demo.html">python socket传输文件demo</a></h2>
-        <time class="post_date">30 October 2016, Sunday</time>
-      </header>
-      <div class="post_excerpt">
-        <p>
-          
-          <p>demo中的客户端和服务端脚本在同一文件夹</p>
-
-<p>服务端 server.py</p>
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
-
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-
-<span class="kn">import</span> <span class="nn">socket</span>
-
-<span class="n">host</span> <span class="o">=</span> <span class="s">'127.0.0.1'</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mi">9090</span>
-<span class="n">file_name</span> <span class="o">=</span> <span class="s">'destination.iso'</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-<span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
-<span class="n">s</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">"connected"</span>
-<span class="n">save_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">3072000</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-        <span class="k">break</span>
-    <span class="n">save_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-<span class="k">print</span> <span class="s">"finish receive!"</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">save_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-<span class="n">run_time</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
-
-<span class="n">minute</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">/</span> <span class="mi">60</span>
-<span class="n">second</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">-</span> <span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span>
-
-<span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s second"</span> <span class="o">%</span> <span class="n">run_time</span>
-<span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
-</code></pre>
-</div>
-
-<p>客户端client.py</p>
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
-
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="n">host</span> <span class="o">=</span> <span class="s">"127.0.0.1"</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mi">9090</span>
-<span class="n">file_name</span> <span class="o">=</span> <span class="s">'source.iso'</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-<span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
-<span class="k">print</span> <span class="s">"connected"</span>
-
-<span class="n">send_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">send_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3072000</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-        <span class="k">break</span>
-    <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-<span class="k">print</span> <span class="s">"finish send!"</span>
-<span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">send_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
-<span class="n">run_time</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
-
-<span class="n">minute</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">/</span> <span class="mi">60</span>
-<span class="n">second</span> <span class="o">=</span> <span class="n">run_time</span> <span class="o">-</span> <span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span>
-
-<span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s second"</span> <span class="o">%</span> <span class="n">run_time</span>
-<span class="k">if</span> <span class="n">minute</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="n">second</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"run time: </span><span class="si">%</span><span class="s">sm</span><span class="si">%</span><span class="s">ss"</span> <span class="o">%</span> <span class="p">(</span><span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
-</code></pre>
-</div>
-
-<blockquote>
-  <p>测试传输的文件大小为3.8G</p>
-</blockquote>
-
-<blockquote>
-  <p>data = send_file.read(4096000)
-这里每次读取大小和服务端每次写多少依据具体情况而定，测试时候发现cpu占用略高，i5-6500 3.4GHz服务器端和客户端各占了10%左右，
-当send_file.read()中参数为4096的时候，占用总共为30%左右。</p>
-</blockquote>
-
-          
-          <a class="read-more" href="/python/2016/10/30/python-socket-demo.html"> »  </a>
-        </p>
-      </div>
-      <footer class="post_meta">
-
-
-        
-        <!--
-        
-        <a href="/category/Python">
-          <data data-icon="ei-archive"></data>
-          Python</a>
         
         -->
 

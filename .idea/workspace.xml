@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f09aa65d-a361-4a19-bb3d-40b2db2f5de7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/eleven26.github.io.iml" afterPath="$PROJECT_DIR$/.idea/eleven26.github.io.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/_posts/2017-03-19-像我这种菜鸟怎么理解Closure的bind和bindTo.md" afterPath="$PROJECT_DIR$/_posts/2017-03-19-how-to-apprehend-Closure's-bind-and-bindTo.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_base.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_base.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_color.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_color.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_layout.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_layout.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_normalize.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_normalize.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_syntax-highlighting.scssc" afterPath="$PROJECT_DIR$/.sass-cache/7282190114468ad519da78079e0d12dac2d87e0e/_syntax-highlighting.scssc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_site/archive.html" afterPath="$PROJECT_DIR$/_site/archive.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_site/feed.xml" afterPath="$PROJECT_DIR$/_site/feed.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_site/index.html" afterPath="$PROJECT_DIR$/_site/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_site/python/2016/10/30/python-socket-demo.html" afterPath="$PROJECT_DIR$/_site/python/2016/10/30/python-socket-demo.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,12 +33,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="2017-03-19-像我这种菜鸟怎么理解Closure的bind和bindTo.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/_posts/2017-03-19-像我这种菜鸟怎么理解Closure的bind和bindTo.md">
+      <file leaf-file-name="2017-03-19-how-to-apprehend-Closure's-bind-and-bindTo.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_posts/2017-03-19-how-to-apprehend-Closure's-bind-and-bindTo.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="651">
-                <caret line="139" column="0" lean-forward="true" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+              <first_editor relative-caret-position="570">
+                <caret line="38" column="23" lean-forward="true" selection-start-line="38" selection-start-column="23" selection-end-line="38" selection-end-column="23" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -45,6 +55,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/_posts/2017-03-19-像我这种菜鸟怎么理解Closure的bind和bindTo.md" />
+        <option value="$PROJECT_DIR$/_posts/2017-03-19-how-to-apprehend-Closure's-bind-and-bindTo.md" />
       </list>
     </option>
   </component>
@@ -194,12 +205,12 @@
       <updated>1482590774547</updated>
       <workItem from="1482590776102" duration="295000" />
       <workItem from="1482594447190" duration="34000" />
-      <workItem from="1489897175611" duration="1261000" />
+      <workItem from="1489897175611" duration="1652000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1590000" />
+    <option name="totallyTimeSpent" value="1981000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="40" y="23" width="1400" height="827" extended-state="0" />
@@ -326,11 +337,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/2017-03-19-像我这种菜鸟怎么理解Closure的bind和bindTo.md">
+    <entry file="file://$PROJECT_DIR$/_posts/2016-11-01-c++-function-pointer.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="651">
-            <caret line="139" column="0" lean-forward="true" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+          <first_editor relative-caret-position="-2385">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2016-11-27-javascript-apply-usage.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="270">
+            <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="26" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2017-03-19-how-to-apprehend-Closure's-bind-and-bindTo.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="570">
+            <caret line="38" column="23" lean-forward="true" selection-start-line="38" selection-start-column="23" selection-end-line="38" selection-end-column="23" />
             <folding />
           </first_editor>
           <second_editor />
