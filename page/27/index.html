@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eleven26.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="eleven26">
+<meta property="og:url" content="https://eleven26.github.io/page/27/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eleven26.github.io/page/27/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>eleven26</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">eleven26</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/06/19/linux/linux%20%E4%BD%BF%E7%94%A8%20ltrace%20%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E9%98%BB%E5%A1%9E%E5%9C%A8%E5%93%AA%E9%87%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/19/linux/linux%20%E4%BD%BF%E7%94%A8%20ltrace%20%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E9%98%BB%E5%A1%9E%E5%9C%A8%E5%93%AA%E9%87%8C/" class="post-title-link" itemprop="url">linux 使用 ltrace 查看进程阻塞在哪里</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-19 15:02:00 / Modified: 16:58:56" itemprop="dateCreated datePublished" datetime="2021-06-19T15:02:00+08:00">2021-06-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 web 应用中，我们有很大几率会遇到一个请求无响应的情况，这种情况往往是某些系统调用阻塞导致的（比如 MySQL、MongoDB 查询一直没有返回），我们该怎么来知道是什么原因导致的呢？</p>
+<p>在 linux 下，我们可以使用 <code>ltrace</code> 来查看进程当前的状态。</p>
+<p>使用方法：</p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ltrace -p 1234</span><br></pre></td></tr></table></figure>
+<p>这里的 1234 是进程 id。</p>
+<blockquote>
+<p>但是有个需要注意的是，对于已经阻塞的进程，通过 <code>ltrace</code> 无法知道当前阻塞在什么系统调用上。不过如果可以在进程处理请求之前拿到进程 id 的话，就可以在请求到来之前先调用 <code>ltrace</code>，然后就可以看到请求过程中的系统调用。</p>
+</blockquote>
+<blockquote>
+<p>另外有个类似的命令 strace。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/06/08/laravel/Laravel%205.5%20%E5%85%B3%E8%81%94%20MongoDB%20whereHas%20%E6%9F%A5%E8%AF%A2%E4%B8%8D%E5%88%B0%E6%95%B0%E6%8D%AE%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/08/laravel/Laravel%205.5%20%E5%85%B3%E8%81%94%20MongoDB%20whereHas%20%E6%9F%A5%E8%AF%A2%E4%B8%8D%E5%88%B0%E6%95%B0%E6%8D%AE%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Laravel 5.5 关联 MongoDB whereHas 查询不到数据的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-08 09:40:00 / Modified: 10:12:08" itemprop="dateCreated datePublished" datetime="2021-06-08T09:40:00+08:00">2021-06-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>具体情况大概是这样的，我们有一个 MySQL 的模型，有一个 Mongo 的模型，然后在 MySQL 的模型中 hasOne Mongo 的模型，结果：</p>
+<p>MySQL with 的时候可以查询出数据，但是使用 whereHas 的时候查询不到数据了。</p>
+<h2 id="环境">环境</h2>
+<ul>
+<li><code>laravel/lumen-framework</code>: 5.5.2</li>
+<li><code>jenssegers/mongodb</code>: 3.3.2</li>
+</ul>
+<h2 id="重现">重现</h2>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> \<span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">// 可以让我们关联 MongoDB 的一个 trait</span></span><br><span class="line">    <span class="keyword">use</span> \<span class="title">Jenssegers</span>\<span class="title">Mongodb</span>\<span class="title">Eloquent</span>\<span class="title">HybridRelations</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(B::<span class="variable language_">class</span>, <span class="string">&#x27;_id&#x27;</span>, <span class="string">&#x27;b_id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> \<span class="title">Jenssegers</span>\<span class="title">Mongodb</span>\<span class="title">Eloquent</span>\<span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Laravel 的关联查询如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = A::<span class="title function_ invoke__">query</span>()-&gt;<span class="title function_ invoke__">with</span>(<span class="string">&#x27;b&#x27;</span>)-&gt;<span class="title function_ invoke__">whereKey</span>(<span class="number">10</span>)-&gt;<span class="title function_ invoke__">first</span>();</span><br><span class="line"><span class="comment">// $a 可以查询出来</span></span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="variable">$a</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$a</span> = A::<span class="title function_ invoke__">query</span>()-&gt;<span class="title function_ invoke__">whereHas</span>(<span class="string">&#x27;b&#x27;</span>)-&gt;<span class="title function_ invoke__">whereKey</span>(<span class="number">10</span>)-&gt;<span class="title function_ invoke__">first</span>();</span><br><span class="line"><span class="comment">// $a 为 null</span></span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="variable">$a</span>);</span><br></pre></td></tr></table></figure>
+<p>正常情况下，其实第二个查询我们也应该查询出来才对，可是我们查不到，然后尝试打印一下查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[2021-06-08 09:54:30] lumen.INFO: time: 75.18 select * from `as` where `as`.`id` = 10 limit 1  </span><br><span class="line">[2021-06-08 09:54:30] lumen.INFO: time: 48.25,  connection: mongo_core,  db.bs.find(&#123;&quot;_id&quot;:&#123;&quot;$in&quot;:[&quot;60becd2306bce821e55ffce3&quot;]&#125;&#125;)  </span><br><span class="line">[2021-06-08 09:54:30] lumen.INFO: time: 2.52,  connection: mongo_core,  db.bs.find(&#123;&quot;projection&quot;:&#123;&quot;_id&quot;:true&#125;&#125;)  </span><br><span class="line">[2021-06-08 09:54:30] lumen.INFO: time: 18.81 select * from `as` where `id` in (&quot;60becd2306bce821e55ffce3&quot;) and `as`.`id` = 10 limit 1  </span><br></pre></td></tr></table></figure>
+<p>我们发现最后一条语句并不是如我们期待的那样，<code>where b_id in</code> 而是 <code>where id in</code>，这是一个不正常的行为，因为根据我们的定义，关联 A 模型的字段应该是 <code>b_id</code> 而不是 <code>id</code>。</p>
+<h2 id="原因">原因</h2>
+<p>因为想找到查询使用 <code>id</code> 而不是 <code>b_id</code>，对关联部分的代码 debug 了一下，最后发现，位于 <code>\Jenssegers\Mongodb\Helpers\QueriesRelationships</code> 的方法 <code>getRelatedConstraintKey</code> 返回了一个错误的关联键：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jenssegers/laravel-mongodb/blob/v3.3.2/src/Jenssegers/Mongodb/Helpers/QueriesRelationships.php">QueriesRelationships.php v3.3.2</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns key we are constraining this parent model&#x27;s query with</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> $relation</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> \Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">getRelatedConstraintKey</span>(<span class="params"><span class="variable">$relation</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$relation</span> <span class="keyword">instanceof</span> HasOneOrMany) &#123;</span><br><span class="line">        <span class="comment">// 这里返回了关联模型的主键（id），但是实际上应该返回的是关联里面指定的那个键（b_id）</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;model-&gt;<span class="title function_ invoke__">getKeyName</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$relation</span> <span class="keyword">instanceof</span> BelongsTo) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$relation</span>-&gt;<span class="title function_ invoke__">getForeignKey</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">\Exception</span>(<span class="title function_ invoke__">class_basename</span>(<span class="variable">$relation</span>) . <span class="string">&#x27; Is Not supported for hybrid query constraints!&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>感觉这是一个 bug，然后去新版本的库里面看了一下，发现新版本里面已经修改过来了：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jenssegers/laravel-mongodb/blob/v3.7.3/src/Jenssegers/Mongodb/Helpers/QueriesRelationships.php">QueriesRelationships.php v3.7.3</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Returns key we are constraining this parent model&#x27;s query with</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> Relation $relation</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">getRelatedConstraintKey</span>(<span class="params">Relation <span class="variable">$relation</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$relation</span> <span class="keyword">instanceof</span> HasOneOrMany) &#123;</span><br><span class="line">        <span class="comment">// 返回了正确的关联键</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$relation</span>-&gt;<span class="title function_ invoke__">getLocalKeyName</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$relation</span> <span class="keyword">instanceof</span> BelongsTo) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$relation</span>-&gt;<span class="title function_ invoke__">getForeignKeyName</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$relation</span> <span class="keyword">instanceof</span> BelongsToMany &amp;&amp; !<span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">isAcrossConnections</span>(<span class="variable">$relation</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;model-&gt;<span class="title function_ invoke__">getKeyName</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="title function_ invoke__">class_basename</span>(<span class="variable">$relation</span>) . <span class="string">&#x27; is not supported for hybrid query constraints.&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结论">结论</h2>
+<p>由于修复的版本与当前使用的版本相差太多，而且依赖于 Laravel 的版本，所以无法升级其版本，只有换一种写法了。（whereHas 拆分出来，先查询到关联数据的 _id，然后作为 whereIn 条件传递）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/06/08/mongodb/jenssegers%20laravel-mongodb%20%E6%A0%B9%E6%8D%AE%E9%9B%86%E5%90%88%E5%89%8D%E7%BC%80%E8%81%9A%E5%90%88%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/08/mongodb/jenssegers%20laravel-mongodb%20%E6%A0%B9%E6%8D%AE%E9%9B%86%E5%90%88%E5%89%8D%E7%BC%80%E8%81%9A%E5%90%88%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">jenssegers laravel-mongodb 根据集合前缀聚合状态数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-06-08 09:12:00" itemprop="dateCreated datePublished" datetime="2021-06-08T09:12:00+08:00">2021-06-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-09 14:16:26" itemprop="dateModified" datetime="2021-06-09T14:16:26+08:00">2021-06-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>有时候需要根据需要对 MongoDB 的集合进行分集合存储（类似 MySQL 的分表），这样一来 db 下就产生了很多相同前缀的集合，这样一来，我们想知道这一批集合的一些关键状态信息的时候就比较不便，比如想知道某一个前缀所有集合的总大小等等。</p>
+<p>一个可行的方法是，通过找到一个模式前缀的所有集合，然后逐个调用 MongoDB 的 <a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/reference/command/collStats/">collStats</a> 命令来获取单个集合的状态，然后做一个聚合，下面是基于 <a target="_blank" rel="noopener" href="https://github.com/jenssegers/laravel-mongodb">jenssegers mongodb</a> 的一个实现：</p>
+<h2 id="统计-product-库下-xx_-前缀的所有集合的大小等">统计 product 库下 xx_ 前缀的所有集合的大小等</h2>
+<p>输出的字段说明：</p>
+<ul>
+<li><code>collection_count</code>: <code>xx_</code> 前缀的集合总数量</li>
+<li><code>total_document_count</code>: <code>xx_</code> 前缀文档总数量</li>
+<li><code>total_size</code>: <code>xx_</code> 前缀集合总大小</li>
+<li><code>avg_obj_size</code>: <code>xx_</code> 前缀集合平均单个文档的大小</li>
+<li><code>total_storage_size</code>: <code>xx_</code> 前缀集合占的总存储大小</li>
+<li><code>total_index_size</code>: <code>xx_</code> 前缀集合索引总大小</li>
+<li><code>total_bytes_in_cache</code>: <code>xx_</code> 前缀集合数据当前占用的缓存大小</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$patterns</span> = [</span><br><span class="line">    <span class="string">&#x27;product.xx_&#x27;</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format</span>(<span class="params"><span class="variable">$bytes</span></span>): <span class="title">string</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$bytes</span> &lt; <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> bytes&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$bytes</span> &lt; <span class="number">1024</span> * <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="variable">$bytes</span> = <span class="title function_ invoke__">round</span>(<span class="variable">$bytes</span> / <span class="number">1024</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> Kb&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$bytes</span> &lt; <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="variable">$bytes</span> = <span class="title function_ invoke__">round</span>(<span class="variable">$bytes</span> / <span class="number">1024</span> / <span class="number">1024</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> Mb&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$bytes</span> = <span class="title function_ invoke__">round</span>(<span class="variable">$bytes</span> / <span class="number">1024</span> / <span class="number">1024</span> / <span class="number">1024</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> Gb&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CollectionStats</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$stats</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$stats</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;stats = <span class="variable">$stats</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toArray</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;collection&#x27;</span>     =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;ns&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;size&#x27;</span>           =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;size&#x27;</span>]),</span><br><span class="line">            <span class="string">&#x27;count&#x27;</span>          =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;avgObjSize&#x27;</span>     =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;avgObjSize&#x27;</span>] ?? <span class="number">0</span>),</span><br><span class="line">            <span class="string">&#x27;storageSize&#x27;</span>    =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;storageSize&#x27;</span>]),</span><br><span class="line">            <span class="string">&#x27;totalIndexSize&#x27;</span> =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;totalIndexSize&#x27;</span>]),</span><br><span class="line"></span><br><span class="line">            <span class="string">&#x27;raw&#x27;</span> =&gt; [</span><br><span class="line">                <span class="string">&#x27;count&#x27;</span>          =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;size&#x27;</span>           =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;size&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;avgObjSize&#x27;</span>     =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;avgObjSize&#x27;</span>] ?? <span class="number">0</span>,</span><br><span class="line">                <span class="string">&#x27;storageSize&#x27;</span>    =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;storageSize&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;totalIndexSize&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;totalIndexSize&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;bytes_in_cache&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;wiredTiger&#x27;</span>][<span class="string">&#x27;cache&#x27;</span>][<span class="string">&#x27;bytes currently in the cache&#x27;</span>],</span><br><span class="line">            ],</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$patterns</span> <span class="keyword">as</span> <span class="variable">$pattern</span>) &#123;</span><br><span class="line">    <span class="comment">// $connectionName 连接名</span></span><br><span class="line">    <span class="comment">// $collectionPrefix Collection 前缀</span></span><br><span class="line">    [<span class="variable">$connectionName</span>, <span class="variable">$collectionPrefix</span>] = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;.&#x27;</span>, <span class="variable">$pattern</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="title function_ invoke__">compact</span>(<span class="string">&#x27;connectionName&#x27;</span>, <span class="string">&#x27;collectionPrefix&#x27;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="variable">$collections</span> = <span class="title function_ invoke__">get_collection_names</span>(<span class="variable">$connectionName</span>);</span><br><span class="line">    <span class="variable">$collections</span> = <span class="title function_ invoke__">collect</span>(<span class="variable">$collections</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">filter</span>(function (<span class="variable">$collection</span>) <span class="keyword">use</span> ($<span class="title">collectionPrefix</span>) &#123;</span><br><span class="line">            <span class="title">return</span> <span class="title">Str</span>::<span class="title">startsWith</span>($<span class="title">collection</span>, $<span class="title">collectionPrefix</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">values</span>()</span><br><span class="line">        -&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看 Collection 的状态：</span></span><br><span class="line">    <span class="comment">// https://docs.mongodb.com/manual/reference/command/</span></span><br><span class="line">    <span class="comment">// https://docs.mongodb.com/manual/reference/command/collStats/#mongodb-dbcommand-dbcmd.collStats</span></span><br><span class="line"></span><br><span class="line">    <span class="variable">$result</span> = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$collections</span> <span class="keyword">as</span> <span class="variable">$collection</span>) &#123;</span><br><span class="line">        <span class="variable">$cursor</span> = DB::<span class="title function_ invoke__">connection</span>(<span class="variable">$connectionName</span>)-&gt;<span class="title function_ invoke__">getMongoDB</span>()-&gt;<span class="title function_ invoke__">command</span>([<span class="string">&#x27;collStats&#x27;</span> =&gt; <span class="variable">$collection</span>]);</span><br><span class="line">        <span class="variable">$res</span>     = <span class="title function_ invoke__">json_decode</span>(<span class="title function_ invoke__">json_encode</span>(<span class="variable">$cursor</span>-&gt;<span class="title function_ invoke__">toArray</span>()[<span class="number">0</span>]), <span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$reply</span>   = <span class="title function_ invoke__">json_encode</span>(<span class="variable">$res</span>, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$result</span>[] = (<span class="keyword">new</span> <span class="title class_">CollectionStats</span>(<span class="variable">$res</span>))-&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$results</span> = <span class="title function_ invoke__">collect</span>(<span class="variable">$result</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;collection_count: &#x27;</span> . <span class="variable">$results</span>-&gt;<span class="title function_ invoke__">count</span>());</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_document_count: &#x27;</span> . <span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.count&#x27;</span>));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.size&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;avg_obj_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">avg</span>(<span class="string">&#x27;raw.avgObjSize&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_storage_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.storageSize&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_index_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.totalIndexSize&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_bytes_in_cache: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.bytes_in_cache&#x27;</span>)));</span><br><span class="line">    <span class="keyword">echo</span> PHP_EOL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array:2 [</span><br><span class="line">  &quot;connectionName&quot; =&gt; &quot;product&quot;</span><br><span class="line">  &quot;collectionPrefix&quot; =&gt; &quot;xx_&quot;</span><br><span class="line">]</span><br><span class="line">&quot;collection_count: 222&quot;</span><br><span class="line">&quot;total_document_count: 1664601&quot;</span><br><span class="line">&quot;total_size: 2.24 Gb&quot;</span><br><span class="line">&quot;avg_obj_size: 1.4 Kb&quot;</span><br><span class="line">&quot;total_storage_size: 996.66 Mb&quot;</span><br><span class="line">&quot;total_index_size: 156.34 Mb&quot;</span><br><span class="line">&quot;total_bytes_in_cache: 3.17 Gb&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="其他">其他</h2>
+<p>这个例子是基于 Laravel 的一个库来实现的，不过只是简单地调用了一个 <code>command</code> 方法，其他语言利用 MongoDB 提供的库也比较容易可以实现。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/06/03/linux/linux%20%E5%85%B1%E4%BA%AB%E5%BA%93%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/03/linux/linux%20%E5%85%B1%E4%BA%AB%E5%BA%93%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">linux 共享库找不到的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-06-03 10:52:00 / Modified: 10:56:11" itemprop="dateCreated datePublished" datetime="2021-06-03T10:52:00+08:00">2021-06-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>是这样的，在服务器上的 php 需要 zip 库，但我自己手动编译了一个 zip 库，安装在了 <code>/usr/local/lib64</code> 下。但 php 编译 zip 扩展的时候提示找不到 libzip。</p>
+<h2 id="解决方法">解决方法</h2>
+<p>将 <code>/usr/local/lib64</code> 也加入到系统共享库的搜索路径，我们可以通过 <code>ldconfig</code></p>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/lib64&quot; &gt; /etc/ld.so.conf.d/local.conf</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+<p>然后重新 configure。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/05/24/laravel/Laravel%20%E9%98%9F%E5%88%97%E8%B6%85%E6%97%B6%E7%9B%91%E5%90%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/24/laravel/Laravel%20%E9%98%9F%E5%88%97%E8%B6%85%E6%97%B6%E7%9B%91%E5%90%AC/" class="post-title-link" itemprop="url">Laravel 队列超时监听</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-24 11:04:00 / Modified: 11:09:38" itemprop="dateCreated datePublished" datetime="2021-05-24T11:04:00+08:00">2021-05-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 Laravel 5.8 以下的版本中，队列消费者处理消息超时的时候会静默失败，即使超过了重试次数，这就导致一个问题，超时的时候问题无法被及时发现。</p>
+<p>在 5.8 及以上版本中，超时次数重试次数之后也会当作失败处理，会记录到 failed_jobs 表里面，而不像之前版本那样一直重试。</p>
+<p>具体可以查看 <code>\Illuminate\Queue\Worker::registerTimeoutHandler</code> 方法。</p>
+<p>不过在 5.8 以下的版本中，我们依然有办法可以得知队列超时，<code>registerTimeoutHandler</code> 里面在超时退出消费者进程之前，先 fire 了一个 WorkerStopping 事件，并且传递了参数 1。</p>
+<p>也就是说，我们可以通过监听 WorkerStopping 事件，然后通过判断 WorkerStopping 的 status 状态字段是否为 1，如果是 1，则表明队列超时了，这个时候我们就可以采取一些行动，比如发送报警通知，及时告知开发者。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/63/">63</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">315</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ogliu.com/" title="https:&#x2F;&#x2F;ogliu.com&#x2F;" rel="noopener" target="_blank">OG-Liu's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+    <div>
+
+  </div>
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">eleven26</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

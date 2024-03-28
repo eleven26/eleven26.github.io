@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eleven26.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="eleven26">
+<meta property="og:url" content="https://eleven26.github.io/page/5/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eleven26.github.io/page/5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>eleven26</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">eleven26</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/11/24/golang/Golang%20%E6%90%AD%E5%BB%BA%20websocket%20%E5%BA%94%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/24/golang/Golang%20%E6%90%AD%E5%BB%BA%20websocket%20%E5%BA%94%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">Golang 搭建 WebSocket 应用（一） - 初识 gorilla/websocket</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-24 20:18:30 / Modified: 15:42:42" itemprop="dateCreated datePublished" datetime="2023-11-24T20:18:30+08:00">2023-11-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在本系列文章中，将会使用在 Go 中一个用得比较多的 <code>WebSocket</code> 实现 <a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">gorilla/websocket</a>。</p>
+<h2 id="背景知识---http-与-websocket-的关系">背景知识 - HTTP 与 WebSocket 的关系</h2>
+<p>本文会涉及到一些原理讲解，其中比较关键的一个是 HTTP 与 <code>WebSocket</code> 的联系与区别，了解这个可以帮助我们更好地使用 <code>WebSocket</code>。</p>
+<p>如果我们此前已经使用过 <code>WebSocket</code>，比如在 nginx 配置过 <code>WebSocket</code>，我们就会发现：</p>
+<ol type="1">
+<li>有个类似 <code>upgrade</code> 的关键字。这个关键字体现了 HTTP 与 <code>WebSocket</code> 的本质区别。</li>
+<li>在 nginx 里配置，意味着 <code>WebSocket</code> 本质上也是通过 HTTP 协议来工作的。</li>
+</ol>
+<p>我们知道，HTTP 的请求会在请求结束之后断开 <code>TCP</code> 连接，但 <code>WebSocket</code> 不一样，它在建立连接之后会一直维持着连接状态， 这样客户端与服务端就可以一直维持通信状态了。</p>
+<h3 id="websocket-建立连接的过程">WebSocket 建立连接的过程</h3>
+<p>在 WebSocket 协议中，初始的握手阶段使用标准的 HTTP 请求和响应：</p>
+<ol type="1">
+<li>客户端先发送一个 HTTP 请求，请求升级到 <code>WebSocket</code> 协议。</li>
+<li>服务器在收到这个请求后，如果同意升级到 <code>WebSocket</code>，就会返回一个状态码为 <code>101</code> 的 HTTP 响应，指示升级成功，然后不会断开 TCP 连接。</li>
+</ol>
+<p>这个过程涉及到的 HTTP 头部字段是 <code>Upgrade</code> 和 <code>Connection</code>，具体而言，HTTP 请求头部可能包含类似以下的字段：</p>
+<p>请求：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/chat</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>example.com</span><br><span class="line"><span class="attribute">Upgrade</span><span class="punctuation">: </span>websocket</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>Upgrade</span><br></pre></td></tr></table></figure>
+<p>响应：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">101</span> Switching Protocols</span><br><span class="line"><span class="attribute">Upgrade</span><span class="punctuation">: </span>websocket</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>Upgrade</span><br></pre></td></tr></table></figure>
+<p>也就是说，我们所看到的 <code>Upgrade</code> 实际上是把一个 <code>HTTP</code> 连接升级为了 <code>WebSocket</code> 连接，这个连接可以实现双向的通信。</p>
+<p>这使得它非常适合实时通信的应用，例如聊天应用、在线游戏等。</p>
+<h2 id="gorillawebsocket-中的基本概念">gorilla/websocket 中的基本概念</h2>
+<h3 id="websocket-连接---conn">WebSocket 连接 - Conn</h3>
+<p>在 <a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">gorilla/websocket</a> 中使用 <code>Conn</code> 来表示一个 <code>WebSocket</code> 连接，它主要有如下作用：</p>
+<ul>
+<li>发送消息给客户端：<code>Write*</code> 方法，如 <code>WriteJSON</code> 发送 JSON 类型消息，又或者 <code>WriteMessage</code> 可以发送普通的文本消息。</li>
+<li>接收客户端发送的消息：<code>Read*</code> 方法，如 <code>ReadJSON</code> 和 <code>ReadMessage</code>。</li>
+<li>其他功能：关闭连接、获取客户端 IP 地址等</li>
+</ul>
+<h3 id="消息">消息</h3>
+<p>在 <a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">gorilla/websocket</a> 中，消息被分为以下几种：</p>
+<ul>
+<li>数据消息：
+<ul>
+<li><code>TextMessage</code> 文本消息：文本消息被解析为 UTF-8 编码的文本。需要应用程序来确保文本消息是有效的 UTF-8 编码文本。</li>
+<li><code>BinaryMessage</code> 二进制消息：二进制消息的解析留给应用程序。</li>
+</ul></li>
+<li>控制消息：可以调用 <code>Conn</code> 中的 <code>WriteControl</code>、<code>WriteMessage</code> 或 <code>NextWriter</code> 方法，将控制消息发送给对方。
+<ul>
+<li><code>CloseMessage</code> 关闭连接的消息</li>
+<li><code>PingMessage</code> ping 消息</li>
+<li><code>PongMessage</code> pong 消息</li>
+</ul></li>
+</ul>
+<p>注意：应用程序需要先读取连接中的消息才能处理从对等方发送的 <code>close</code>、<code>ping</code> 和 <code>pong</code> 消息。如果应用程序对来自对等方的消息不感兴趣， 则应用程序应启动一个 <code>goroutine</code> 来读取和丢弃来自对等方的消息。</p>
+<h3 id="并发">并发</h3>
+<p>虽然 Golang 中有 <code>goroutine</code> 可以支持我们做并发操作，但是在 <a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">gorilla/websocket</a> 中， 一个 <code>WebSocket</code> 连接只支持一个并发 <code>reader</code> 和一个并发 <code>writer</code>。</p>
+<p>我们的应用程序应该确保不超过一个 <code>goroutine</code> 同时调用写入方法（<code>WriteMessage</code>、<code>WriteJSON</code>）或者读取方法（<code>ReadMessage</code>、<code>ReadJSON</code>）。</p>
+<p>而 <code>Close</code> 和 <code>WriteControl</code> 方法可以与其他所有方法同时调用。</p>
+<h3 id="安全性">安全性</h3>
+<p>我们知道，在一般的 web 应用中，经常需要处理跨域的问题，同样的，在 <a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">gorilla/websocket</a> 中也需要做一定的配置。</p>
+<p>我们可以在 <code>Upgrader</code> 中的 <code>CheckOrigin</code> 字段中指定函数的 <code>Origin</code> 检查策略，如果 <code>CheckOrigin</code> 函数返回 <code>false</code>，则 <code>Upgrader</code> 方法将拒绝建立 <code>WebSocket</code> 连接，如果允许所有来源的连接，我们可以直接返回 <code>true</code> 即可。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> upgrader = websocket.Upgrader&#123;</span><br><span class="line">	ReadBufferSize:  <span class="number">1024</span>,</span><br><span class="line">	WriteBufferSize: <span class="number">1024</span>,</span><br><span class="line">	CheckOrigin: <span class="function"><span class="keyword">func</span><span class="params">(r *http.Request)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="缓冲">缓冲</h3>
+<p>缓冲在 io 类操作中是一个很常见的术语，在 <a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">gorilla/websocket</a> 中我们可以通过上面那段代码的 <code>ReadBufferSize</code> 和 <code>WriteBufferSize</code> 来指定连接的缓冲大小，以减少读取或写入消息时的系统调用次数。</p>
+<p>默认大小为 <code>4096</code>，建议限制为最大预期消息的大小，大于最大消息最大大小的缓冲区不会带来任何好处。</p>
+<h2 id="hello-world">Hello World</h2>
+<p>最后，让我们通过一个简单的 <code>Hello World</code> 程序来结束本文：</p>
+<p><code>main.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gorilla/websocket&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> upgrader = websocket.Upgrader&#123;</span><br><span class="line">	ReadBufferSize:  <span class="number">1024</span>,</span><br><span class="line">	WriteBufferSize: <span class="number">1024</span>,</span><br><span class="line">	CheckOrigin: <span class="function"><span class="keyword">func</span><span class="params">(r *http.Request)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	conn, err := upgrader.Upgrade(w, r, <span class="literal">nil</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	conn.WriteMessage(websocket.TextMessage, []<span class="type">byte</span>(<span class="string">&quot;Hello, World!&quot;</span>))</span><br><span class="line">	conn.Close()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/ws&quot;</span>, handler)</span><br><span class="line">	http.ListenAndServe(<span class="string">&quot;:8181&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>执行 <code>go run main.go</code> 启动 <code>WebSocket</code> 服务端，然后，我们打开一个浏览器的控制台， 在里面执行下面的 <code>JavaScript</code> 代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> ws = <span class="keyword">new</span> <span class="title class_">WebSocket</span>(<span class="string">&#x27;ws://127.0.0.1:8181/ws&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>不出意外的话，我们可以在浏览器控制台的 <code>Network -&gt; WS</code> 中看到由服务端发送的 <code>Hello, World!</code>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/11/21/php/PHP%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%20-%20xhprof/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/21/php/PHP%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%20-%20xhprof/" class="post-title-link" itemprop="url">PHP 性能分析工具使用 - xhprof</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-11-21 20:18:30" itemprop="dateCreated datePublished" datetime="2023-11-21T20:18:30+08:00">2023-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-24 14:06:06" itemprop="dateModified" datetime="2023-11-24T14:06:06+08:00">2023-11-24</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是-xhprof">什么是 xhprof？</h2>
+<p><code>xhprof</code> 是一个轻量级 PHP 性能分析工具。</p>
+<p>它报告函数级别的请求次数和各种指标，包括阻塞时间，CPU 时间和内存使用情况。</p>
+<blockquote>
+<p>注意：xhprof 的使用开销很大，所以只能在本地开发调试的时候使用。</p>
+</blockquote>
+<h2 id="安装">安装</h2>
+<p>我们可以通过 <code>pecl</code> 来安装 <code>xhprof</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">目前最新版本是 2.3.9</span></span><br><span class="line">pecl install xhprof-2.3.9</span><br></pre></td></tr></table></figure>
+<p>安装完之后，运行一下 <code>php -m</code> 查看是否已经启用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -m</span><br></pre></td></tr></table></figure>
+<p>最后，修改一下 <code>php.ini</code> 配置文件，添加以下配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhprof.output_dir = /tmp/xhprof</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：这里指定的文件夹必须有写的权限才行。</p>
+</blockquote>
+<p>当然，我们也可以通过源码编译安装，源码在 <a target="_blank" rel="noopener" href="https://github.com/longxinH/xhprof">https://github.com/longxinH/xhprof</a>。</p>
+<h2 id="使用">使用</h2>
+<p>主要有两个步骤：</p>
+<ol type="1">
+<li>使用 <code>xhprof_enable</code> 来开启 <code>xhprof</code> 性能监控</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">xhprof_enable</span>(XHPROF_FLAGS_NO_BUILTINS +</span><br><span class="line">    XHPROF_FLAGS_CPU +</span><br><span class="line">    XHPROF_FLAGS_MEMORY);</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>注册一个 <code>shutdown</code> 处理器</li>
+</ol>
+<p>它的作用是在 php 请求处理完毕的时候将性能指标数据写入到文件中，如果没有这个，则在 <code>xhprof.output_dir</code> 中将不会有任何输出。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">register_shutdown_function</span>(function()&#123;</span><br><span class="line">    <span class="variable">$data</span> = <span class="title function_ invoke__">xhprof_disable</span>();   <span class="comment">//返回运行数据</span></span><br><span class="line">    <span class="comment">// 需要在 https://github.com/longxinH/xhprof 下载源码，下面的 `.../xhprof_lib` 就是下载源码中的 `xhprof_lib` 目录</span></span><br><span class="line">    <span class="comment">// 这里需要替换为自己本地的路径</span></span><br><span class="line">    <span class="keyword">include</span> <span class="string">&#x27;/Users/ruby/Code/xhprof-2.3.9/xhprof_lib/utils/xhprof_lib.php&#x27;</span>;</span><br><span class="line">    <span class="keyword">include</span> <span class="string">&#x27;/Users/ruby/Code/xhprof-2.3.9/xhprof_lib/utils/xhprof_runs.php&#x27;</span>;</span><br><span class="line">    <span class="variable">$objXhprofRun</span> = <span class="keyword">new</span> <span class="title class_">XHProfRuns_Default</span>();</span><br><span class="line">    <span class="variable">$objXhprofRun</span>-&gt;<span class="title function_ invoke__">save_run</span>(<span class="variable">$data</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//test 表示文件后缀</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="通过-html-页面展示性能分析结果">通过 HTML 页面展示性能分析结果</h2>
+<ol type="1">
+<li>我们在本地的 <code>nginx</code> 中添加一个 <code>xhprof</code> web 服务的配置：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 8088;</span><br><span class="line">    server_name xhprof.local;</span><br><span class="line">    root /Users/ruby/Code/xhprof-2.3.9;</span><br><span class="line"></span><br><span class="line">    add_header X-Frame-Options &quot;SAMEORIGIN&quot;;</span><br><span class="line">    add_header X-Content-Type-Options &quot;nosniff&quot;;</span><br><span class="line"></span><br><span class="line">    index index.php;</span><br><span class="line"></span><br><span class="line">    charset utf-8;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        try_files $uri $uri/ /index.php?$query_string;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location = /favicon.ico &#123; access_log off; log_not_found off; &#125;</span><br><span class="line">    location = /robots.txt  &#123; access_log off; log_not_found off; &#125;</span><br><span class="line"></span><br><span class="line">    error_page 404 /index.php;</span><br><span class="line"></span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ /\.(?!well-known).* &#123;</span><br><span class="line">        deny all;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li><p>重启本地的 php-fpm</p></li>
+<li><p>在我们的 <code>/etc/hosts</code> 中加上 nginx 中配置的域名即可</p></li>
+<li><p>打开浏览器，访问 <a target="_blank" rel="noopener" href="http://xhprof.local:8088/xhprof_html/">http://xhprof.local:8088/xhprof_html/</a></p></li>
+</ol>
+<figure>
+<img src="/images/php/xhprof-1.png" alt="xhprof" /><figcaption aria-hidden="true">xhprof</figcaption>
+</figure>
+<ol start="5" type="1">
+<li>点击其中一个进去，可以看到详情</li>
+</ol>
+<figure>
+<img src="/images/php/xhprof-2.png" alt="xhprof" /><figcaption aria-hidden="true">xhprof</figcaption>
+</figure>
+<p>在这里，我们还能点击每一列的表头，让它按这一列来排序。上图我就按 <code>Calls</code> 逆序排序了。</p>
+<h2 id="以图的形式来展示">以图的形式来展示</h2>
+<p>上面我们通过表格的方式来看到了函数调用的次数、时间等，但表格其实不够直观。</p>
+<p>我们也看到上面图中的正中间有一个 <code>View Full Callgraph</code> 的超链接，我们可以通过这个超链接来查看具体的函数调用链， 这样我们可以更加直观的知道调用入口在哪里，以及整个调用链条大概长什么样子的。</p>
+<figure>
+<img src="/images/php/xhprof-3.png" alt="xhprof" /><figcaption aria-hidden="true">xhprof</figcaption>
+</figure>
+<p>图太大了，这里随便看看吧</p>
+<blockquote>
+<p>注意：要使用这个功能，我们需要安一个插件 <code>graphviz</code>。mac 下可以通过 <code>brew install graphviz</code>，其他的自行搜索。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/11/21/laravel/Laravel%20ORM%20%E6%A8%A1%E5%9E%8B%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E4%B8%8B%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/21/laravel/Laravel%20ORM%20%E6%A8%A1%E5%9E%8B%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E4%B8%8B%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">Laravel ORM 模型大数据量下的性能优化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-21 20:08:30 / Modified: 13:35:43" itemprop="dateCreated datePublished" datetime="2023-11-21T20:08:30+08:00">2023-11-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在项目中发现有个接口需要耗时几分钟才能完成，排查发现跟以往的慢请求不大一样，这次的慢请求中，并没有慢查询（不管是 MySQL、MongoDB 还是 Redis、HTTP），经过排查发现其中有一个函数处理时间非常长，整个请求的 99% 的时间都花在了这个函数上：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数内主要是一个 for 循环</span></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$rules</span> <span class="keyword">as</span> <span class="variable">$rule</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable language_">$this</span>-&gt;hasAllCustomerUserIds[<span class="variable">$rule</span>-&gt;user_id])) &#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">matchRule</span>(<span class="variable">$rule</span>, <span class="variable">$results</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个循环有 <code>600+</code> 次，但是循环内的 <code>matchRule</code> 有 <code>11w+</code> 个循环，也就是说，总循环次数达到了 <code>6000w+</code> 次。 这样一来，就算我们没有慢查询，某些性能不高的点累积起来也会导致整个请求耗时非常漫长，以至最终耗时达到了 7 分钟。</p>
+<h2 id="根本原因">根本原因</h2>
+<p>在这 <code>6000w+</code> 的循环里面，完全没有太复杂的操作，更没有什么查询之类的操作，但是由于内层循环都是操作了 <code>ORM</code> 模型，有比较多的获取 <code>ORM</code> 模型属性的操作。 而 Laravel 的 <code>ORM</code> 模型中获取属性是通过魔术方法 <code>__get()</code> 实现的，而这个 <code>__get()</code> 中有一个时间复杂度比较高的操作 <code>getAttribute()</code>，所以这里会有一定的性能问题：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Dynamically retrieve attributes on the model.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>  string  $key</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params"><span class="variable">$key</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getAttribute</span>(<span class="variable">$key</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Get an attribute from the model.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>  string  $key</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getAttribute</span>(<span class="params"><span class="variable">$key</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (! <span class="variable">$key</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If the attribute exists in the attribute array or has a &quot;get&quot; mutator we will</span></span><br><span class="line">    <span class="comment">// get the attribute&#x27;s value. Otherwise, we will proceed as if the developers</span></span><br><span class="line">    <span class="comment">// are asking for a relationship&#x27;s value. This covers both types of values.</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">array_key_exists</span>(<span class="variable">$key</span>, <span class="variable">$this</span>-&gt;attributes) ||</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasGetMutator</span>(<span class="variable">$key</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getAttributeValue</span>(<span class="variable">$key</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Here we will determine if the model base class itself contains this given key</span></span><br><span class="line">    <span class="comment">// since we don&#x27;t want to treat any of those methods as relationships because</span></span><br><span class="line">    <span class="comment">// they are all intended as helper methods and none of these are relations.</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">method_exists</span>(<span class="built_in">self</span>::<span class="variable language_">class</span>, <span class="variable">$key</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getRelationValue</span>(<span class="variable">$key</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里只贴 <code>__get()</code> 和 <code>getAttribute()</code> 方法，但是我们也能看到了，虽然我们只是做了一个简单的获取模型属性的操作，但底层涉及了很多的方法调用。</p>
+<p>在这种情况下，虽然在代码中已经做了一些查询上的优化，但是这个计算规模下，对 Laravel <code>ORM</code> 模型的操作带来的性能问题会非常显著。</p>
+<p>因为模型中使用 <code>$model-&gt;attribute</code> 这种方式来获取它的属性的时候，时间复杂度会很高（相比于普通的对象属性），下面是一个性能测试：</p>
+<h3 id="w-次模型访问属性操作">100w 次模型访问属性操作</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">extends</span> \<span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Model</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$model</span> = <span class="keyword">new</span> <span class="title class_">Foo</span>;</span><br><span class="line"><span class="variable">$model</span>-&gt;a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">1000000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$model</span>-&gt;a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 0.7896（=789.6ms）</span></span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="title function_ invoke__">bcsub</span>(<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>), <span class="variable">$start</span>, <span class="number">4</span>));</span><br></pre></td></tr></table></figure>
+<p>最终耗时 <code>789.6ms</code></p>
+<h3 id="w-次普通对象获取属性操作">100w 次普通对象获取属性操作</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$bar</span> = <span class="keyword">new</span> <span class="title class_">Bar</span>;</span><br><span class="line"><span class="variable">$bar</span>-&gt;a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">1000000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$bar</span>-&gt;a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 0.0140（=14ms）</span></span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="title function_ invoke__">bcsub</span>(<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>), <span class="variable">$start</span>, <span class="number">4</span>));</span><br></pre></td></tr></table></figure>
+<p>最终耗时 <code>14ms</code></p>
+<p>也就是说，两者在 <code>100w</code> 的计算规模下，性能差距相差了 <code>56.4</code> 倍。</p>
+<p><code>56.4</code> 倍在数据规模小的时候，我们通常无法感知，比如 <code>10ms</code>，再乘以 <code>56.4</code> 也就是 <code>564</code>，这也还是一个可以接受的时间。</p>
+<p>但是在数据规模较大的时候，原本只需要 <code>1s</code> 的操作，可能就得需要 <code>56s</code> 了，这就是非常明显的。</p>
+<h2 id="orm-模型的属性访问做了什么">ORM 模型的属性访问做了什么？</h2>
+<p>首选我们需要知道的是，我们定义的模型中，并没有定义显式地定义任何 <code>public</code> 属性，对于这种情况，我们访问它的属性的时候，php 会去调用对象的 <code>__get</code> 方法。那就顺着模型的 <code>__get</code> 方法看看它做了什么：</p>
+<figure>
+<img src="/images/laravel/orm_optimize.png" alt="orm_optimize" /><figcaption aria-hidden="true">orm_optimize</figcaption>
+</figure>
+<p>我们可以看到，我们只是做了一个简单的属性访问，但是底层却调用了 <code>8+</code> 方法。</p>
+<p>方法调用在次数少的时候我们无法感知，但是我们可以看看 <code>100w</code> 次方法调用需要多久：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">t</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$test</span> = <span class="keyword">new</span> <span class="title class_">Test</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">1000000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$test</span>-&gt;<span class="title function_ invoke__">t</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 0.0216（=21.6ms）</span></span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="title function_ invoke__">bcsub</span>(<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>), <span class="variable">$start</span>, <span class="number">4</span>));</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，我们的 <code>t</code> 方法里面什么都没有做，但是调用了 <code>100w</code> 次之依然需要 <code>21ms</code>。</p>
+<p>也就是说，在模型访问属性所产生的 <code>8+</code> 方法调用中，至少需要花费 <code>160ms</code>，这还是一个保守的数字，因为上面产生的方法调用里面还有一些方法调用没有画出来。</p>
+<h2 id="如何优化">如何优化？</h2>
+<p>知道了原因之后，我们优化起来就简单了，那就是尽量把 ORM 模型访问属性所产生的额外开销去掉，因为在这里讨论的问题中，并不需要模型帮我们做额外的处理（比如 <code>cast</code>、日期转换）。</p>
+<p>因此，最简单的实现方法就是将 <code>ORM</code> 模型转换为普通的实体类型。</p>
+<p>这一种优化方法下，也还有两种实现方式，先说第一种，直接创建一个 <code>stdClass</code> 对象，然后将 <code>ORM</code> 模型的属性依次赋值到这个 <code>stdClass</code> 对象中，如下：</p>
+<p>在我们定义的模型中添加一个方法 <code>toStdClass</code>:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">extends</span> \<span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 转换为 stdClass</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toStdClass</span>(<span class="params"></span>): <span class="title">stdClass</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="keyword">new</span> <span class="built_in">stdClass</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable language_">$this</span>-&gt;attributes <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$attribute</span>) &#123;</span><br><span class="line">            <span class="variable">$result</span>-&gt;&#123;<span class="variable">$key</span>&#125; = <span class="variable">$attribute</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$model</span> = <span class="keyword">new</span> <span class="title class_">Foo</span>;</span><br><span class="line"><span class="variable">$model</span>-&gt;a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$stdClass</span> = <span class="variable">$model</span>-&gt;<span class="title function_ invoke__">toStdClass</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">1000000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$stdClass</span>-&gt;a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 0.0140（=14ms）</span></span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="title function_ invoke__">bcsub</span>(<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>), <span class="variable">$start</span>, <span class="number">4</span>));</span><br></pre></td></tr></table></figure>
+<p>在这种实现方式中，由于我们在循环里面操作的是一个 <code>stdClass</code>，所以也就没有了 <code>ORM</code> 模型访问属性时候的方法调用开销，最终时间是 <code>14ms</code>，也就是跟我们访问普通对象属性的开销一样了，比原来快了 <code>56</code> 倍。</p>
+<p>但是，需要注意的是，在这种实现中，由于我们拿到的是一个 <code>stdClass</code>，也就丧失了 <code>ORM</code> 模型本身带来的一些便利。不过好在这种便利在我们只是做简单的属性访问的时候是不需要的，除非我们需要在拿到模型之后还需要做 <code>CRUD</code> 操作。就算如此，我们也依然可以再改造一下我们的实现方式，另外定义一个实体类，使用这个实体类来代替上面的 <code>stdClass</code>，然后再在这个实体类中添加一个方法，让其拥有转换回 <code>ORM</code> 模型的能力（第 2 种实现方式）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">extends</span> \<span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toStdClass</span>(<span class="params"></span>): <span class="title">stdClass</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="keyword">new</span> <span class="built_in">stdClass</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable language_">$this</span>-&gt;attributes <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$attribute</span>) &#123;</span><br><span class="line">            <span class="variable">$result</span>-&gt;&#123;<span class="variable">$key</span>&#125; = <span class="variable">$attribute</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FooEntity</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">// 由 ORM 模型创建一个 Entity</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">make</span>(<span class="params">\Illuminate\Database\Eloquent\Model <span class="variable">$model</span></span>): <span class="title">self</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="keyword">new</span> <span class="built_in">self</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$model</span>-&gt;<span class="title function_ invoke__">getAttributes</span>() <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$attribute</span>) &#123;</span><br><span class="line">            <span class="variable">$result</span>-&gt;&#123;<span class="variable">$key</span>&#125; = <span class="variable">$attribute</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 由 Entity 转换回 ORM 模型</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toModel</span>(<span class="params"></span>): <span class="title">Foo</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="keyword">new</span> <span class="title class_">Foo</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="title function_ invoke__">get_object_vars</span>(<span class="variable">$this</span>) <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$attribute</span>) &#123;</span><br><span class="line">            <span class="variable">$result</span>-&gt;<span class="title function_ invoke__">setAttribute</span>(<span class="variable">$key</span>, <span class="variable">$attribute</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$model</span>    = <span class="keyword">new</span> <span class="title class_">Foo</span>;</span><br><span class="line"><span class="variable">$model</span>-&gt;a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// model -&gt; entity</span></span><br><span class="line"><span class="variable">$entity</span> = <span class="title class_">FooEntity</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$model</span>);</span><br><span class="line"><span class="comment">// entity -&gt; model</span></span><br><span class="line"><span class="variable">$model</span> = <span class="variable">$entity</span>-&gt;<span class="title function_ invoke__">toModel</span>();</span><br></pre></td></tr></table></figure>
+<h2 id="优化效果">优化效果</h2>
+<p>这里不贴具体代码了。</p>
+<p>在不做其他优化的情况下，只是将循环中的 <code>ORM</code> 模型修改为实体之后，原本 <code>7</code> 分钟的函数，最终只需要 <code>44s</code> 了。</p>
+<blockquote>
+<p>当然，代码还有不少其他可以优化的地方，只是那些是比较常规的可以优化的，这里不再赘述。截止发文这天，这个优化已经上线了，将其他的可以优化的地方优化之后，原本 7 分钟的请求，最终耗时 20s 左右。</p>
+</blockquote>
+<h2 id="存在问题">存在问题</h2>
+<ol type="1">
+<li>上面的两种实现方式都没有显式指定类的属性，不好维护。（可以显式定义实体类，并显式定义 <code>ORM</code> 中存在的属性）</li>
+<li>转换为 <code>entity</code> 之后无法拥有 <code>ORM</code> 模型的能力，需要注意。</li>
+</ol>
+<p>由于第 2 点，所以这种优化不适用于那些需要更新的场景，当然我们也可以将实体转换回 ORM 模型，然后再做 CURD 操作。</p>
+<h2 id="总结">总结</h2>
+<p>Laravel 的 <code>ORM</code> 模型给我们带来了非常大的便利，但是它通过魔术方法 <code>__get()</code> 来获取模型属性的方式在大数据量操作下会有一些性能问题， 如果我们不需要在这过程做 <code>CURD</code> 操作，我们可以将 <code>ORM</code> 转换为简单的实体对象。</p>
+<p>这样就可以大大减少在 <code>ORM</code> 模型中访问属性的开销。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/09/24/java/Spring%20%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/24/java/Spring%20%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">Spring 的事件机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-09-24 20:08:30" itemprop="dateCreated datePublished" datetime="2023-09-24T20:08:30+08:00">2023-09-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-25 14:58:20" itemprop="dateModified" datetime="2023-09-25T14:58:20+08:00">2023-09-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="观察者模式">观察者模式</h2>
+<p>在说事件机制之前，我们先聊一下观察者模式，因为 Spring 的事件机制本质上是观察者模式的一种实现。</p>
+<p>我们都知道，有一种设计模式叫观察者模式，它用于建立对象之间一对多的依赖关系，当一个对象的状态发生变化时， 所有依赖它的对象都会得到通知并自动更新。这种模式常用于需要实现对象之间松耦合的场景， 其中一个对象（被观察者）的状态变化会影响到其他多个对象（观察者）。</p>
+<h3 id="观察者模式的主要角色">观察者模式的主要角色</h3>
+<ol type="1">
+<li>被观察者（<code>Subject</code>）：也称为主题或者可观察对象，它维护了一个观察者列表，可以添加、删除和通知观察者。当其状态发生变化时，会通知所有注册的观察者。</li>
+<li>观察者（<code>Observer</code>）：观察者是依赖于被观察者的对象，它定义了一个方法，用于在被观察者状态发生变化时进行更新操作。</li>
+</ol>
+<h3 id="观察者模式的工作流程">观察者模式的工作流程</h3>
+<ol type="1">
+<li>被观察者对象注册观察者：观察者通过某种方式向被观察者注册，通常是将自己添加到被观察者的观察者列表中。（建立起观察者与被观察者的关联）</li>
+<li>被观察者状态变化</li>
+<li>通知观察者：被观察者遍历观察者列表，调用每个观察者的更新方法（<code>onEvent</code>、<code>handle</code>...）</li>
+<li>观察者更新：每个观察者根据被观察者的通知进行相应的更新操作，执行与状态变化相关的任务</li>
+</ol>
+<h3 id="观察者模式的优点">观察者模式的优点</h3>
+<p>解耦性：被观察者和观察者之间的关系是松耦合的，提高了代码的可维护性和扩展性。 可以轻松添加或删除观察者，可以在不修改被观察者的情况下增加新的观察者。</p>
+<h2 id="spring-中的事件">Spring 中的事件</h2>
+<p>Spring 的事件机制是 Spring 框架中的一个重要特性，基于观察者模式实现，它可以实现应用程序中的解耦，提高代码的可维护性和可扩展性。</p>
+<p>Spring 的事件机制包括事件、事件发布、事件监听器等几个基本概念：</p>
+<ol type="1">
+<li>事件：事件是一个抽象的概念，它代表着应用程序中的某个动作或状态的发生。</li>
+<li>事件发布：是事件发生的地方，它负责发布事件，从而通知事件监听器。</li>
+<li>事件监听器：事件的接收者，它负责处理事件并执行相应的操作。</li>
+</ol>
+<p>在 Spring 的事件机制中，事件源和事件监听器之间通过事件进行通信，从而实现了代码的解耦。</p>
+<figure>
+<img src="/images/java/event/1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
+</figure>
+<p>如上图所示，在观察者模式的实现中，往往还会有一个 <code>Dispatcher</code> 的角色， 由它来通知观察者，在 Spring 中，<code>ApplicationContext</code> 就扮演了这个角色。</p>
+<h2 id="如何定义事件">如何定义事件</h2>
+<p>在 Spring 中，我们可以通过继承 <code>ApplicationEvent</code> 来自定义一个事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationEvent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvent</span> <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyEvent</span><span class="params">(Object source)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们会发现，<code>ApplicationEvent</code> 有一个必选的参数 <code>source</code>，这个参数在实践中往往传递 <code>this</code>，也就是事件发生处的对象，这个参数不能为 <code>null</code>。</p>
+<h2 id="如何监听事件">如何监听事件？</h2>
+<p>在 Spring 中，监听事件的方式有两种：</p>
+<ol type="1">
+<li>实现 <code>ApplicationListener</code>，需要指定它要监听的事件类型</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationListener;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEventListener</span> <span class="keyword">implements</span> <span class="title class_">ApplicationListener</span>&lt;MyEvent&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(MyEvent event)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;MyEventListener::onApplicationEvent&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：我们需要添加 <code>@Component</code> 注解以便 Spring 可以注册这个观察者。</p>
+<ol start="2" type="1">
+<li>使用 <code>@EventListener</code> 注解</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.springeventdemo.event.MyEvent;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.event.EventListener;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringEventListener</span> &#123;</span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myEvent</span><span class="params">(MyEvent myEvent)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;my event.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以使用 <code>@EventListener</code> 注解在托管 bean 的任何方法上注册事件监听器。 需要监听的事件通过方法的参数来指定。</p>
+<h2 id="如何发布事件">如何发布事件</h2>
+<p>我们可以使用 <code>ApplicationEventPublisher</code> 来发布一个事件，也就是通知所有的观察者:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.example.springeventdemo.event.MyEvent;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationEventPublisher;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    ApplicationEventPublisher applicationEventPublisher;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">publish</span><span class="params">()</span> &#123;</span><br><span class="line">        applicationEventPublisher.publishEvent(<span class="keyword">new</span> <span class="title class_">MyEvent</span>(<span class="built_in">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以使用 <code>ConfigurableApplicationContext</code>，不过这个接口其实也是继承了 <code>ApplicationEventPublisher</code> 接口。</p>
+<h2 id="事件异步处理">事件异步处理</h2>
+<p>有时候，我们的一些事件是可以异步处理的，比如注册成功之后给用户发送验证邮件， 注册成功我们就可以返回了，而发送验证邮件的这一步操作可以异步进行处理， 从而加快接口的响应速度。</p>
+<p>在 Spring 中，我们可以使用 <code>@Async</code> 注解来将一个 <code>EventListener</code> 标记为异步处理的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.event.EventListener;</span><br><span class="line"><span class="keyword">import</span> org.springframework.scheduling.annotation.Async;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AsyncMyEventListener</span> &#123;</span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="meta">@Async</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">listen</span><span class="params">(MyEvent myEvent)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 模拟耗时操作</span></span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            <span class="comment">// 请求结束之后才会输出下面这一行</span></span><br><span class="line">            System.out.println(<span class="string">&quot;AsyncMyEventListener::listen&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，要使用 <code>@Async</code> 我们必须在我们的主程序类中加上 <code>@EnableAsync</code> 注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.scheduling.annotation.EnableAsync;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableAsync</span> <span class="comment">// 加上这个注解</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringEventDemoApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(SpringEventDemoApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 <code>@Async</code> 注解的监听器，会放到跟请求不同的线程中处理。</p>
+</blockquote>
+<h2 id="指定-eventlistener-的处理条件">指定 EventListener 的处理条件</h2>
+<p>我们可以通过 <code>EventListener</code> 的 <code>condition</code> 属性来决定监听器是否需要执行：</p>
+<blockquote>
+<p>使用 <code>SpEL</code> 表达式，当然我们也可以把判断写到方法体内。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 myEvent 的 foo 属性等于 &#x27;bar&#x27; 的时候才会触发</span></span><br><span class="line"><span class="meta">@EventListener(condition = &quot;#myEvent.foo == &#x27;bar&#x27;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myEvent1</span><span class="params">(MyEvent myEvent)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;my event: foo=bar&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>condition</code> 而不是写到方法体中的原因是：</p>
+<ol type="1">
+<li>解耦和可配置性：通过将条件与事件监听器声明分离，你可以在不修改监听器代码的情况下更改条件。这使得在不同的环境或不同的配置下轻松切换监听器的行为成为可能。</li>
+<li>动态切换行为：允许你根据应用程序或配置来动态决定是否触发事件监听器。这对于需要根据运行时条件来启动或禁用监听器的情况非常有用。</li>
+<li>可测试性：可以为不同的条件编写单元测试，以确保条件的正确性。</li>
+<li>统一管理：当有多个监听器时，将条件集中管理在 <code>condition</code> 属性中可以提高代码的可读性，因为你可以轻松查看每个监听器的条件而无需查看每个监听器的具体实现。</li>
+</ol>
+<h2 id="监听多个事件">监听多个事件</h2>
+<p>我们可以通过 <code>EventListener</code> 的 <code>classes</code> 属性来指定要监听的多个事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EventListener(classes = &#123;MyEvent.class, AnotherEvent.class&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myEvent2</span><span class="params">(Object event)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;myEvent2: &quot;</span> + event.getClass());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个时候，我们的参数类型就需要修改一下了。</p>
+<h2 id="指定事件监听器的执行顺序">指定事件监听器的执行顺序</h2>
+<p>我们可以通过 <code>@Order</code> 注解来指定一个事件的不同监听器的执行顺序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.event.EventListener;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.annotation.Order;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringEventListener</span> &#123;</span><br><span class="line">    <span class="meta">@Order(2)</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myEvent2</span><span class="params">(MyEvent myEvent)</span> &#123;</span><br><span class="line">        <span class="comment">// 后执行</span></span><br><span class="line">        System.out.println(<span class="string">&quot;my event. order = 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Order(1)</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myEvent1</span><span class="params">(MyEvent myEvent)</span> &#123;</span><br><span class="line">        <span class="comment">// 先执行</span></span><br><span class="line">        System.out.println(<span class="string">&quot;my event. order = 1&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="控制事件在事务提交前执行">控制事件在事务提交前执行</h2>
+<p>有时候，我们会在代码中通过 <code>@Transactional</code> 来使用事务：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional(rollbackFor = RuntimeException.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveFoo</span><span class="params">(Foo foo)</span> &#123;</span><br><span class="line">    fooRepository.save(foo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设我们在这个方法中有很多代码，然后其中穿插地发布了一些事件，但是我们希望这些事件在整个事务后才去触发监听器的处理逻辑， 这个时候我们就需要使用 <code>@TransactionalEventListener</code> 来注解我们的事件监听器，而不是使用 <code>@EventListener</code>：</p>
+<p>发布事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional(rollbackFor = RuntimeException.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveFoo</span><span class="params">(Foo foo)</span> &#123;</span><br><span class="line">    <span class="comment">// 发布了事件，但是事件处理器并不会马上处理，要等事务开始提交、结束提交的时候才会执行</span></span><br><span class="line">    <span class="comment">// 所以我们会看到 &quot;before save&quot; 和 &quot;after save&quot; 输出在 &quot;before commit&quot; 之前</span></span><br><span class="line">    <span class="type">FooEvent</span> <span class="variable">event</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FooEvent</span>(<span class="built_in">this</span>);</span><br><span class="line">    eventPublisher.publishEvent(event);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;before save&quot;</span>);</span><br><span class="line">    fooRepository.save(foo);</span><br><span class="line">    System.out.println(<span class="string">&quot;after save&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事件监听器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.event.TransactionPhase;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.event.TransactionalEventListener;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TransactionEventListener</span> &#123;</span><br><span class="line">    <span class="comment">// 在事务提交前处理这个 FooEvent</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">beforeCommit</span><span class="params">(FooEvent event)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;before commit: foo event.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在事务提交后处理这个 FooEvent</span></span><br><span class="line">    <span class="comment">// 如果事务回滚则不会处理这个 FooEvent。</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterCommit</span><span class="params">(FooEvent event)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;after commit: foo event.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码会输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">before save</span><br><span class="line">after save</span><br><span class="line">before commit: foo event.</span><br><span class="line">after commit: foo event.</span><br></pre></td></tr></table></figure>
+<p><code>@TransactionalEventListener</code> 为我们提供了一个 <code>phase</code> 参数，让我们可以控制事件监听器的执行时机，它有以下可选值：</p>
+<ul>
+<li><code>TransactionPhase.BEFORE_COMMIT</code>：事务提交前</li>
+<li><code>TransactionPhase.AFTER_COMMIT</code>：事务提交后</li>
+<li><code>TransactionPhase.AFTER_ROLLBACK</code>：事务回滚后</li>
+<li><code>TransactionPhase.AFTER_COMPLETION</code>：事务完成后</li>
+</ul>
+<blockquote>
+<p>tips：<code>@TransactionalEventListener</code> 并不是给我们监听事务的，只是控制事件在事务提交过程中的某一时刻触发。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/09/20/java/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Java%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/20/java/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Java%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">深入理解 Java 动态代理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-09-20 20:08:30" itemprop="dateCreated datePublished" datetime="2023-09-20T20:08:30+08:00">2023-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-21 16:35:44" itemprop="dateModified" datetime="2023-09-21T16:35:44+08:00">2023-09-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是动态代理">什么是动态代理？</h2>
+<p>在 Java 中，动态代理是一种代理模式的实现方式，它允许在运行时动态地创建代理类并动态地处理方法调用。 动态代理常用于解耦合、处理和其他对象交互相关的行为控制。</p>
+<h2 id="动态代理例子">动态代理例子</h2>
+<p>下面是一个简单的Java动态代理示例，它演示了如何使用动态代理创建一个代理对象，以及如何在代理对象上调用方法并在方法调用前后执行一些操作：</p>
+<p>首先，我们需要创建一个代理接口，定义一些方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义代理接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MyInterface</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时，也定义一个 <code>MyInterface</code> 的实现类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyInterfaceImpl</span> <span class="keyword">implements</span> <span class="title class_">MyInterface</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;MyInterfaceImpl doSomething&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，创建一个实现 <code>InvocationHandler</code> 接口的处理器类，它将负责在代理对象上调用方法时执行额外的操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object realObject;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyInvocationHandler</span><span class="params">(Object realObject)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.realObject = realObject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Before invoking &quot;</span> + method.getName());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 调用真实对象的方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(realObject, args);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;After invoking &quot;</span> + method.getName());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来，我们可以在主程序中使用动态代理创建代理对象并调用方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建一个真实对象</span></span><br><span class="line">        <span class="type">MyInterface</span> <span class="variable">myInterface</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyInterfaceImpl</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建代理处理器</span></span><br><span class="line">        <span class="type">MyInvocationHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyInvocationHandler</span>(myInterface);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建代理对象</span></span><br><span class="line">        <span class="type">MyInterface</span> <span class="variable">proxy</span> <span class="operator">=</span> (MyInterface) Proxy.newProxyInstance(</span><br><span class="line">            MyInterface.class.getClassLoader(),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;MyInterface.class&#125;,</span><br><span class="line">            handler</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用代理对象的方法</span></span><br><span class="line">        proxy.doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述示例中，我们首先定义了一个代理接口 <code>MyInterface</code> ，然后创建了一个实现了 <code>InvocationHandler</code> 接口的处理器类 <code>MyInvocationHandler</code>， 该处理器负责在方法调用前后输出日志。最后，在主程序中，我们使用 <code>Proxy.newProxyInstance</code> 方法创建了代理对象，并通过代理对象调用了方法。在方法调用前后，会执行处理器中的操作。</p>
+<p>以上代码会输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Before invoking doSomething</span><br><span class="line">MyInterfaceImpl doSomething</span><br><span class="line">After invoking doSomething</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，虽然我们好像是在调用 <code>MyInterface</code> 接口的方法，但是实际上又不单纯是调用这个方法，还在调用这个方法前后做了一些事情。</p>
+<p>我们可以通过下图来更加直观地了解上面这个动态代理的例子到底做了什么：</p>
+<figure>
+<img src="/images/java/proxy/1.png" alt="1" /><figcaption aria-hidden="true">1</figcaption>
+</figure>
+<p>这个图体现了使用 Java 动态代理的一些关键：</p>
+<ul>
+<li>要使用 Java 中的 <code>Proxy</code> 来实现动态代理我们就需要定义 <code>interface</code></li>
+<li>我们需要通过 <code>InvocationHandler</code> 来调用被代理对象的方法，在 <code>InvocationHandler</code> 的 <code>invoke</code> 方法中，我们可以在调用被代理对象方法前后加一些自定义逻辑</li>
+<li>需要通过 <code>Proxy.newProxyInstance</code> 创建代理对象，这个代理对象实现了我们指定的接口（也就是第二个参数传递的 <code>interface</code>）。</li>
+</ul>
+<p>这个示例演示了如何使用动态代理创建代理对象，并在方法调用前后执行自定义的操作。在实际应用中，你可以根据需要自定义处理器类，以执行不同的操作，如日志记录、性能监测、事务管理等。</p>
+<h2 id="动态代理的使用场景">动态代理的使用场景</h2>
+<p>动态代理在 Java 中是用得非常多的，使用动态代理我们可以在不侵入代码的情况下，为类增加或修改行为。常见的使用场景如下：</p>
+<ol type="1">
+<li>RPC</li>
+</ol>
+<p>在我们使用 <code>Dubbo</code> 的时候在我们服务端的类上加一个 <code>@DubboService</code> 注解就可以将一个类声明为可以被远程调用的服务了； 然后在客户端进行注入的时候，加上 <code>@DubboReference</code> 就可以将服务声明为一个远程服务了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 服务端</span></span><br><span class="line"><span class="meta">@DubboService(version = &quot;$&#123;product.service.version&#125;&quot;)</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductServiceRpcImpl</span> <span class="keyword">implements</span> <span class="title class_">ProductService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IProductService productService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Sku <span class="title function_">test</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> productService.test();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 客户端</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductClient</span> &#123;</span><br><span class="line">    <span class="meta">@DubboReference(</span></span><br><span class="line"><span class="meta">        version = &quot;$&#123;product.service.version&#125;&quot;, </span></span><br><span class="line"><span class="meta">        cluster = &quot;failfast&quot;, </span></span><br><span class="line"><span class="meta">        timeout = 5000,</span></span><br><span class="line"><span class="meta">        retries = 2,</span></span><br><span class="line"><span class="meta">        proxy = &quot;jdk&quot; // 一般情况不需要加这个配置</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="keyword">private</span> ProductService productService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(productService.test(<span class="number">1L</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面 Dubbo 客户端的代码中，我们在 <code>@DubboReference</code> 的注解中加了个 <code>proxy = "jdk"</code> 表示我们要使用 JDK 的动态代理，</p>
+<blockquote>
+<p>但是我们需要知道的是，JDK 的动态代理性能上并不是最优的，所以 Dubbo 的默认代理方式不是 JDK 动态代理，上面指定 <code>proxy</code> 只是为了演示。</p>
+</blockquote>
+<p>Dubbo 实现动态代理的方式有三种：<code>bytebuddy</code>、<code>javassist</code>、<code>jdk</code>。</p>
+<p>我们可以通过下面代码验证一下上面的 <code>ProductClient</code> 是否真的使用了 JDK 的动态代理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// class com.sun.proxy.$Proxy123</span></span><br><span class="line">    System.out.println(productService.getClass());</span><br><span class="line">    <span class="comment">// true</span></span><br><span class="line">    System.out.println(Proxy.isProxyClass(productService.getClass()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从输出结果我们可以看到，<code>productService</code> 实际上就是 JDK 代理类的对象。</p>
+<ol start="2" type="1">
+<li>Spring 容器</li>
+</ol>
+<p>我们知道 Spring 容器可以帮助我们注入一些对象，而这些被注入的对象都是代理对象，直接 <code>new</code> 出来的对象跟 Spring 注入的对象是不一样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@MapperScan(&quot;com.baiguiren.mapper&quot;)</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PersonService personService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(Main.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/test&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// class com.sun.proxy.$Proxy66 这是一个代理类</span></span><br><span class="line">        System.out.println(personService.getClass());</span><br><span class="line"></span><br><span class="line">        <span class="type">PersonService</span> <span class="variable">personService1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PersonServiceImpl</span>();</span><br><span class="line">        <span class="comment">// class com.baiguiren.service.Impl.PersonServiceImpl，这是我们定义的类</span></span><br><span class="line">        System.out.println(personService1.getClass());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面这个例子我们发现，Spring 注入的对象，它的 <code>Class</code> 并不是我们所定义的那个类，而是一个代理类。</p>
+<blockquote>
+<p>我的 aop 配置是 <code>spring.aop.proxy-target-class=false</code>，这样 Spring 会使用 JDK 代理，当然我们也可以去掉这个配置或者配置为 false，这样 Spring 会使用 CGLIB 来实现动态代理。</p>
+</blockquote>
+<p>在使用 CGLIB 动态代理的时候，上面的 <code>personService.getClass()</code> 会输出 <code>class (...).PersonServiceImpl$$EnhancerBySpringCGLIB$$23b7767d</code>， 我们可以在输出中看到 <code>$$EnhancerBySpringCGLIB$$</code>，这就意味着我们拿到的注入的对象实际上是被 Spring 容器增强过的实例。</p>
+<p>同样的，在我们使用 <code>mybatis</code> 的 <code>Mapper</code> 的时候，它也是一个代理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">PersonService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PersonMapper personMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Person <span class="title function_">find</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">        System.out.println(personMapper <span class="keyword">instanceof</span> Proxy); <span class="comment">// true</span></span><br><span class="line">        <span class="keyword">return</span> personMapper.selectPersonById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以虽然我们定义了一个接口，里面什么内容也没写，但实际上底层会帮我们去实现一个类，然后基于这个类来创建实例。</p>
+<ol start="3" type="1">
+<li>事务管理</li>
+</ol>
+<p>事实上，这也可以归到 2 中去，当然我们也可以在不使用 Spring 的情况下通过动态代理来实现事务管理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FooServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">FooService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Transactional(rollbackFor = RollbackException.class)</span> <span class="comment">// 事务管理</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insertThenRollback</span><span class="params">()</span> <span class="keyword">throws</span> RollbackException &#123;</span><br><span class="line">        jdbcTemplate.execute(<span class="string">&quot;INSERT INTO FOO (BAR) VALUES (&#x27;BBB&#x27;)&quot;</span>);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RollbackException</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子中的 <code>Transactional</code> 其实也是 Spring 给我们提供的功能。通过 <code>Transactional</code> 注解，我们的 <code>FooServiceImpl::insertThenRollback</code> 会得到增强。</p>
+<p>在我们抛出 <code>RollbackException</code> 的时候，这个方法中执行的操作将会被回滚，但是我们不需要手动去执行开启事务、提交事务、回滚事务的操作，比较方便。</p>
+<p>上面的 <code>insertThenRollback</code> 转换为伪代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    beginTransaction();</span><br><span class="line">    jdbcTemplate.execute(<span class="string">&quot;INSERT INTO FOO (BAR) VALUES (&#x27;BBB&#x27;)&quot;</span>);</span><br><span class="line">    commit();</span><br><span class="line">&#125; <span class="keyword">catch</span> (RollbackException e) &#123;</span><br><span class="line">    rollback();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面这几个场景，相信我们已经体会到了动态代理的强大之处了， 当然实际中的使用远不止上面这几种场景。</p>
+<h2 id="代理模式">代理模式</h2>
+<p>我们在文章开头就说了，动态代理是一种代理模式的实现方式。</p>
+<p>现在我们再来看看代理模式的定义：</p>
+<blockquote>
+<p>在不改变原始类（或叫被代理类）代码的情况下，通过引入代理类来给原始类附加功能。</p>
+</blockquote>
+<p>一个很简单的例子如下，我们需要针对控制器中的所有方法做性能监测：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/test1&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实际业务逻辑处理</span></span><br><span class="line">    System.out.println(<span class="string">&quot;test1...&quot;</span>);</span><br><span class="line">    <span class="comment">// 模拟耗时长的操作</span></span><br><span class="line">    Thread.sleep(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    log.info(<span class="string">&quot;GET /test1: &quot;</span> + (end - start)); <span class="comment">// 输出日志</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，上面这个例子实现的方式其实比较笨拙，如果我们有 100 个接口，上面的代码就得重复 100 遍，这种实现方式对开发人员是非常不友好的。</p>
+<p>使用动态代理，我们可以有更加优雅的实现方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ITestController</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义实现类（被代理类）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> <span class="keyword">implements</span> <span class="title class_">ITestController</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;test1...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义 InvocationHandler</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ControllerInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ITestController testController;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ControllerInvocationHandler</span><span class="params">(ITestController testController)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.testController = testController;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用被代理类的方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span>method.invoke(testController, args);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        log.info(method.getName() + <span class="string">&quot; invoked: &quot;</span> + (end - start)); <span class="comment">// 输出日志</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建代理对象</span></span><br><span class="line"><span class="type">ITestController</span> <span class="variable">testController</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestController</span>();</span><br><span class="line"><span class="comment">// 代理对象，它实现了所有的 testController.getClass().getInterfaces()</span></span><br><span class="line"><span class="type">ITestController</span> <span class="variable">testControllerProxy</span> <span class="operator">=</span> (ITestController) Proxy.newProxyInstance(</span><br><span class="line">        testController.getClass().getClassLoader(),</span><br><span class="line">        testController.getClass().getInterfaces(),</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ControllerInvocationHandler</span>(testController)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用代理对象的方法</span></span><br><span class="line">testControllerProxy.test1();</span><br></pre></td></tr></table></figure>
+<p>当然，这也只是个例子，如果我们使用 Spring，我们可以通过 <code>aspect</code> 来实现上面这个功能。</p>
+<p>同时，我们也发现，使用了动态代理之后，我们就不必在每一个方法中加上那些性能监测的代码了，这就可以将开发人员从繁琐的操作中解放出来了。</p>
+<h2 id="动态代理实现原理">动态代理实现原理</h2>
+<p>了解了动态代理的基本使用、常用的使用场景之后，让我们再来了解一下它的实现原理（基于 JDK 1.8）。</p>
+<p>还是以上一小节的例子来说明，在上面的例子中，我们为 <code>ITestController</code> 接口升成了一个代理对象，但是这个代理对象为什么可以直接调用被代理对象的方法呢？</p>
+<p>这是因为，底层实际上是创建另一个继承自 <code>java.lang.reflect.Proxy</code> 的代理类，这个代理类实现了我们指定的 <code>interfaces</code>，而其中的方法体中，则会去调用实际被代理对象的方法。</p>
+<p>这么说有点抽象，其实我们可以通过 Java 的一个命令行参数来让 Java 帮我们将升成的代理类保存到文件上：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意：是 Java 8，新版本可能会有一些差异</span></span><br><span class="line">-Dsun.misc.ProxyGenerator.saveGeneratedFiles=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>对于上一个例子中的 <code>ITestController</code> 的代理类，我们可以看到它的内容实际如下（项目目录下的 <code>com/sun/proxy</code> 文件夹）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.sun.proxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// $Proxy69 继承了 java.lang.reflect.Proxy 这个类，</span></span><br><span class="line"><span class="comment">// 实现了 ITestController 接口</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">$Proxy69</span> <span class="keyword">extends</span> <span class="title class_">Proxy</span> <span class="keyword">implements</span> <span class="title class_">ITestController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Method m3;</span><br><span class="line">    <span class="comment">// ... 省略其他代码</span></span><br><span class="line">  </span><br><span class="line">    <span class="keyword">public</span> $Proxy69(InvocationHandler var1) <span class="keyword">throws</span>  &#123;</span><br><span class="line">        <span class="built_in">super</span>(var1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> <span class="keyword">throws</span>  &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 实际上调用了 InvocationHandler 的 invoke 方法</span></span><br><span class="line">            <span class="comment">// this 也就是代理对象</span></span><br><span class="line">            <span class="comment">// m3 是实际接口的 reflect.Method</span></span><br><span class="line">            <span class="comment">// 实际调用的时候，没有传递任何参数</span></span><br><span class="line">            <span class="built_in">super</span>.h.invoke(<span class="built_in">this</span>, m3, (Object[])<span class="literal">null</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException | Error var2) &#123;</span><br><span class="line">            <span class="keyword">throw</span> var2;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable var3) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UndeclaredThrowableException</span>(var3);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... 省略其他代码</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 也就是 ITestController 中 test1 的反射 Method</span></span><br><span class="line">            m3 = Class.forName(<span class="string">&quot;com.baiguiren.ITestController&quot;</span>).getMethod(<span class="string">&quot;test1&quot;</span>);</span><br><span class="line">        &#125; ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从生成的代码中，我们可以看到，所有对代理对象的方法调用，都委托给了 <code>InvocationHandler::invoke</code> 方法。</p>
+<p>生成代理类的过程可以用下图表示（<code>Proxy</code> 类中的实现）：</p>
+<figure>
+<img src="/images/java/proxy/2.png" alt="2" /><figcaption aria-hidden="true">2</figcaption>
+</figure>
+<ol type="1">
+<li><code>Proxy</code> 类中有两个方法会创建代理类，一个是 <code>getProxyClass</code>，另一个是 <code>newProxyInstance</code>，<code>getProxyClass</code> 获取 <code>Class</code> 对象，而 <code>newProxyInstance</code> 会基于这个代理类创建一个代理对象。</li>
+<li>上一步的两个方法中都会调用 <code>getProxyClass0</code> 来获取 <code>Class</code> 对象，这个方法会有缓存，如果之前已经创建则会从缓存获取，否则会新建一个 <code>Class</code></li>
+<li>如果是第一次创建代理类，则会通过 <code>ProxyClassFactory</code> 来创建一个新的 <code>Class</code></li>
+<li>在实际加载到内存之前，会通过 <code>ProxyGenerator</code> 的 <code>generateProxyClass</code> 方法来生成 <code>Class</code> 对象的字节码</li>
+<li>通过 <code>defineClass0</code> 方法来创建一个 <code>Class</code> 对象。（这是一个 <code>native</code> 方法，具体实现由 JVM 提供）。</li>
+</ol>
+<p>拿到了代理类，也就是上面那一段 <code>$Proxy69</code> 类所表示的类之后，就可以创建代理对象了。</p>
+<p>因为这个代理类实现了我们指定的接口，所以是可以通过类型转换转换成不同的 <code>interface</code> 的，如 <code>(ITestController) Proxy.newProxyInstance(...)</code>。</p>
+<p>最终，我们就拿到了一个实现了 <code>ITestController</code> 接口的代理对象，它的行为跟我们原来的对象完全一致，通过这种方式我们获得了一个附加了额外功能的代理对象。</p>
+<h2 id="其他实现动态代理的方式">其他实现动态代理的方式</h2>
+<p>除了使用 JDK 的动态代理之外，还有一种实现动态代理的方式是 <code>CGLIB</code> 动态代理，上面也有提及，他们都有一些局限性，需要根据我们的实际应用场景来选择。</p>
+<p>比如，JDK 动态代理需要我们先定义 <code>interface</code>，而 <code>CGLIB</code> 是通过继承的方式来实现动态代理的，如果某个类有 <code>final</code> 标记，那它是无法使用 <code>CGLIB</code> 来做动态代理的。</p>
+<blockquote>
+<p>本文主要是为了介绍动态代理的一些原理，至于其他代理方式，都是殊途同归的，所以本文不做过多探讨了。</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>动态代理是一种 Java 编程技巧，通过在运行时生成代理类，它能够拦截对原始类的方法调用并在方法执行前后执行自定义操作， 这一特性使其广泛应用于解耦、性能监测、事务管理、RPC、AOP 等各种场景，提高了代码的可维护性和可扩展性。</p>
+<p>最后，再简单总结一下本文的内容：</p>
+<ul>
+<li>动态代理是一种代理模式的实现方式，它允许在运行时动态地创建代理类并动态地处理方法调用。</li>
+<li>动态代理被广泛应用于 Spring 中，我们通过 <code>@Autowired</code> 注入的对象就是一个代理对象。</li>
+<li>动态代理还被用于 RPC、事务管理等，可以将非业务代码放到代理层去实现</li>
+<li>JDK 的动态代理是在运行时才根据 <code>ClassLoader</code> 和 <code>interface</code> 来创建 <code>Class</code> 的，具体加载到 JVM 的操作是底层帮我们实现的</li>
+<li>还有一种很常见的动态代理方式是 <code>CGLIB</code> 动态代理，但它不能代理 <code>final</code> 类。</li>
+<li>而使用 JDK 动态代理则需要先定义 <code>interface</code>，代理类会实现这些 <code>interface</code>，但是实际上还是会调用被代理对象的方法（通过 <code>Invocationhandler</code>）。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/63/">63</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">315</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ogliu.com/" title="https:&#x2F;&#x2F;ogliu.com&#x2F;" rel="noopener" target="_blank">OG-Liu's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+    <div>
+
+  </div>
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">eleven26</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

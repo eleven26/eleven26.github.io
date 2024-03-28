@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eleven26.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="eleven26">
+<meta property="og:url" content="https://eleven26.github.io/page/40/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eleven26.github.io/page/40/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>eleven26</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">eleven26</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/03/08/golang/Go%20%E4%BD%BF%E7%94%A8%20MongoDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/08/golang/Go%20%E4%BD%BF%E7%94%A8%20MongoDB/" class="post-title-link" itemprop="url">Go 使用 MongoDB</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-08 13:11:30" itemprop="dateCreated datePublished" datetime="2020-03-08T13:11:30+08:00">2020-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-15 11:06:31" itemprop="dateModified" datetime="2022-11-15T11:06:31+08:00">2022-11-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a href="#MongoDB-安装-Docker">MongoDB 安装(Docker)</a></li>
+<li><a href="#安装-MongoDB-Go-驱动">安装 MongoDB Go 驱动</a></li>
+<li><a href="#使用-Go-Driver-连接到-MongoDB">使用 Go Driver 连接到 MongoDB</a></li>
+<li><a href="#在-Go-里面使用-BSON-对象">在 Go 里面使用 BSON 对象</a></li>
+<li><a href="#CRUD-操作">CRUD 操作</a>
+<ul>
+<li><a href="#插入文档">插入文档</a></li>
+<li><a href="#更新文档">更新文档</a></li>
+<li><a href="#查询文档">查询文档</a></li>
+<li><a href="#删除文档">删除文档</a></li>
+</ul></li>
+<li><a href="#下一步">下一步</a></li>
+</ul>
+<h2 id="mongodb-安装docker">MongoDB 安装(Docker)</h2>
+<p>先装个 mongo，为了省事就用 docker 了。</p>
+<p>docker 的 daemon.json 加一个国内的源地址：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;http://hub-mirror.c.163.com&quot;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<p>然后拉取 mongo 镜像:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull mongodb</span><br></pre></td></tr></table></figure>
+<p>启动 mongo:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 27017:27017 mongo</span><br></pre></td></tr></table></figure>
+<h2 id="安装-mongodb-go-驱动">安装 MongoDB Go 驱动</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get go.mongodb.org/mongo-driver</span><br></pre></td></tr></table></figure>
+<h2 id="基础代码">基础代码</h2>
+<p>创建 main.go 文件，并且导入 <code>bson</code>，<code>mongo</code> 和 <code>mongo/options</code> 包。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;log&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;go.mongodb.org/mongo-driver/bson&quot;</span></span><br><span class="line">    <span class="string">&quot;go.mongodb.org/mongo-driver/mongo&quot;</span></span><br><span class="line">    <span class="string">&quot;go.mongodb.org/mongo-driver/mongo/options&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在后面的代码中将会使用这个 Trainer 结构体</span></span><br><span class="line"><span class="keyword">type</span> Trainer <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name <span class="type">string</span></span><br><span class="line">    Age  <span class="type">int</span></span><br><span class="line">    City <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用-go-driver-连接到-mongodb">使用 Go Driver 连接到 MongoDB</h2>
+<p>一旦 MongoDB 的 Go 驱动被导入之后，我们就可以使用 <code>mongo.Connect</code> 函数来连接到 MongoDB。你必须传递一个 <code>context</code> 和 <code>options.ClientOptions</code> 对象给 <code>mongo.Connect</code> 函数。<a target="_blank" rel="noopener" href="https://godoc.org/go.mongodb.org/mongo-driver/mongo/options">options.ClientOptions</a> 被用来设置连接配置。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置连接参数</span></span><br><span class="line">clientOptions := options.Client().ApplyURI(<span class="string">&quot;mongodb://localhost:27017&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 连接到 MongoDB</span></span><br><span class="line">client, err := mongo.Connect(context.TODO(), clientOptions)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查连接</span></span><br><span class="line">err = client.Ping(context.TODO(), <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fmt.Println(<span class="string">&quot;Connected to MongoDB!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>一旦你连接上了 MongoDB，你现在可以获取 test 数据库的 trainers 集合。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">collection := client.Dataabse(<span class="string">&quot;test&quot;</span>).Collection(<span class="string">&quot;trainers&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>下面的代码将会使用 <code>collection</code> 来查询 <code>trainers</code> 集合。</p>
+<p>如果你不在需要查询 MongoDB，就可以使用 <code>client.Disconnect()</code> 来关闭 MongoDB 连接。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">err = client.Disconnect(context.TODO())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(<span class="string">&quot;Connection to MongoDB closed.&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="在-go-里面使用-bson-对象">在 Go 里面使用 BSON 对象</h2>
+<p>在发送查询请求到 MongoDB 之前，了解如何使用 BSON 对象是非常有必要的。在 MongoDB 中存储的 JSON 文档叫 BSON，是以二进制形式存储的。不像其他数据库以字符串形式存储 JSOn 数据，BSON 还包含了字段类型，这使得应用程序更容易可靠地处理、排序和比较。Go 的 MongoDB 驱动有两个表示 BSON 数据的类型：D 类型和 Raw 类型。</p>
+<p>D 类型用于使用 Go 中的原始类型来构建 BSON 对象。这对于传递给 MongoDB 的命令特别有用。D 类型包括四种类型：</p>
+<ul>
+<li><p>D：一个 BSON 文档。</p></li>
+<li><p>M：无序的 map。</p></li>
+<li><p>A：一个 BSON 数组。</p></li>
+<li><p>E：D 里面的单个元素。</p></li>
+</ul>
+<p>这里是一个使用 D 类型筛选文档的例子，这里会筛选出名字为 Alice 或者 Bob 的数据：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bson.D(&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>,</span><br><span class="line">    bson.D&#123;</span><br><span class="line">        &#123;<span class="string">&quot;$in&quot;</span>: bson.A&#123;<span class="string">&quot;Alice&quot;</span>, <span class="string">&quot;Bob&quot;</span>&#125;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="crud-操作">CRUD 操作</h2>
+<p>一旦你连接到了数据库，我们就可以开始添加或者操作数据库中的数据了。<code>Collection</code> 类型有一些方法允许你发送查询到数据库中。</p>
+<h3 id="插入文档">插入文档</h3>
+<p>首先，创建一些新的 <code>Trainer</code> 结构体来插入到数据库中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ash := Trainer&#123;<span class="string">&quot;Ash&quot;</span>, <span class="number">10</span>, <span class="string">&quot;Pallet Town&quot;</span>&#125;</span><br><span class="line">misty := Trainer&#123;<span class="string">&quot;Misty&quot;</span>, <span class="number">10</span>, <span class="string">&quot;Cerulean City&quot;</span>&#125;</span><br><span class="line">brock := Trainer&#123;<span class="string">&quot;Brock&quot;</span>, <span class="number">15</span>, <span class="string">&quot;Pewter&quot;</span> City&#125;</span><br></pre></td></tr></table></figure>
+<p>可以使用 <code>collection.InsertOne()</code> 方法来插入单个文档：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">insertResult, err := collection.InsertOne(context.TODO(), ash)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fmt.Println(<span class="string">&quot;Inserted a single document: &quot;</span>, insertResult.InsertedID)</span><br></pre></td></tr></table></figure>
+<p>如果我们想一次性插入多个文档，可以传递一个切片给 <code>collection.InsertMany</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">trainers := []<span class="keyword">interface</span>&#123;&#125;&#123;misty, brock&#125;</span><br><span class="line"></span><br><span class="line">insertManyResult, err := collection.InsertMany(context.TODO(), trainers)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fmt.Println(<span class="string">&quot;Inserted multiple documents: &quot;</span>, insertManyResult.InsertedIDs)</span><br></pre></td></tr></table></figure>
+<h3 id="更新文档">更新文档</h3>
+<p><code>collection.UpdateOne()</code> 方法允许你更新单个文档。它需要一个 <code>bson.D</code> 类型的参数来筛选数据库中特定的文档，然后更新它。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 筛选 name 字段的值为 Ash 的记录</span></span><br><span class="line">filter := bson.D&#123;&#123;<span class="string">&quot;name&quot;</span>, <span class="string">&quot;Ash&quot;</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新 age 字段，值加 1</span></span><br><span class="line">update := bson.D&#123;</span><br><span class="line">    &#123;<span class="string">&quot;$inc&quot;</span>, bson.D&#123;</span><br><span class="line">        &#123;<span class="string">&quot;age&quot;</span>, <span class="number">1</span>&#125;</span><br><span class="line">    &#125;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这几行代码会将数据库中名字为 Ash 的文档的 age 字段的值加 1。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">updateResult, err := collection.UpdateOne(context.TODO(), filter, update)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">&quot;Matched %v documents and updated %v documents.\n&quot;</span>, updateResult.MatchedCount, updateResult.ModifiedCount)</span><br></pre></td></tr></table></figure>
+<h3 id="查询文档">查询文档</h3>
+<p>如果想要查询一个文档，同样需要提供一个 filter 文档来筛选，同时需要一个接收结果的指针。为了查询单个文档，可以使用 <code>collection.FindOne()</code> 方法。这个方法会返回一条匹配上的记录并解析到我们指针指向的地方。你可以使用和上面相同的 filter 来查询 name 为 Ash 的记录。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个变量用来接收解析后的结果</span></span><br><span class="line"><span class="keyword">var</span> result Trainer</span><br><span class="line"></span><br><span class="line">err = collection.FindOne(context.TODO(), filter).Decode(&amp;result)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">&quot;Found a single document: %+v\n&quot;</span>, result)</span><br></pre></td></tr></table></figure>
+<p>如果想要查询多个文档，可以使用 <code>collection.Find()</code> 方法。这个方法返回一个 <code>Cursor</code>（游标）。一个 <code>Cursor</code> （游标）可以让我们一次获取到其中一条记录。一旦一个游标遍历完毕，你应该关闭这个游标。</p>
+<p>下面的例子中，我们在 Find 的时候同时指定了额外的一些选项，这里我们设置最多获取的记录数为 2。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个选项会被传递给 Find 方法</span></span><br><span class="line">findOptions := options.Find()</span><br><span class="line">findOptions.SetLimit(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这是用来保存查询结果的数组</span></span><br><span class="line"><span class="keyword">var</span> results []*Trainer</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传递 bson.D&#123;&#123;&#125;&#125; 作为 filter 来匹配 collection 中的所有文档</span></span><br><span class="line">cur, err := collection.Find(context.TODO(), bson.D&#123;&#123;&#125;&#125;, findOptions)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询多个文档的时候返回一个 cursor</span></span><br><span class="line"><span class="comment">// 迭代这个 cursor 允许我们一次解码一个文档</span></span><br><span class="line"><span class="keyword">for</span> cur.Next(context.TODO()) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建一个用来接收单个文档的变量</span></span><br><span class="line">    <span class="keyword">var</span> elem Trainer</span><br><span class="line">    err := cur.Decode(&amp;elem)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    results = <span class="built_in">append</span>(results, &amp;elem)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err := cur.Err(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一旦结束了获取数据的操作，我们需要关闭 cursor</span></span><br><span class="line">cur.Close(context.TODO())</span><br><span class="line"></span><br><span class="line">fmt.Println(<span class="string">&quot;Found multiple documents (array of pointers): %+v\n&quot;</span>, results)</span><br></pre></td></tr></table></figure>
+<h3 id="删除文档">删除文档</h3>
+<p>最后，你可以使用 <code>collection.DeleteOne()</code> 或者 <code>collection.DeleteMany()</code> 来删除文档。这里传递了 <code>bson.D&#123; &#123;&#125; &#125;</code> 作为 filter 参数，将会匹配集合中的所有文档。你也可以使用 <code>collection.Drop</code> 来删除整个集合。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deleteResult, err := collection.DeleteMany(context.TODO(), bson.D&#123;&#123;&#125;&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">&quot;Deleted %v documents in the trainers collection\n&quot;</span>, deleteResult.DeletedCount)</span><br></pre></td></tr></table></figure>
+<h2 id="下一步">下一步</h2>
+<p>MongoDB Go 驱动的完整文档可以在 <a target="_blank" rel="noopener" href="https://pkg.go.dev/go.mongodb.org/mongo-driver/mongo?tab=doc">pkg.go.dev</a> 中查看。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/03/02/linux/CentOS%206.10%20%E5%AE%89%E8%A3%85%20RabbitMQ/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/02/linux/CentOS%206.10%20%E5%AE%89%E8%A3%85%20RabbitMQ/" class="post-title-link" itemprop="url">CentOS 6.10 安装 RabbitMQ</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-02 14:38:00" itemprop="dateCreated datePublished" datetime="2020-03-02T14:38:00+08:00">2020-03-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-08 23:20:59" itemprop="dateModified" datetime="2020-12-08T23:20:59+08:00">2020-12-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考链接：<a target="_blank" rel="noopener" href="https://tecadmin.net/install-rabbitmq-on-centos/">https://tecadmin.net/install-rabbitmq-on-centos/</a></p>
+<h2 id="安装-erlang">安装 Erlang</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm</span><br><span class="line">sudo rpm -Uvh erlang-solutions-1.0-1.noarch.rpm</span><br><span class="line">sudo yum install erlang erlang-nox</span><br></pre></td></tr></table></figure>
+<h2 id="安装-rabbitmq-server">安装 RabbitMQ Server</h2>
+<p>CentOS/RHEL 6</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.2/rabbitmq-server-3.8.2-1.el6.noarch.rpm</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm --import https://www.rabbitmq.com/rabbitmq-release-signing-key.asc</span><br><span class="line">sudo yum install rabbitmq-server-3.8.2-1.el6.noarch.rpm</span><br></pre></td></tr></table></figure>
+<h2 id="疑难杂症">疑难杂症</h2>
+<p>在内网测试机上安装的过程中，遇到了一种情况，<code>yum install</code> 只能安装旧的版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum list | grep erlang</span><br><span class="line"></span><br><span class="line">erlang-appmon.x86_64                        R14B-04.3.el6               @epel</span><br><span class="line">erlang-asn1.x86_64                          R14B-04.3.el6               @epel</span><br><span class="line">erlang-common_test.x86_64                   R14B-04.3.el6               @epel</span><br><span class="line">erlang-compiler.x86_64                      R14B-04.3.el6               @epel</span><br><span class="line">erlang-cosEvent.x86_64                      R14B-04.3.el6               @epel</span><br><span class="line">erlang-cosEventDomain.x86_64                R14B-04.3.el6               @epel</span><br><span class="line">erlang-cosFileTransfer.x86_64               R14B-04.3.el6               @epel</span><br><span class="line">erlang-cosNotification.x86_64               R14B-04.3.el6               @epel</span><br><span class="line">erlang-cosProperty.x86_64                   R14B-04.3.el6               @epel</span><br><span class="line">erlang-cosTime.x86_64                       R14B-04.3.el6               @epel</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这个命令输出显示了一堆 R14B-04.3.el6 的 erlang 版本。但是这不是我想要安装的版本。而且因为这一个版本存在，也导致新的版本死活安装不上。</p>
+<p>最后搜索 <span class="citation" data-cites="epel">@epel</span> 找到一个命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep kernel</span><br></pre></td></tr></table></figure>
+<p>这个命令输出显示有一个 <code>erlang-kernel-R14B-04.3.el6.x86_64</code>，说实话这个不知道哪里来的，估计是之前随便找了篇文章瞎搞上去的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kernel-2.6.32-642.el6.x86_64</span><br><span class="line">kernel-2.6.32-696.23.1.el6.x86_64</span><br><span class="line">kernel-2.6.32-754.27.1.el6.x86_64</span><br><span class="line">dracut-kernel-004-411.el6.noarch</span><br><span class="line">kernel-2.6.32-754.6.3.el6.x86_64</span><br><span class="line">erlang-kernel-R14B-04.3.el6.x86_64</span><br><span class="line">kernel-headers-2.6.32-754.27.1.el6.x86_64</span><br><span class="line">kernel-firmware-2.6.32-754.27.1.el6.noarch</span><br></pre></td></tr></table></figure>
+<p>把这个删除就可以装上新的版本了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum remove erlang-kernel-R14B-04.3.el6.x86_64</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/02/28/php/composer%20install%20%E5%BF%BD%E7%95%A5%E5%B9%B3%E5%8F%B0%E4%BE%9D%E8%B5%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/28/php/composer%20install%20%E5%BF%BD%E7%95%A5%E5%B9%B3%E5%8F%B0%E4%BE%9D%E8%B5%96/" class="post-title-link" itemprop="url">composer install 忽略平台依赖</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-28 09:48:00" itemprop="dateCreated datePublished" datetime="2020-02-28T09:48:00+08:00">2020-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-08 23:20:59" itemprop="dateModified" datetime="2020-12-08T23:20:59+08:00">2020-12-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>有时候我们在执行 <code>composer install</code> 的时候会遇到一些依赖不满足导致命令执行失败的情况，比如 php 版本不满足、扩展缺失等。如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Your requirements could not be resolved to an installable set of packages.</span><br><span class="line"></span><br><span class="line">  Problem 1</span><br><span class="line">    - phpdocumentor/reflection-docblock 5.1.0 requires php ^7.2 -&gt; your PHP version (7.1.14) does not satisfy that requirement.</span><br><span class="line">    - phpdocumentor/reflection-docblock 5.1.0 requires php ^7.2 -&gt; your PHP version (7.1.14) does not satisfy that requirement.</span><br><span class="line">    - phpdocumentor/reflection-docblock 5.1.0 requires php ^7.2 -&gt; your PHP version (7.1.14) does not satisfy that requirement.</span><br><span class="line">    - Installation request for phpdocumentor/reflection-docblock (locked at 5.1.0) -&gt; satisfiable by phpdocumentor/reflection-docblock[5.1.0].</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Installation failed, reverting ./composer.json to its original content.</span><br></pre></td></tr></table></figure>
+<p>但有时候我们可能并不需要满足那个依赖也能满足我们项目的正常运行，这个时候我们可以选择忽略掉这些依赖不满足的情况继续执行 composer install。</p>
+<p>这个时候，我们只需要加上参数 <code>--ignore-platform-reqs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer install --ignore-platform-reqs</span><br></pre></td></tr></table></figure>
+<p>加上这个参数之后，我们的 composer install 命令将会忽略掉依赖不满足的情况继续执行安装。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/02/27/mongodb/mongodb%20%E7%9A%84%20aggregate%20%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/27/mongodb/mongodb%20%E7%9A%84%20aggregate%20%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84/" class="post-title-link" itemprop="url">mongodb 的 aggregate 需要知道的</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-27 19:20:00" itemprop="dateCreated datePublished" datetime="2020-02-27T19:20:00+08:00">2020-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-08 23:20:59" itemprop="dateModified" datetime="2020-12-08T23:20:59+08:00">2020-12-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今天在排查 stage 环境的 mongodb log 的时候发现有很多慢查询，本来想尝试去优化一波，但无奈的是实在是看不懂那些 aggregate 语句，目前只好先来补习一下 mongodb 的 aggregate 相关知识。</p>
+<h2 id="mongodb-aggregate-做了什么">mongodb aggregate 做了什么？</h2>
+<p><strong>我们在使用 mongodb 的 aggregate 操作的时候会传递一个数组参数，这个数组里面的每一项定义了这一步需要做的操作，然后把这一步的结果传递给数组下一个聚合操作，知道执行完所有操作。</strong></p>
+<blockquote>
+<p>MongoDB 的聚合框架以数据处理管道的概念为模型。文档进入多阶段流水线，该流水线将文档转换成汇总结果。</p>
+</blockquote>
+<h2 id="例子来自官网">例子（来自官网）</h2>
+<p>假设我们有如下数据：</p>
+<p>orders:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;A123&quot;,</span><br><span class="line">    amount: 500,</span><br><span class="line">    status: &quot;A&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;A123&quot;,</span><br><span class="line">    amount: 250,</span><br><span class="line">    status: &quot;A&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;B212&quot;,</span><br><span class="line">    amount: 200,</span><br><span class="line">    status: &quot;A&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;A123&quot;,</span><br><span class="line">    amount: 300,</span><br><span class="line">    status: &quot;D&quot;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>我们对这个 collection 执行如下操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.orders.aggregate([</span><br><span class="line">    &#123; $match: &#123; status: &quot;A&quot; &#125; &#125;,</span><br><span class="line">    &#123; $group: &#123; _id: &quot;$cust_id&quot;, total: &#123; $sum: &quot;$amount&quot; &#125; &#125; &#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h2 id="这个操作做了什么">这个操作做了什么？</h2>
+<h3 id="首先根据传递的条件筛选出符合条件的数据">首先，根据传递的条件筛选出符合条件的数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; $match: &#123; status: &quot;A&quot; &#125; &#125;,</span><br></pre></td></tr></table></figure>
+<p>首先，筛选出 <code>status</code> 为 <code>"A"</code> 的记录。这个过程会得到下面的记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;A123&quot;,</span><br><span class="line">    amount: 500,</span><br><span class="line">    status: &quot;A&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;A123&quot;,</span><br><span class="line">    amount: 250,</span><br><span class="line">    status: &quot;A&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    cust_id: &quot;B212&quot;,</span><br><span class="line">    amount: 200,</span><br><span class="line">    status: &quot;A&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="然后根据-cust_id-分组并且统计-amount-的总数">然后，根据 cust_id 分组，并且统计 amount 的总数</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; $group: &#123; _id: &quot;$cust_id&quot;, total: &#123; $sum: &quot;$amount&quot; &#125; &#125; &#125;</span><br></pre></td></tr></table></figure>
+<p><code>$group</code> 表明我们要对上一步的结果进行分组，<code>_id</code> 表明我们需要根据 <code>"$cust_id""</code> 来分组，相同 <code>cust_id</code> 的数组分为一组，最后，<code>$sum</code> 表明我们需要根据后面的表达式来当前分组执行求和操作，求和的字段为 <code>amount</code>。</p>
+<p>这个过程会得到下面的结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    _id: &quot;A123&quot;,</span><br><span class="line">    total: 750</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    _id: &quot;B212&quot;,</span><br><span class="line">    total: 200</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/02/24/git/mac%20%E4%B8%8B%E6%96%B0%E7%89%88%20GitKraken%20%E4%B8%8D%E8%83%BD%E6%89%93%E5%BC%80%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/24/git/mac%20%E4%B8%8B%E6%96%B0%E7%89%88%20GitKraken%20%E4%B8%8D%E8%83%BD%E6%89%93%E5%BC%80%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">mac 下新版 GitKraken 不能打开私有仓库解决方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-24 15:06:00" itemprop="dateCreated datePublished" datetime="2020-02-24T15:06:00+08:00">2020-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-08 23:20:59" itemprop="dateModified" datetime="2020-12-08T23:20:59+08:00">2020-12-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>本文只是说 mac 下的解决方案，其他系统可以依样画葫芦，毕竟用 electron 就是为了它的跨平台特性，各个平台代码基本上一样的。</p>
+</blockquote>
+<blockquote>
+<p>觉得太长而且是 mac 的话，可以直接使用文末的脚本。</p>
+</blockquote>
+<p>mac 下的破解方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://raw.githubusercontent.com/eleven26/blog/master/scripts/gitkraken.py | python</span><br></pre></td></tr></table></figure>
+<p>今天打开 GitKraken 的时候突然发现，提示我 <code>The free version of GitKraken does not support opening private or self-hosted repositories.</code>。</p>
+<p><code>GitKraken</code> 是一个用 <code>electron</code> 开发的客户端应用，正好之前用 <code>electron</code> 写过一点东西，去看看源码有没有什么解决方法。</p>
+<p>源码位于：<code>/Applications/GitKraken.app/Contents/Resources</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /Applications/GitKraken.app/Contents/Resources</span><br></pre></td></tr></table></figure>
+<p>我们会看到一个 <code>app.asar</code> 文件，这个其实就是应用的核心所在，我们可以看作类似与 zip 之类的东西，它把所有源码打包到了一个文件中，我们解压开来看看源码：</p>
+<blockquote>
+<p>想了解 asar 是什么的可以看 <a target="_blank" rel="noopener" href="https://www.electronjs.org/docs/tutorial/application-packaging">https://www.electronjs.org/docs/tutorial/application-packaging</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Applications/GitKraken.app/Contents/Resources</span><br><span class="line">asar e app.asar unpacked  # 解压 app.asar 到 unpacked 文件夹中</span><br></pre></td></tr></table></figure>
+<p>asar 需要通过 npm 安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g asar</span><br></pre></td></tr></table></figure>
+<p>我们可以直接用 WebStorm 之类的 IDE 打开这个文件夹，我们可以看到一个 <code>initializeGlobals.js</code> 文件，在里面发现一行对于开发人员来说比较敏感的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">process.env.NODE_ENV = loadSettings.mode === &#x27;development&#x27; ? &#x27;development&#x27; : &#x27;production&#x27;;</span><br></pre></td></tr></table></figure>
+<p>一般开发中，我们常常定义 env 环境变量，然后在开发环境我们通常会少一些限制，想到此，可能修改为 <code>development</code> 模式会可以解决现在遇到的问题，然后找到定义的地方，在另外一个文件中：</p>
+<p>clientType.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#x27;production&#x27;;</span><br></pre></td></tr></table></figure>
+<p>我们把这一行修改为 <code>module.exports = 'development';</code> 看看。</p>
+<p>修改完之后，重新打包。</p>
+<ol type="1">
+<li>先把旧的文件备份：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /Applications/GitKraken.app/Contents/Resources/app.asar /Applications/GitKraken.app/Contents/Resources/app.asar.bak</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>打包之后，我们就可以将修改后的代码重新打包</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Applications/GitKraken.app/Contents/Resources</span><br><span class="line">rm app.asar &amp;&amp; asar pack unpacked app.asar</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>unpacked</code> 就是刚刚上面解压出来的文件夹。</p>
+<ol start="3" type="1">
+<li>重启 <code>GitKraken</code></li>
+</ol>
+<p>重启之后，弹窗没有了，各项功能正常使用。应该没什么问题了，就先用着了。</p>
+<h2 id="py脚本">py脚本</h2>
+<p>觉得上面太长不想看的可以执行下面的脚本：</p>
+<p>保存为 <code>gitkraken.py</code>，然后运行 <code>chmod +x gitkraken.py &amp;&amp; ./gitkraken.py</code> 即可破解。</p>
+<p>下面的代码 Gitkraken 7.4.0 可用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">d = &#x27;/Applications/GitKraken.app/Contents/Resources&#x27;</span><br><span class="line">if not os.path.isdir(d):</span><br><span class="line">    print(&quot;GitKraken 尚未安装&quot;)</span><br><span class="line">    exit(-1)</span><br><span class="line"></span><br><span class="line">print(&quot;切换目录到 %s...&quot; % d)</span><br><span class="line">os.chdir(d)</span><br><span class="line">if os.path.isdir(d + &quot;/unpacked&quot;):</span><br><span class="line">    os.system(&quot;rm -rf &quot; + d + &quot;/unpacked&quot;)</span><br><span class="line"></span><br><span class="line"># 解压</span><br><span class="line">print(&quot;解压 app.asar...&quot;)</span><br><span class="line">os.system(&quot;cp app.asar app.asar.bak&quot;)</span><br><span class="line">os.system(&quot;asar e app.asar unpacked&quot;)</span><br><span class="line"></span><br><span class="line"># 替换文件</span><br><span class="line">print(&quot;替换文件...&quot;)</span><br><span class="line">f = open(d + &quot;/unpacked/src/main/clientType.js&quot;, mode=&#x27;wb&#x27;)</span><br><span class="line">content = &quot;&quot;&quot;// This file is auto-generated by the set-client-type.js script</span><br><span class="line">module.exports = &#x27;development&#x27;;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">f.write(bytes(content))</span><br><span class="line">f.close()</span><br><span class="line"></span><br><span class="line">f = open(d + &quot;/unpacked/src/main/static/clientType.js&quot;, mode=&#x27;wb&#x27;)</span><br><span class="line">content = &quot;&quot;&quot;// This file is auto-generated by the set-client-type.js script</span><br><span class="line">module.exports = &#x27;development&#x27;;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">f.write(bytes(content))</span><br><span class="line">f.close()</span><br><span class="line"></span><br><span class="line">f = open(d + &quot;/unpacked/src/main/static/mode.js&quot;, mode=&#x27;wb&#x27;)</span><br><span class="line">content = &quot;&quot;&quot;// This file is auto-generated by the set-run-mode.js script</span><br><span class="line">module.exports = &#x27;development&#x27;;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">f.write(bytes(content))</span><br><span class="line">f.close()</span><br><span class="line"></span><br><span class="line"># 重新打包</span><br><span class="line">print(&quot;重新打包...&quot;)</span><br><span class="line">os.system(&quot;rm app.asar &amp;&amp; asar pack unpacked app.asar&quot;)</span><br><span class="line"></span><br><span class="line"># 清理操作</span><br><span class="line">os.system(&quot;rm -rf unpacked&quot;)</span><br><span class="line"></span><br><span class="line">print(&quot;破解成功!&quot;)</span><br><span class="line"></span><br><span class="line"># 打开 Gitkraken</span><br><span class="line">script = &quot;&quot;&quot;tell application &quot;GitKraken&quot;</span><br><span class="line">    activate</span><br><span class="line">    # set frontmost to true</span><br><span class="line"></span><br><span class="line">    try</span><br><span class="line">        set miniaturized of windows to false -- most apps</span><br><span class="line">    end try</span><br><span class="line">end tell&quot;&quot;&quot;</span><br><span class="line">os.system(&quot;osascript -e &#x27;%s&#x27;&quot; % script)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参考链接：</p>
+<ol type="1">
+<li><a target="_blank" rel="noopener" href="https://www.electronjs.org/docs/tutorial/application-packaging">application-packaging</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/39/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&hellip;</span><a class="page-number" href="/page/63/">63</a><a class="extend next" rel="next" href="/page/41/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">315</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ogliu.com/" title="https:&#x2F;&#x2F;ogliu.com&#x2F;" rel="noopener" target="_blank">OG-Liu's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+    <div>
+
+  </div>
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">eleven26</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

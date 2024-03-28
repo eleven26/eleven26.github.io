@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"eleven26.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="eleven26">
+<meta property="og:url" content="https://eleven26.github.io/page/8/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://eleven26.github.io/page/8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
+  };
+</script>
+
+  <title>eleven26</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">eleven26</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/01/17/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.Map%20-%20%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/17/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.Map%20-%20%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">深入理解 go sync.Map - 基本原理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-01-17 20:28:30 / Modified: 11:43:10" itemprop="dateCreated datePublished" datetime="2023-01-17T20:28:30+08:00">2023-01-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们知道，go 里面提供了 <code>map</code> 这种类型让我们可以存储键值对数据，但是如果我们在并发的情况下使用 <code>map</code> 的话，就会发现它是不支持并发地进行读写的（会报错）。 在这种情况下，我们可以使用 <code>sync.Mutex</code> 来保证并发安全，但是这样会导致我们在读写的时候，都需要加锁，这样就会导致性能的下降。 除了使用互斥锁这种相对低效的方式，我们还可以使用 <code>sync.Map</code> 来保证并发安全，它在某些场景下有比使用 <code>sync.Mutex</code> 更高的性能。 本文就来探讨一下 <code>sync.Map</code> 中的一些大家比较感兴趣的问题，比如为什么有了 <code>map</code> 还要 <code>sync.Map</code>？它为什么快？<code>sync.Map</code> 的适用场景（注意：不是所有情况下都快。）等。</p>
+<p>关于 <code>sync.Map</code> 的设计与实现原理，会在下一篇中再做讲解。</p>
+<h2 id="map-在并发下的问题">map 在并发下的问题</h2>
+<p>如果我们看过 <code>map</code> 的源码，就会发现其中有不少会引起 <code>fatal</code> 错误的地方，比如 <code>mapaccess1</code>（从 <code>map</code> 中读取 <code>key</code> 的函数）里面，如果发现正在写 <code>map</code>，则会有 <code>fatal</code> 错误。 （如果还没看过，可以跟着这篇 <a target="_blank" rel="noopener" href="https://blog.baiguiren.com/2022/12/16/golang/go%20map%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">《go map 设计与实现》</a> 看一下）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> h.flags&amp;hashWriting != <span class="number">0</span> &#123;</span><br><span class="line">    fatal(<span class="string">&quot;concurrent map read and map write&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="map-并发读写异常的例子">map 并发读写异常的例子</h3>
+<p>下面是一个实际使用中的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 往 map 写 key 的协程</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 往 map 写入数据</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        m[i] = i</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从 map 读取 key 的协程</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 从 map 读取数据</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">10000</span>; i &gt; <span class="number">0</span>; i-- &#123;</span><br><span class="line">        _ = m[i]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等待两个协程执行完毕</span></span><br><span class="line">time.Sleep(time.Second)</span><br></pre></td></tr></table></figure>
+<p>这会导致报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal error: concurrent map read and map write</span><br></pre></td></tr></table></figure>
+<p>这是因为我们同时对 <code>map</code> 进行读写，而 <code>map</code> 不支持并发读写，所以会报错。如果 <code>map</code> 允许并发读写，那么可能在我们使用的时候会有很多错乱的情况出现。 （具体如何错乱，我们可以对比多线程的场景思考一下，本文不展开了）。</p>
+<h3 id="使用-sync.mutex-保证并发安全">使用 sync.Mutex 保证并发安全</h3>
+<p>对于 <code>map</code> 并发读写报错的问题，其中一种解决方案就是使用 <code>sync.Mutex</code> 来保证并发安全， 但是这样会导致我们在读写的时候，都需要加锁，这样就会导致性能的下降。</p>
+<p>使用 <code>sync.Mutex</code> 来保证并发安全，上面的代码可以改成下面这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line"><span class="comment">// 互斥锁</span></span><br><span class="line"><span class="keyword">var</span> mu sync.Mutex</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写 map 的协程</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        mu.Lock() <span class="comment">// 写 map，加互斥锁</span></span><br><span class="line">        m[i] = i</span><br><span class="line">        mu.Unlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读 map 的协程序</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">10000</span>; i &gt; <span class="number">0</span>; i-- &#123;</span><br><span class="line">        mu.Lock() <span class="comment">// 读 map，加互斥锁</span></span><br><span class="line">        _ = m[i]</span><br><span class="line">        mu.Unlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">time.Sleep(time.Second)</span><br></pre></td></tr></table></figure>
+<p>这样就不会报错了，但是性能会有所下降，因为我们在读写的时候都需要加锁。（如果需要更高性能，可以继续读下去，不要急着使用 <code>sync.Mutex</code>）</p>
+<blockquote>
+<p><code>sync.Mutex</code> 的常见的用法是在结构体中嵌入 <code>sync.Mutex</code>，而不是定义独立的两个变量。</p>
+</blockquote>
+<h3 id="使用-sync.rwmutex-保证并发安全">使用 sync.RWMutex 保证并发安全</h3>
+<p>在上一小节中，我们使用了 <code>sync.Mutex</code> 来保证并发安全，但是在读和写的时候我们都需要加互斥锁。 这就意味着，<strong>就算多个协程进行并发读，也需要等待锁</strong>。 但是互斥锁的粒度太大了，但实际上，并发读是没有什么太大问题的，应该被允许才对，<strong>如果我们允许并发读，那么就可以提高性能</strong>。</p>
+<p>当然 go 的开发者也考虑到了这一点，所以在 <code>sync</code> 包中提供了 <code>sync.RWMutex</code>，这个锁可以允许进行并发读，但是写的时候还是需要等待锁。 也就是说，<strong>一个协程在持有写锁的时候，其他协程是既不能读也不能写的，只能等待写锁释放才能进行读写</strong>。</p>
+<p>使用 <code>sync.RWMutex</code> 来保证并发安全，我们可以改成下面这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line"><span class="comment">// 读写锁（允许并发读，写的时候是互斥的）</span></span><br><span class="line"><span class="keyword">var</span> mu sync.RWMutex</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入 map 的协程</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        <span class="comment">// 写入的时候需要加锁</span></span><br><span class="line">        mu.Lock()</span><br><span class="line">        m[i] = i</span><br><span class="line">        mu.Unlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取 map 的协程</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">10000</span>; i &gt; <span class="number">0</span>; i-- &#123;</span><br><span class="line">        <span class="comment">// 读取的时候需要加锁，但是这个锁是读锁</span></span><br><span class="line">        <span class="comment">// 多个协程可以同时使用 RLock 而不需要等待</span></span><br><span class="line">        mu.RLock()</span><br><span class="line">        _ = m[i]</span><br><span class="line">        mu.RUnlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 另外一个读取 map 的协程</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">20000</span>; i &gt; <span class="number">10000</span>; i-- &#123;</span><br><span class="line">        <span class="comment">// 读取的时候需要加锁，但是这个锁是读锁</span></span><br><span class="line">        <span class="comment">// 多个协程可以同时使用 RLock 而不需要等待</span></span><br><span class="line">        mu.RLock()</span><br><span class="line">        _ = m[i]</span><br><span class="line">        mu.RUnlock()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">time.Sleep(time.Second)</span><br></pre></td></tr></table></figure>
+<p>这样就不会报错了，而且性能也提高了，因为我们在读的时候，不需要等待锁。</p>
+<p>说明：</p>
+<ul>
+<li><strong>多个协程</strong>可以同时使用 <code>RLock</code> 而不需要等待，这是读锁。</li>
+<li><strong>只有一个协程</strong>可以使用 <code>Lock</code>，这是写锁，有写锁的时候，其他协程不能读也不能写。</li>
+<li>持有写锁的协程，可以使用 <code>Unlock</code> 来释放锁。</li>
+<li>写锁释放之后，其他协程才能获取到锁（读锁或者写锁）。</li>
+</ul>
+<p>也就是说，使用 <code>sync.RWMutex</code> 的时候，读操作是可以并发执行的，但是写操作是互斥的。 这样一来，相比 <code>sync.Mutex</code> 来说等待锁的次数就少了，自然也就能获得更好的性能了。</p>
+<blockquote>
+<p>gin 框架里面就使用了 <code>sync.RWMutex</code> 来保证 <code>Keys</code> 读写操作的并发安全。</p>
+</blockquote>
+<h2 id="有了读写锁为什么还要有-sync.map">有了读写锁为什么还要有 sync.Map？</h2>
+<p>通过上面的内容，我们知道了，有下面两种方式可以保证并发安全：</p>
+<ul>
+<li>使用 <code>sync.Mutex</code>，但是这样的话，读写都是互斥的，性能不好。</li>
+<li>使用 <code>sync.RWMutex</code>，可以并发读，但是写的时候是互斥的，性能相对 <code>sync.Mutex</code> 要好一些。</li>
+</ul>
+<p>但是就算我们使用了 <code>sync.RWMutex</code>，也还是有一些锁的开销。那么我们能不能再优化一下呢？答案是可以的。那就是使用 <code>sync.Map</code>。</p>
+<blockquote>
+<p><code>sync.Map</code> 在锁的基础上做了进一步优化，在一些场景下使用原子操作来保证并发安全，性能更好。</p>
+</blockquote>
+<h3 id="使用原子操作替代读锁">使用原子操作替代读锁</h3>
+<p>但是就算使用 <code>sync.RWMutex</code>，读操作依然还有锁的开销，那么有没有更好的方式呢？ 答案是有的，就是使用原子操作来替代读锁。</p>
+<p>举一个很常见的例子就是多个协程同时读取一个变量，然后对这个变量进行累加操作：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="type">int32</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">wg.Add(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        a++</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Done()</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        a++</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Done()</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">wg.Wait()</span><br><span class="line"></span><br><span class="line"><span class="comment">// a 期望结果应该是 20000才对。</span></span><br><span class="line">fmt.Println(a) <span class="comment">// 实际：17089，而且每次都不一样</span></span><br></pre></td></tr></table></figure>
+<p>这个例子中，我们期望的结果是 <code>a</code> 的值是 <code>20000</code>，但是实际上，每次运行的结果都不一样，而且都不会等于 <code>20000</code>。 其中很简单粗暴的一种解决方法是加锁，但是这样的话，性能就不好了，但是我们可以使用原子操作来解决这个问题：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a atomic.Int32</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">wg.Add(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        a.Add(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Done()</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        a.Add(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Done()</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">wg.Wait()</span><br><span class="line"></span><br><span class="line">fmt.Println(a.Load()) <span class="comment">// 20000</span></span><br></pre></td></tr></table></figure>
+<h3 id="锁跟原子操作的性能差多少">锁跟原子操作的性能差多少？</h3>
+<p>我们来看一下，使用锁和原子操作的性能差多少：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkMutexAdd</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="type">int32</span></span><br><span class="line">	<span class="keyword">var</span> mu sync.Mutex</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		mu.Lock()</span><br><span class="line">		a++</span><br><span class="line">		mu.Unlock()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAtomicAdd</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a atomic.Int32</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		a.Add(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkMutexAdd-12     	100000000	        10.07 ns/op</span><br><span class="line">BenchmarkAtomicAdd-12    	205196968	         5.847 ns/op</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，使用原子操作的性能比使用锁的性能要好一些。</p>
+<p>也许我们会觉得上面这个例子是写操作，那么读操作呢？我们来看一下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkMutex</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> mu sync.RWMutex</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		mu.RLock()</span><br><span class="line">		mu.RUnlock()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAtomic</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a atomic.Int32</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		_ = a.Load()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkMutex-12     	100000000	        10.12 ns/op</span><br><span class="line">BenchmarkAtomic-12    	1000000000	         0.3133 ns/op</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，使用原子操作的性能比使用锁的性能要好很多。而且在 <code>BenchmarkMutex</code> 里面甚至还没有做读取数据的操作。</p>
+<h3 id="sync.map-里面的原子操作">sync.Map 里面的原子操作</h3>
+<p><code>sync.Map</code> 里面相比 <code>sync.RWMutex</code>，性能更好的原因就是使用了原子操作。 在我们从 <code>sync.Map</code> 里面读取数据的时候，会先使用一个原子 <code>Load</code> 操作来读取 <code>sync.Map</code> 里面的 <code>key</code>（从 <code>read</code> 中读取）。 注意：这里拿到的是 <code>key</code> 的一份快照，我们对其进行读操作的时候也可以同时往 <code>sync.Map</code> 中写入新的 <code>key</code>，这是保证它高性能的一个很关键的设计（类似读写分离）。</p>
+<p><code>sync.Map</code> 里面的 <code>Load</code> 方法里面就包含了上述的流程：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Load 方法从 sync.Map 里面读取数据。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Map)</span></span> Load(key any) (value any, ok <span class="type">bool</span>) &#123;</span><br><span class="line">	<span class="comment">// 先从只读 map 里面读取数据。</span></span><br><span class="line">	<span class="comment">// 这一步是不需要锁的，只有一个原子操作。</span></span><br><span class="line">	read := m.loadReadOnly()</span><br><span class="line">	e, ok := read.m[key]</span><br><span class="line">	<span class="keyword">if</span> !ok &amp;&amp; read.amended &#123; <span class="comment">// 如果没有找到，并且 dirty 里面有一些 read 中没有的 key，那么就需要从 dirty 里面读取数据。</span></span><br><span class="line">		<span class="comment">// 这里才需要锁</span></span><br><span class="line">		m.mu.Lock()</span><br><span class="line">		read = m.loadReadOnly()</span><br><span class="line">		e, ok = read.m[key]</span><br><span class="line">		<span class="keyword">if</span> !ok &amp;&amp; read.amended &#123;</span><br><span class="line">			e, ok = m.dirty[key]</span><br><span class="line">			m.missLocked()</span><br><span class="line">		&#125;</span><br><span class="line">		m.mu.Unlock()</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// key 不存在</span></span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 使用原子操作读取</span></span><br><span class="line">	<span class="keyword">return</span> e.Load()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码我们可能还看不懂，但是没关系，这里我们只需要知道的是，<strong>从 sync.Map 读取数据的时候，会先做原子操作，如果没找到，再进行加锁操作，这样就减少了使用锁的频率了，自然也就可以获得更好的性能（但要注意的是并不是所有情况下都能获得更好的性能）</strong>。至于具体实现，在下一篇文章中会进行更加详细的分析。</p>
+<p><strong>也就是说，sync.Map 之所以更快，是因为相比 RWMutex，进一步减少了锁的使用，而这也就是 sync.Map 存在的原因了</strong></p>
+<h2 id="sync.map-的基本用法">sync.Map 的基本用法</h2>
+<p>现在我们知道了，<code>sync.Map</code> 里面是利用了原子操作来减少锁的使用。但是我们好像连 <code>sync.Map</code> 的一些基本操作都还不了解，现在就让我们再来看看 <code>sync.Map</code> 的基本用法。</p>
+<p><code>sync.Map</code> 的使用还是挺简单的，<code>map</code> 中有的操作，在 <code>sync.Map</code> 都有，只不过区别是，在 <code>sync.Map</code> 中，所有的操作都需要通过调用其方法来进行。 <code>sync.Map</code> 里面几个常用的方法有（<code>CRUD</code>）：</p>
+<ul>
+<li><code>Store</code>：我们新增或者修改数据的时候，都可以使用 <code>Store</code> 方法。</li>
+<li><code>Load</code>：读取数据的方法。</li>
+<li><code>Range</code>：遍历数据的方法。</li>
+<li><code>Delete</code>：删除数据的方法。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m sync.Map</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入/修改</span></span><br><span class="line">m.Store(<span class="string">&quot;foo&quot;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取</span></span><br><span class="line">fmt.Println(m.Load(<span class="string">&quot;foo&quot;</span>)) <span class="comment">// 1 true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历</span></span><br><span class="line">m.Range(<span class="function"><span class="keyword">func</span><span class="params">(key, value <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">    fmt.Println(key, value) <span class="comment">// foo 1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除</span></span><br><span class="line">m.Delete(<span class="string">&quot;foo&quot;</span>)</span><br><span class="line">fmt.Println(m.Load(<span class="string">&quot;foo&quot;</span>)) <span class="comment">// nil false</span></span><br></pre></td></tr></table></figure>
+<p>注意：在 <code>sync.Map</code> 中，<code>key</code> 和 <code>value</code> 都是 <code>interface&#123;&#125;</code> 类型的，也就是说，我们可以使用任意类型的 <code>key</code> 和 <code>value</code>。 而不像 <code>map</code>，只能存在一种类型的 <code>key</code> 和 <code>value</code>。从这个角度来看，它的类型类似于 <code>map[any]any</code>。</p>
+<p>另外一个需要注意的是，<code>Range</code> 方法的参数是一个函数，这个函数如果返回 <code>false</code>，那么遍历就会停止。</p>
+<h2 id="sync.map-的使用场景">sync.Map 的使用场景</h2>
+<p>在 <code>sync.Map</code> 源码中，已经告诉了我们 <code>sync.Map</code> 的使用场景：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">The Map type is optimized for two common use cases: (1) when the entry for a given</span><br><span class="line">key is only ever written once but read many times, as in caches that only grow,</span><br><span class="line">or (2) when multiple goroutines read, write, and overwrite entries for disjoint</span><br><span class="line">sets of keys. In these two cases, use of a Map may significantly reduce lock</span><br><span class="line">contention compared to a Go map paired with a separate Mutex or RWMutex.</span><br></pre></td></tr></table></figure>
+<p>翻译过来就是，Map 类型针对两种常见用例进行了优化：</p>
+<ul>
+<li>当给定 <code>key</code> 的条目只写入一次但读取多次时，如在只会增长的缓存中。（读多写少）</li>
+<li>当多个 goroutine 读取、写入和覆盖不相交的键集的条目。（不同 goroutine 操作不同的 key）</li>
+</ul>
+<p>在这两种情况下，与 Go <code>map</code> 与单独的 <code>Mutex</code> 或 <code>RWMutex</code> 配对相比，使用 <code>sync.Map</code> 可以显著减少锁竞争（很多时候只需要原子操作就可以）。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>普通的 <code>map</code> 不支持并发读写。</li>
+<li>有以下两种方式可以实现 <code>map</code> 的并发读写：
+<ul>
+<li>使用 <code>sync.Mutex</code> 互斥锁。读和写的时候都使用互斥锁，性能相比 <code>sync.RWMutex</code> 会差一些。</li>
+<li>使用 <code>sync.RWMutex</code> 读写锁。读的锁是可以共享的，但是写锁是独占的。性能相比 <code>sync.Mutex</code> 会好一些。</li>
+</ul></li>
+<li><code>sync.Map</code> 里面会先进行原子操作来读取 <code>key</code>，如果读取不到的时候，才会需要加锁。所以性能相比 <code>sync.Mutex</code> 和 <code>sync.RWMutex</code> 会好一些。</li>
+<li><code>sync.Map</code> 里面几个常用的方法有（<code>CRUD</code>）：
+<ul>
+<li><code>Store</code>：我们新增或者修改数据的时候，都可以使用 <code>Store</code> 方法。</li>
+<li><code>Load</code>：读取数据的方法。</li>
+<li><code>Range</code>：遍历数据的方法。</li>
+<li><code>Delete</code>：删除数据的方法。</li>
+</ul></li>
+<li><code>sync.Map</code> 的使用场景，<code>sync.Map</code> 针对以下两种场景做了优化：
+<ul>
+<li><code>key</code> 只会写入一次，但是会被读取多次的场景。</li>
+<li>多个 goroutine 读取、写入和覆盖不相交的键集的条目。</li>
+</ul></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/01/10/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E5%8F%8D%E5%B0%84%E4%B8%BA%E4%BB%80%E4%B9%88%E6%85%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/10/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E5%8F%8D%E5%B0%84%E4%B8%BA%E4%BB%80%E4%B9%88%E6%85%A2/" class="post-title-link" itemprop="url">深入理解 go reflect - 反射为什么慢</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-01-10 20:28:30 / Modified: 17:35:37" itemprop="dateCreated datePublished" datetime="2023-01-10T20:28:30+08:00">2023-01-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们选择 go 语言的一个重要原因是，它有非常高的性能。但是它反射的性能却一直为人所诟病，本篇文章就来看看 go 反射的性能问题。</p>
+<h2 id="go-的性能测试">go 的性能测试</h2>
+<p>在开始之前，有必要先了解一下 go 的性能测试。在 go 里面进行性能测试很简单，只需要在测试函数前面加上 <code>Benchmark</code> 前缀， 然后在函数体里面使用 <code>b.N</code> 来进行循环，就可以得到每次循环的耗时。如下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkNew</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	b.ReportAllocs()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		New()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以使用命令 <code>go test -bench=. reflect_test.go</code> 来运行这个测试函数，又或者如果使用 goland 的话，直接点击运行按钮就可以了。</p>
+<p>说明：</p>
+<ul>
+<li>在 <code>*_test.go</code> 文件中 <code>Benchmark*</code> 前缀函数是性能测试函数，它的参数是 <code>*testing.B</code> 类型。</li>
+<li><code>b.ReportAllocs()</code>：报告内存分配次数，这是一个非常重要的指标，因为<strong>内存分配相比单纯的 CPU 计算是比较耗时的操作</strong>。在性能测试中，我们需要关注内存分配次数，以及每次内存分配的大小。</li>
+<li><code>b.N</code>：是一个循环次数，每次循环都会执行 <code>New()</code> 函数，然后记录下来每次循环的耗时。</li>
+</ul>
+<blockquote>
+<p>go 里面很多优化都致力于减少内存分配，减少内存分配很多情况下都可以提高性能。</p>
+</blockquote>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkNew-20    1000000000	  0.1286 ns/op	  0 B/op   0 allocs/op</span><br></pre></td></tr></table></figure>
+<p>输出说明：</p>
+<ul>
+<li><code>BenchmarkNew-20</code>：<code>BenchmarkNew</code> 是测试函数名，<code>-20</code> 是 CPU 核数。</li>
+<li><code>1000000000</code>：循环次数。</li>
+<li><code>0.1286 ns/op</code>：每次循环的耗时，单位是纳秒。这里表示每次循环耗时 0.1286 纳秒。</li>
+<li><code>0 B/op</code>：每次循环内存分配的大小，单位是字节。这里表示每次循环没有分配内存。</li>
+<li><code>0 allocs/op</code>：每次循环内存分配的次数。这里表示每次循环没有分配内存。</li>
+</ul>
+<h2 id="go-反射慢的原因">go 反射慢的原因</h2>
+<blockquote>
+<p>动态语言的灵活性是以牺牲性能为代价的，go 语言也不例外，go 的 interface{} 提供了一定的灵活性，但是处理 interface{} 的时候就要有一些性能上的损耗了。</p>
+</blockquote>
+<p>我们都知道，go 是一门静态语言，这意味着我们在编译的时候就知道了所有的类型，而不是在运行时才知道类型。 但是 go 里面有一个 <code>interface&#123;&#125;</code> 类型，它可以表示任意类型，这就意味着我们可以在运行时才知道类型。 但本质上，<code>interface&#123;&#125;</code> 类型还是静态类型，只不过它的类型和值是动态的。 在 <code>interface&#123;&#125;</code> 类型里面，存储了两个指针，一个指向类型信息，一个指向值信息。具体可参考<a target="_blank" rel="noopener" href="https://juejin.cn/post/7173965896656879630">《go interface 设计与实现》</a>。</p>
+<h3 id="go-interface-带来的灵活性">go interface{} 带来的灵活性</h3>
+<p>有了 <code>interface&#123;&#125;</code> 类型，让 go 也拥有了动态语言的特性，比如，定义一个函数，它的参数是 <code>interface&#123;&#125;</code> 类型， 那么我们就可以传入任意类型的值给这个函数。比如下面这个函数（做任意整型的加法，返回 <code>int64</code> 类型）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">convert</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">int64</span> &#123;</span><br><span class="line">	typ := reflect.TypeOf(i)</span><br><span class="line">	<span class="keyword">switch</span> typ.Kind() &#123;</span><br><span class="line">	<span class="keyword">case</span> reflect.Int:</span><br><span class="line">		<span class="keyword">return</span> <span class="type">int64</span>(i.(<span class="type">int</span>))</span><br><span class="line">	<span class="keyword">case</span> reflect.Int8:</span><br><span class="line">		<span class="keyword">return</span> <span class="type">int64</span>(i.(<span class="type">int8</span>))</span><br><span class="line">	<span class="keyword">case</span> reflect.Int16:</span><br><span class="line">		<span class="keyword">return</span> <span class="type">int64</span>(i.(<span class="type">int16</span>))</span><br><span class="line">	<span class="keyword">case</span> reflect.Int32:</span><br><span class="line">		<span class="keyword">return</span> <span class="type">int64</span>(i.(<span class="type">int32</span>))</span><br><span class="line">	<span class="keyword">case</span> reflect.Int64:</span><br><span class="line">		<span class="keyword">return</span> i.(<span class="type">int64</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;not support&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a, b <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> convert(a) + convert(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>convert()</code> 函数：将 <code>interface&#123;&#125;</code> 类型转换为 <code>int64</code> 类型。对于非整型的类型，会 panic。（当然不是很严谨，还没涵盖 <code>uint*</code> 类型）</li>
+<li><code>add()</code> 函数：做任意整型的加法，返回 <code>int64</code> 类型。</li>
+</ul>
+<p>相比之下，如果是确定的类型，我们根本不需要判断类型，直接相加就可以了：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add1</span><span class="params">(a, b <span class="type">int64</span>)</span></span> <span class="type">int64</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以通过以下的 benchmark 来对比一下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAdd</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	b.ReportAllocs()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		add(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAdd1</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	b.ReportAllocs()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		add1(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkAdd-12         179697526                6.667 ns/op           0 B/op          0 allocs/op</span><br><span class="line">BenchmarkAdd1-12        1000000000               0.2353 ns/op          0 B/op          0 allocs/op</span><br></pre></td></tr></table></figure>
+<p>我们可以看到非常明显的性能差距，<code>add()</code> 要比 <code>add1()</code> 慢了非常多，而且这还只是做了一些简单的类型判断及类型转换的情况下。</p>
+<h3 id="go-灵活性的代价慢的原因">go 灵活性的代价（慢的原因）</h3>
+<p>通过这个例子我们知道，go 虽然通过 <code>interface&#123;&#125;</code> 为我们提供了一定的灵活性支持，但是使用这种动态的特性是有一定代价的，比如：</p>
+<ul>
+<li>我们在运行时才知道类型，那么我们就需要在运行时去做类型判断（也就是通过<strong>反射</strong>），这种判断会有一定开销（本来是确定的一种类型，但是现在可能要在 20 多个类型中匹配才能确定它的类型是什么）。同时，判断到属于某一类型之后，往往需要转换为具体的类型，这也是一种开销。</li>
+<li>同时，我们可能需要去做一些属性、方法的查找等操作（<code>Field</code>, <code>FieldByName</code>, <code>Method</code>, <code>MethodByName</code>），这些操作都是在运行时做的，所以会有一定的性能损耗。</li>
+<li>另外，在做属性、方法之类的查找的时候，查找性能取决于属性、方法的数量，如果属性、方法的数量很多，那么查找性能就会相对慢。<strong>通过 index (<code>Field</code>, <code>Method</code>)查找相比通过 name (<code>FieldByName</code>, <code>MethodByName</code>)查找快很多，后者有内存分配的操作</strong></li>
+<li>在我们通过反射来做这些操作的时候，多出了很多操作，比如，简单的两个 <code>int</code> 类型相加，本来可以直接相加。但是通过反射，我们不得不先根据 <code>interface&#123;&#125;</code> 创建一个反射对象，然后再做类型判断，再做类型转换，最后再做加法。</li>
+</ul>
+<p><strong>总的来说，go 的 interface{} 类型虽然给我们提供了一定的灵活性，让开发者也可以在 go 里面实现一些动态语言的特性，</strong> <strong>但是这种灵活性是以牺牲一定的性能来作为代价的，它会让一些简单的操作变得复杂，一方面生成的编译指令会多出几十倍，另一方面也有可能在这过程有内存分配的发生（比如 <code>FieldByName</code>）。</strong></p>
+<h2 id="慢是相对的">慢是相对的</h2>
+<p>从上面的例子中，我们发现 go 的反射好像慢到了让人无法忍受的地步，然后就有人提出了一些解决方案， 比如：<strong>通过代码生成的方式避免运行时的反射操作，从而提高性能。比如 easyjson</strong></p>
+<p>但是这类方案都会让代码变得繁杂起来。我们需要权衡之后再做决定。为什么呢？因为反射虽然慢，但我们要知道的是，如果我们的应用中有网络调用，<strong>任何一次网络调用的时间往往都不会少于 1ms，而这 1ms 足够 go 做很多次反射操作了</strong>。这给我们什么启示呢？如果我们不是做中间件或者是做一些高性能的服务，而是做一些 web 应用，那么我们可以考虑一下性能瓶颈是不是在反射这里，如果是，那么我们就可以考虑一下代码生成的方式来提高性能，如果不是，那么我们真的需要牺牲代码的可维护性、可读性来提高反射的性能吗？优化几个慢查询带来的收益是不是更高呢？</p>
+<h2 id="go-反射性能优化">go 反射性能优化</h2>
+<p>如果可以的话，<strong>最好的优化就是不要用反射</strong>。</p>
+<h3 id="通过代码生成的方式避免序列化和反序列化时的反射操作">通过代码生成的方式避免序列化和反序列化时的反射操作</h3>
+<p>这里以 <code>easyjson</code> 为例，我们来看一下它是怎么做的。假设我们有如下结构体，我们需要对其进行 json 序列化/反序列化：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// person.go</span></span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="type">string</span> <span class="string">`json:&quot;name&quot;`</span></span><br><span class="line">	Age  <span class="type">int</span>    <span class="string">`json:&quot;age&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>easyjson</code> 的话，我们需要为结构体生成代码，这里我们使用 <code>easyjson</code> 的命令行工具来生成代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">easyjson -all person.go</span><br></pre></td></tr></table></figure>
+<p>这样，我们就会在当前目录下生成 <code>person_easyjson.go</code> 文件，里面包含了 <code>MarshalJSON</code> 和 <code>UnmarshalJSON</code> 方法，这两个方法就是我们需要的序列化和反序列化方法。不同于标准库里面的 <code>json.Marshal</code> 和 <code>json.Unmarshal</code>，这两个方法是不需要反射的，它们的性能会比标准库的方法要好很多。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">easyjsonDb0593a3EncodeGithubComGinGonicGinCEasy</span><span class="params">(out *jwriter.Writer, in Person)</span></span> &#123;</span><br><span class="line">	out.RawByte(<span class="string">&#x27;&#123;&#x27;</span>)</span><br><span class="line">	first := <span class="literal">true</span></span><br><span class="line">	_ = first</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">const</span> prefix <span class="type">string</span> = <span class="string">&quot;,\&quot;name\&quot;:&quot;</span></span><br><span class="line">		out.RawString(prefix[<span class="number">1</span>:])</span><br><span class="line">		out.String(<span class="type">string</span>(in.Name))</span><br><span class="line">	&#125;</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">const</span> prefix <span class="type">string</span> = <span class="string">&quot;,\&quot;age\&quot;:&quot;</span></span><br><span class="line">		out.RawString(prefix)</span><br><span class="line">		out.Int(<span class="type">int</span>(in.Age))</span><br><span class="line">	&#125;</span><br><span class="line">	out.RawByte(<span class="string">&#x27;&#125;&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MarshalJSON supports json.Marshaler interface</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Person)</span></span> MarshalJSON() ([]<span class="type">byte</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	w := jwriter.Writer&#123;&#125;</span><br><span class="line">	easyjsonDb0593a3EncodeGithubComGinGonicGinCEasy(&amp;w, v)</span><br><span class="line">	<span class="keyword">return</span> w.Buffer.BuildBytes(), w.Error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到，我们对 <code>Person</code> 的序列化操作现在只需要几行代码就可以完成了，但是也有很明显的缺点，生成的代码会很多。</p>
+<p>性能差距：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">goos: darwin</span><br><span class="line">goarch: amd64</span><br><span class="line">pkg: github.com/gin-gonic/gin/c/easy</span><br><span class="line">cpu: Intel(R) Core(TM) i7<span class="number">-8700</span> CPU @ <span class="number">3.20</span>GHz</span><br><span class="line">BenchmarkJson</span><br><span class="line">BenchmarkJson<span class="number">-12</span>        	 <span class="number">3680560</span>	       <span class="number">305.9</span> ns/op	     <span class="number">152</span> B/op	       <span class="number">2</span> allocs/op</span><br><span class="line">BenchmarkEasyJson</span><br><span class="line">BenchmarkEasyJson<span class="number">-12</span>    	<span class="number">16834758</span>	        <span class="number">71.37</span> ns/op	     <span class="number">128</span> B/op	       <span class="number">1</span> allocs/op</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，使用 <code>easyjson</code> 生成的代码，序列化的性能比标准库的方法要好很多，好了 4 倍以上。</p>
+<h3 id="反射结果缓存">反射结果缓存</h3>
+<blockquote>
+<p>这种方法适用于需要根据名称查找结构体字段或者查找方法的场景。</p>
+</blockquote>
+<p>假设我们有一个结构体 <code>Person</code>，其中有 5 个方法，<code>M1</code>、<code>M2</code>、<code>M3</code>、<code>M4</code>、<code>M5</code>，我们需要通过名称来查找其中的方法，那么我们可以使用 <code>reflect</code> 包来实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p := &amp;Person&#123;&#125;</span><br><span class="line">v := reflect.ValueOf(p)</span><br><span class="line">v.MethodByName(<span class="string">&quot;M4&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>这是很容易想到的办法，但是性能如何呢？通过性能测试，我们可以看到，这种方式的性能是非常差的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkMethodByName</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	p := &amp;Person&#123;&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	b.ReportAllocs()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		v.MethodByName(<span class="string">&quot;M4&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkMethodByName-12         5051679               237.1 ns/op           120 B/op          3 allocs/op</span><br></pre></td></tr></table></figure>
+<p>相比之下，我们如果使用索引来获取其中的方法的话，性能会好很多：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkMethod</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	p := &amp;Person&#123;&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	b.ReportAllocs()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		v.Method(<span class="number">3</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BenchmarkMethod-12              200091475                5.958 ns/op           0 B/op          0 allocs/op</span><br></pre></td></tr></table></figure>
+<p>我们可以看到两种性能相差几十倍。那么我们是不是可以通过 <code>Method</code> 方法来替代 <code>MethodByName</code> 从而获得更好的性能呢？答案是可以的，我们可以缓存 <code>MethodByName</code> 的结果（就是方法名对应的下标），下次通过反射获取对应方法的时候直接通过这个下标来获取：</p>
+<blockquote>
+<p>这里需要通过 reflect.Type 的 MethodByName 来获取反射的方法对象。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 缓存方法名对应的方法下标</span></span><br><span class="line"><span class="keyword">var</span> indexCache = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">methodIndex</span><span class="params">(p <span class="keyword">interface</span>&#123;&#125;, method <span class="type">string</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> _, ok := indexCache[method]; !ok &#123;</span><br><span class="line">		m, ok := reflect.TypeOf(p).MethodByName(method)</span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			<span class="built_in">panic</span>(<span class="string">&quot;method not found!&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		indexCache[method] = m.Index</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> indexCache[method]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>性能测试：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkMethodByNameCache</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	p := &amp;Person&#123;&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	b.ReportAllocs()</span><br><span class="line">	<span class="keyword">var</span> idx <span class="type">int</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		idx = methodIndex(p, <span class="string">&quot;M4&quot;</span>)</span><br><span class="line">		v.Method(idx)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 相比原来的 MethodByName 快了将近 20 倍</span><br><span class="line">BenchmarkMethodByNameCache-12           86208202                13.65 ns/op            0 B/op          0 allocs/op</span><br><span class="line">BenchmarkMethodByName-12                 5082429               235.9 ns/op           120 B/op          3 allocs/op</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>跟这个例子类似的是 Field/FieldByName 方法，可以采用同样的优化方式。这个可能是更加常见的操作，反序列化可能需要通过字段名查找字段，然后进行赋值。</p>
+</blockquote>
+<h3 id="使用类型断言代替反射">使用类型断言代替反射</h3>
+<p>在实际使用中，如果只是需要进行一些简单的类型判断的话，比如判断是否实现某一个接口，那么可以使用类型断言来实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Talk <span class="keyword">interface</span> &#123;</span><br><span class="line">	Say()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p person)</span></span> Say() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkReflectCall</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	p := person&#123;&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		idx := methodIndex(&amp;p, <span class="string">&quot;Say&quot;</span>)</span><br><span class="line">		v.Method(idx).Call(<span class="literal">nil</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkAssert</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">	p := person&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">		<span class="keyword">var</span> inter <span class="keyword">interface</span>&#123;&#125; = p</span><br><span class="line">		<span class="keyword">if</span> v, ok := inter.(Talk); ok &#123;</span><br><span class="line">			v.Say()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">goos: darwin</span><br><span class="line">goarch: amd64</span><br><span class="line">cpu: Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz</span><br><span class="line">BenchmarkReflectCall-12          6906339               173.1 ns/op</span><br><span class="line">BenchmarkAssert-12              171741784                6.922 ns/op</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们就算使用了缓存版本的反射，性能也跟类型断言差了将近 25 倍。</p>
+<blockquote>
+<p>因此，在我们使用反射之前，我们需要先考虑一下是否可以通过类型断言来实现，如果可以的话，那么就不需要使用反射了。</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<ul>
+<li>go 提供了性能测试的工具，我们可以通过 <code>go test -bench=.</code> 这种命令来进行性能测试，运行命令之后，文件夹下的测试文件中的 <code>Benchmark*</code> 函数会被执行。</li>
+<li>性能测试的结果中，除了平均执行耗时之外，还有内存分配的次数和内存分配的字节数，这些都是我们需要关注的指标。其中内存分配的次数和内存分配的字节数是可以通过 <code>b.ReportAllocs()</code> 来进行统计的。内存分配的次数和内存分配的字节数越少，性能越好。</li>
+<li>反射虽然慢，但是也带来了一定的灵活性，它的慢主要由以下几个方面的原因造成的：
+<ul>
+<li>运行时需要进行类型判断，相比确定的类型，运行时可能需要在 20 多种类型中进行判断。</li>
+<li>类型判断之后，往往需要将 interface{} 转换为具体的类型，这个转换也是需要消耗一定时间的。</li>
+<li>方法、字段的查找也是需要消耗一定时间的。尤其是 <code>FieldByName</code>, <code>MethodByName</code> 这种方法，它们需要遍历所有的字段和方法，然后进行比较，这个比较的过程也是需要消耗一定时间的。而且这个过程还需要分配内存，这会进一步降低性能。</li>
+</ul></li>
+<li>慢不慢是一个相对的概念，如果我们的应用大部分时间是在 IO 等待，那么反射的性能大概率不会成为瓶颈。优化其他地方可能会带来更大的收益，同时也可以在不影响代码可维护性的前提下，使用一些时空复杂度更低的反射方法，比如使用 <code>Field</code> 代替 <code>FieldByName</code> 等。</li>
+<li>如果可以的话，尽量不使用反射就是最好的优化。</li>
+<li>反射的一些性能优化方式有如下几种（不完全，需要根据实际情况做优化）：
+<ul>
+<li>使用生成代码的方式，生成特定的序列化和反序列化方法，这样就可以避免反射的开销。</li>
+<li>将第一次反射拿到的结果缓存起来，这样如果后续需要反射的话，就可以直接使用缓存的结果，避免反射的开销。（<strong>空间换时间</strong>）</li>
+<li>如果只是需要进行简单的类型判断，可以先考虑一下类型断言能不能实现我们想要的效果，它相比反射的开销要小很多。</li>
+</ul></li>
+</ul>
+<p>反射是一个很庞大的话题，这里只是简单的介绍了一小部分反射的性能问题，讨论了一些可行的优化方案，但是每个人使用反射的场景都不一样，所以需要根据实际情况来做优化。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/01/04/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E5%8F%8D%E5%B0%84%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/04/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E5%8F%8D%E5%B0%84%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/" class="post-title-link" itemprop="url">深入理解 go reflect - 反射常见错误</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-01-04 20:28:30 / Modified: 17:25:45" itemprop="dateCreated datePublished" datetime="2023-01-04T20:28:30+08:00">2023-01-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>go 的反射是很脆弱的，保证反射代码正确运行的前提是，在调用反射对象的方法之前， 先问一下自己正在调用的方法是不是适合于所有用于创建反射对象的原始类型。 <strong>go 反射的错误大多数都来自于调用了一个不适合当前类型的方法</strong>（比如在一个整型反射对象上调用 <code>Field()</code> 方法）。 而且，这些错误通常是在运行时才会暴露出来，而不是在编译时，如果我们传递的类型在反射代码中没有被覆盖到那么很容易就会 <code>panic</code>。</p>
+<p>本文就介绍一下使用 go 反射时很大概率会出现的错误。</p>
+<h2 id="获取-value-的值之前没有判断类型">获取 Value 的值之前没有判断类型</h2>
+<p>对于 <code>reflect.Value</code>，我们有很多方法可以获取它的值，比如 <code>Int()</code>、<code>String()</code> 等等。 但是，这些方法都有一个前提，就是反射对象底层必须是我们调用的那个方法对应的类型，否则会 <code>panic</code>，比如下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f <span class="type">float32</span> = <span class="number">1.0</span></span><br><span class="line">v := reflect.ValueOf(f)</span><br><span class="line"><span class="comment">// 报错：panic: reflect: call of reflect.Value.Int on float32 Value</span></span><br><span class="line">fmt.Println(v.Int())</span><br></pre></td></tr></table></figure>
+<p>上面这个例子中，<code>f</code> 是一个 <code>float32</code> 类型的浮点数，然后我们尝试通过 <code>Int()</code> 方法来获取一个整数，但是这个方法只能用于 <code>int</code> 类型的反射对象，所以会报错。</p>
+<ul>
+<li>涉及的方法：<code>Addr</code>, <code>Bool</code>, <code>Bytes</code>, <code>Complex</code>, <code>Int</code>, <code>Uint</code>, <code>Float</code>, <code>Interface</code>；调用这些方法的时候，如果类型不对则会 <code>panic</code>。</li>
+<li>判断反射对象能否转换为某一类型的方法：<code>CanAddr</code>, <code>CanInterface</code>, <code>CanComplex</code>, <code>CanFloat</code>, <code>CanInt</code>, <code>CanUint</code>。</li>
+<li>其他类型是否能转换判断方法：<code>CanConvert</code>，可以判断一个反射对象能否转换为某一类型。</li>
+</ul>
+<p>通过 <code>CanConvert</code> 方法来判断一个反射对象能否转换为某一类型：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// true</span></span><br><span class="line">fmt.Println(v.CanConvert(reflect.TypeOf(<span class="number">1.0</span>)))</span><br></pre></td></tr></table></figure>
+<p>如果我们想将反射对象转换为我们的自定义类型，就可以通过 <code>CanConvert</code> 来判断是否能转换，然后再调用 <code>Convert</code> 方法来转换：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	p := Person&#123;Name: <span class="string">&quot;foo&quot;</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v 可以转换为 Person 类型</span></span><br><span class="line">	assert.True(t, v.CanConvert(reflect.TypeOf(Person&#123;&#125;)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v 可以转换为 Person 类型</span></span><br><span class="line">	p1 := v.Convert(reflect.TypeOf(Person&#123;&#125;))</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;foo&quot;</span>, p1.Interface().(Person).Name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>reflect.TypeOf(Person&#123;&#125;)</code> 可以取得 <code>Person</code> 类型的信息</li>
+<li><code>v.Convert</code> 可以将 <code>v</code> 转换为 <code>reflect.TypeOf(Person&#123;&#125;)</code> 指定的类型</li>
+</ul>
+<h2 id="没有传递指针给-reflect.valueof">没有传递指针给 reflect.ValueOf</h2>
+<p>如果我们想通过反射对象来修改原变量，就必须传递一个指针，否则会报错（暂不考虑 <code>slice</code>, <code>map</code>, 结构体字段包含指针字段的特殊情况）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	p := Person&#123;Name: <span class="string">&quot;foo&quot;</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 报错：panic: reflect: reflect.Value.SetString using unaddressable value</span></span><br><span class="line">	v.FieldByName(<span class="string">&quot;Name&quot;</span>).SetString(<span class="string">&quot;bar&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个错误的原因是，<code>v</code> 是一个 <code>Person</code> 类型的值，而不是指针，所以我们不能通过 <code>v.FieldByName("Name")</code> 来修改它的字段。</p>
+<blockquote>
+<p>对于反射对象来说，只拿到了 p 的拷贝，而不是 p 本身，所以我们不能通过反射对象来修改 p。</p>
+</blockquote>
+<h2 id="在一个无效的-value-上操作">在一个无效的 Value 上操作</h2>
+<p>我们有很多方法可以创建 <code>reflect.Value</code>，而且这类方法没有 <code>error</code> 返回值，这就意味着，就算我们创建 <code>reflect.Value</code> 的时候传递了一个无效的值，也不会报错，而是会返回一个无效的 <code>reflect.Value</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Person 不存在 foo 方法</span></span><br><span class="line">	<span class="comment">// FieldByName 返回一个表示 Field 的反射对象 reflect.Value</span></span><br><span class="line">	v1 := v.FieldByName(<span class="string">&quot;foo&quot;</span>)</span><br><span class="line">	assert.False(t, v1.IsValid())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v1 是无效的，只有 String 方法可以调用</span></span><br><span class="line">	<span class="comment">// 其他方法调用都会 panic</span></span><br><span class="line">	assert.Panics(t, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// panic: reflect: call of reflect.Value.NumMethod on zero Value</span></span><br><span class="line">		fmt.Println(v1.NumMethod())</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于这个问题，我们可以通过 <code>IsValid</code> 方法来判断 <code>reflect.Value</code> 是否有效：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	v1 := v.FieldByName(<span class="string">&quot;foo&quot;</span>)</span><br><span class="line">	<span class="comment">// 通过 IsValid 判断 reflect.Value 是否有效</span></span><br><span class="line">	<span class="keyword">if</span> v1.IsValid() &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;p has foo field&quot;</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;p has no foo field&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Field() 方法在传递的索引超出范围的时候，直接 panic，而不会返回一个 invalid 的 reflect.Value。</p>
+</blockquote>
+<p><code>IsValid</code> 报告反射对象 <code>v</code> 是否代表一个值。 如果 <code>v</code> 是零值，则返回 <code>false</code>。 如果 <code>IsValid</code> 返回 <code>false</code>，则除 <code>String</code> 之外的所有其他方法都将发生 <code>panic</code>。 大多数函数和方法从不返回无效值。</p>
+<h3 id="什么时候-isvalid-返回-false">什么时候 IsValid 返回 false</h3>
+<p><code>reflect.Value</code> 的 <code>IsValid</code> 的返回值表示 <code>reflect.Value</code> 是否有效，而不是它代表的值是否有效。比如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b *<span class="type">int</span> = <span class="literal">nil</span></span><br><span class="line">v := reflect.ValueOf(b)</span><br><span class="line">fmt.Println(v.IsValid())                   <span class="comment">// true</span></span><br><span class="line">fmt.Println(v.Elem().IsValid())            <span class="comment">// false</span></span><br><span class="line">fmt.Println(reflect.Indirect(v).IsValid()) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>在上面这个例子中，<code>v</code> 是有效的，它表示了一个指针，指针指向的对象为 <code>nil</code>。 但是 <code>v.Elem()</code> 和 <code>reflect.Indirect(v)</code> 都是无效的，因为它们表示的是指针指向的对象，而指针指向的对象为 <code>nil</code>。 我们无法基于 <code>nil</code> 来做任何反射操作。</p>
+<h3 id="其他情况下-isvalid-返回-false">其他情况下 IsValid 返回 false</h3>
+<p>除了上面的情况，<code>IsValid</code> 还有其他情况下会返回 <code>false</code>：</p>
+<ul>
+<li>空的反射值对象，获取通过 <code>nil</code> 创建的反射对象，其 <code>IsValid</code> 会返回 <code>false</code>。</li>
+<li>结构体反射对象通过 <code>FieldByName</code> 获取了一个不存在的字段，其 <code>IsValid</code> 会返回 <code>false</code>。</li>
+<li>结构体反射对象通过 <code>MethodByName</code> 获取了一个不存在的方法，其 <code>IsValid</code> 会返回 <code>false</code>。</li>
+<li><code>map</code> 反射对象通过 <code>MapIndex</code> 获取了一个不存在的 key，其 <code>IsValid</code> 会返回 <code>false</code>。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 空的反射对象</span></span><br><span class="line">	fmt.Println(reflect.Value&#123;&#125;.IsValid())      <span class="comment">// false</span></span><br><span class="line">	<span class="comment">// 基于 nil 创建的反射对象</span></span><br><span class="line">	fmt.Println(reflect.ValueOf(<span class="literal">nil</span>).IsValid()) <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">	s := <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	<span class="comment">// 获取不存在的字段</span></span><br><span class="line">	fmt.Println(reflect.ValueOf(s).FieldByName(<span class="string">&quot;&quot;</span>).IsValid())  <span class="comment">// false</span></span><br><span class="line">	<span class="comment">// 获取不存在的方法</span></span><br><span class="line">	fmt.Println(reflect.ValueOf(s).MethodByName(<span class="string">&quot;&quot;</span>).IsValid()) <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">	m := <span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>&#123;&#125;</span><br><span class="line">	<span class="comment">// 获取 map 的不存在的 key</span></span><br><span class="line">	fmt.Println(reflect.ValueOf(m).MapIndex(reflect.ValueOf(<span class="number">3</span>)).IsValid())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：还有其他一些情况也会使 <code>IsValid</code> 返回 <code>false</code>，这里只是列出了部分情况。 我们在使用的时候需要注意我们正在使用的反射对象会不会是无效的。</p>
+<h2 id="通过反射修改不可修改的值">通过反射修改不可修改的值</h2>
+<p>对于 <code>reflect.Value</code> 对象，我们可以通过 <code>CanSet</code> 方法来判断它是否可以被设置：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	p := Person&#123;Name: <span class="string">&quot;foo&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 传递值来创建的发射对象，</span></span><br><span class="line">	<span class="comment">// 不能修改其值，因为它是一个副本</span></span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line">	assert.False(t, v.CanSet())</span><br><span class="line">	assert.False(t, v.Field(<span class="number">0</span>).CanSet())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 下面这一行代码会 panic：</span></span><br><span class="line">	<span class="comment">// panic: reflect: reflect.Value.SetString using unaddressable value</span></span><br><span class="line">	<span class="comment">// v.Field(0).SetString(&quot;bar&quot;)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 指针反射对象本身不能修改，</span></span><br><span class="line">	<span class="comment">// 其指向的对象（也就是 v1.Elem()）可以修改</span></span><br><span class="line">	v1 := reflect.ValueOf(&amp;p)</span><br><span class="line">	assert.False(t, v1.CanSet())</span><br><span class="line">	assert.True(t, v1.Elem().CanSet())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>CanSet</code> 报告 <code>v</code> 的值是否可以更改。只有可寻址（<code>addressable</code>）且不是通过使用未导出的结构字段获得的值才能更改。 如果 <code>CanSet</code> 返回 <code>false</code>，调用 <code>Set</code> 或任何类型特定的 <code>setter</code>（例如 <code>SetBool</code>、<code>SetInt</code>）将 <code>panic</code>。<strong>CanSet 的条件是可寻址。</strong></p>
+<p>对于传值创建的反射对象，我们无法通过反射对象来修改原变量，<code>CanSet</code> 方法返回 <code>false</code>。 <strong>例外的情况是，如果这个值中包含了指针，我们依然可以通过那个指针来修改其指向的对象。</strong></p>
+<blockquote>
+<p>只有通过 Elem 方法的返回值才能设置指针指向的对象。</p>
+</blockquote>
+<h2 id="在错误的-value-上调用-elem-方法">在错误的 Value 上调用 Elem 方法</h2>
+<p><code>reflect.Value</code> 的 <code>Elem()</code> 返回 <code>interface</code> 的反射对象包含的值或指针反射对象指向的值。如果反射对象的 <code>Kind</code> 不是 <code>reflect.Interface</code> 或 <code>reflect.Pointer</code>，它会发生 <code>panic</code>。 如果反射对象为 <code>nil</code>，则返回零值。</p>
+<p>我们知道，<code>interface</code> 类型实际上包含了类型和数据。而我们传递给 <code>reflect.ValueOf</code> 的参数就是 <code>interface</code>，所以在反射对象中也提供了方法来获取 <code>interface</code> 类型的类型和数据：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	p := Person&#123;Name: <span class="string">&quot;foo&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 下面这一行会报错：</span></span><br><span class="line">	<span class="comment">// panic: reflect: call of reflect.Value.Elem on struct Value</span></span><br><span class="line">	<span class="comment">// v.Elem()</span></span><br><span class="line">	fmt.Println(v.Type())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v1 是 *Person 类型的反射对象，是一个指针</span></span><br><span class="line">	v1 := reflect.ValueOf(&amp;p)</span><br><span class="line">	fmt.Println(v1.Elem(), v1.Type())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，<code>v</code> 是一个 <code>Person</code> 类型的反射对象，它不是一个指针，所以我们不能通过 <code>v.Elem()</code> 来获取它指向的对象。 而 <code>v1</code> 是一个指针，所以我们可以通过 <code>v1.Elem()</code> 来获取它指向的对象。</p>
+<h2 id="调用了一个其类型不能调用的方法">调用了一个其类型不能调用的方法</h2>
+<blockquote>
+<p>这可能是最常见的一类错误了，因为在 go 的反射系统中，我们调用的一些方法又会返回一个相同类型的反射对象，但是这个新的反射对象可能是一个不同的类型了。同时返回的这个反射对象是否有效也是未知的。</p>
+</blockquote>
+<p>在 go 中，反射有两大对象 <code>reflect.Type</code> 和 <code>reflect.Value</code>，它们都存在一些方法只适用于某些特定的类型，也就是说， 在 go 的反射设计中，只分为了<strong>类型</strong>和<strong>值</strong>两大类。但是实际的 go 中的类型就有很多种，比如 <code>int</code>、<code>string</code>、<code>struct</code>、<code>interface</code>、<code>slice</code>、<code>map</code>、<code>chan</code>、<code>func</code> 等等。</p>
+<p>我们先不说 <code>reflect.Type</code>，我们从 <code>reflect.Value</code> 的角度看看，将这么多类型的值都抽象为 <code>reflect.Value</code> 之后， 我们如何获取某些类型值特定的信息呢？比如获取结构体的某一个字段的值，或者调用某一个方法。 这个问题很好解决，需要获取结构体字段是吧，那给你提供一个 <code>Field()</code> 方法，需要调用方法吧，那给你提供一个 <code>Call()</code> 方法。</p>
+<p>但是这样一来，有另外一个问题就是，如果我们的 <code>reflect.Value</code> 是从一个 <code>int</code> 类型的值创建的， 那么我们调用 <code>Field()</code> 方法就会发生 <code>panic</code>，因为 <code>int</code> 类型的值是没有 <code>Field()</code> 方法的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReflect</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	p := Person&#123;Name: <span class="string">&quot;foo&quot;</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 获取反射对象的 Name 字段</span></span><br><span class="line">	assert.Equal(t, <span class="string">&quot;foo&quot;</span>, v.Field(<span class="number">0</span>).String())</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> i = <span class="number">1</span></span><br><span class="line">	v1 := reflect.ValueOf(i)</span><br><span class="line">	assert.Panics(t, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// 下面这一行会 panic：</span></span><br><span class="line">		<span class="comment">// v1 没有 Field 方法</span></span><br><span class="line">		fmt.Println(v1.Field(<span class="number">0</span>).String())</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至于有哪些方法是某些类型特定的，可以参考一下下面两个文档：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7183132625580605498#heading-20">类型特定的 reflect.Value 方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7183132625580605498#heading-16">类型特定的 reflect.Type 方法</a></li>
+</ul>
+<h2 id="总结">总结</h2>
+<ul>
+<li>在调用 <code>Int()</code>、<code>Float()</code> 等方法时，需要确保反射对象的类型是正确的类型，否则会 <code>panic</code>，比如在一个 <code>flaot</code> 类型的反射对象上调用 <code>Int()</code> 方法就会 <code>panic</code>。</li>
+<li>如果想修改原始的变量，创建 <code>reflect.Value</code> 时需要传入原始变量的指针。</li>
+<li>如果 <code>reflect.Value</code> 的 <code>IsValid()</code> 方法返回 <code>false</code>，那么它就是一个无效的反射对象，调用它的任何方法都会 <code>panic</code>，除了 <code>String</code> 方法。</li>
+<li>对于基于值创建的 <code>reflect.Value</code>，如果想要修改它的值，我们无法调用这个反射对象的 <code>Set*</code> 方法，因为修改一个变量的拷贝没有任何意义。</li>
+<li>同时，我们也无法通过 <code>reflect.Value</code> 去修改结构体中未导出的字段，即使我们创建 <code>reflect.Value</code> 时传入的是结构体的指针。</li>
+<li><code>Elem()</code> 只可以在指针或者 <code>interface</code> 类型的反射对象上调用，否则会 <code>panic</code>，它的作用是获取指针指向的对象的反射对象，又或者获取接口 <code>data</code> 的反射对象。</li>
+<li><code>reflect.Value</code> 和 <code>reflect.Type</code> 都有很多类型特定的方法，比如 <code>Field()</code>、<code>Call()</code> 等，这些方法只能在某些类型的反射对象上调用，否则会 <code>panic</code>。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/01/03/golang/go%20%E5%8F%8D%E5%B0%84%E7%9A%84%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/03/golang/go%20%E5%8F%8D%E5%B0%84%E7%9A%84%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">go 反射的常见用法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-01-03 20:28:30 / Modified: 17:40:10" itemprop="dateCreated datePublished" datetime="2023-01-03T20:28:30+08:00">2023-01-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在之前的两篇文章 <a target="_blank" rel="noopener" href="https://blog.baiguiren.com/2022/12/31/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E5%8F%8D%E5%B0%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">《深入理解 go reflect - 反射基本原理》</a>、<a target="_blank" rel="noopener" href="https://blog.baiguiren.com/2023/01/02/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E8%A6%81%E4%B8%8D%E8%A6%81%E4%BC%A0%E6%8C%87%E9%92%88/">《深入理解 go reflect - 要不要传指针》</a> 中， 我们讲解了关于 go 反射的一些基本原理，以及通过反射对象修改变量的一些注意事项。 本篇文章将介绍一些常见的反射用法，涵盖了常见的数据类型的反射操作。</p>
+<h2 id="根据类型做不同处理">根据类型做不同处理</h2>
+<p>使用反射很常见的一个场景就是根据类型做不同处理，比如下面这个方法，根据不同的 <code>Kind</code> 返回不同的字符串表示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getType</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	v := reflect.ValueOf(i)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">switch</span> v.Kind() &#123;</span><br><span class="line">	<span class="keyword">case</span> reflect.Bool:</span><br><span class="line">		b := <span class="string">&quot;false&quot;</span></span><br><span class="line">		<span class="keyword">if</span> v.Bool() &#123;</span><br><span class="line">			b = <span class="string">&quot;true&quot;</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;bool: %s&quot;</span>, b)</span><br><span class="line">	<span class="keyword">case</span> reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;int: %d&quot;</span>, v.Int())</span><br><span class="line">	<span class="keyword">case</span> reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;uint: %d&quot;</span>, v.Uint())</span><br><span class="line">	<span class="keyword">case</span> reflect.Float32, reflect.Float64:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;float: %.1f&quot;</span>, v.Float())</span><br><span class="line">	<span class="keyword">case</span> reflect.String:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;string: %s&quot;</span>, v.String())</span><br><span class="line">	<span class="keyword">case</span> reflect.Interface:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;interface: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">case</span> reflect.Struct:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;struct: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">case</span> reflect.Map:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;map: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">case</span> reflect.Slice:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;slice: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">case</span> reflect.Array:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;array: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">case</span> reflect.Pointer:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;pointer: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">case</span> reflect.Chan:</span><br><span class="line">		<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;chan: %v&quot;</span>, v.Interface())</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;unknown&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestKind</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;int: 1&quot;</span>, getType(<span class="number">1</span>))</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;string: 1&quot;</span>, getType(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;bool: true&quot;</span>, getType(<span class="literal">true</span>))</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;float: 1.0&quot;</span>, getType(<span class="number">1.0</span>))</span><br><span class="line"></span><br><span class="line">    arr := [<span class="number">3</span>]<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">    sli := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">    assert.Equal(t, <span class="string">&quot;array: [1 2 3]&quot;</span>, getType(arr))</span><br><span class="line">    assert.Equal(t, <span class="string">&quot;slice: [1 2 3]&quot;</span>, getType(sli))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="标准库-json-中的示例">标准库 json 中的示例</h3>
+<p>在标准库 <code>encoding/json</code> 中，也有类似的场景，比如下面这个方法，根据不同的 <code>Kind</code> 做不同的处理：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newTypeEncoder</span><span class="params">(t reflect.Type, allowAddr <span class="type">bool</span>)</span></span> encoderFunc &#123;</span><br><span class="line">	<span class="comment">// ... 其他代码</span></span><br><span class="line">	<span class="keyword">switch</span> t.Kind() &#123;</span><br><span class="line">	<span class="keyword">case</span> reflect.Bool:</span><br><span class="line">		<span class="keyword">return</span> boolEncoder</span><br><span class="line">	<span class="keyword">case</span> reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:</span><br><span class="line">		<span class="keyword">return</span> intEncoder</span><br><span class="line">	<span class="keyword">case</span> reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:</span><br><span class="line">		<span class="keyword">return</span> uintEncoder</span><br><span class="line">	<span class="comment">// ...省略其他 case...</span></span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="keyword">return</span> unsupportedTypeEncoder</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在进行 <code>json</code> 编码的时候，因为不知道传入的参数是什么类型，所以需要根据类型做不同的处理，这里就是使用反射来做的。 通过判断不同的类型，然后返回不同的 <code>encoder</code>。</p>
+<h2 id="基本类型的反射">基本类型的反射</h2>
+<p>这里说的基本类型是：<code>int*</code>、<code>uint*</code>、<code>float*</code>、<code>complex*</code>、<code>bool</code> 这种类型。</p>
+<p>通过反射修改基本类型的值，需要注意的是，传入的参数必须是指针类型，否则会 <code>panic</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestBaseKind</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过反射修改 int 类型变量的值</span></span><br><span class="line">	a := <span class="number">1</span></span><br><span class="line">	v := reflect.ValueOf(&amp;a)</span><br><span class="line">	v.Elem().SetInt(<span class="number">10</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">10</span>, a)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 通过反射修改 uint16 类型变量的值</span></span><br><span class="line">	b := <span class="type">uint16</span>(<span class="number">10</span>)</span><br><span class="line">	v1 := reflect.ValueOf(&amp;b)</span><br><span class="line">	v1.Elem().SetUint(<span class="number">20</span>)</span><br><span class="line">	assert.Equal(t, <span class="type">uint16</span>(<span class="number">20</span>), b)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 通过反射修改 float32 类型变量的值</span></span><br><span class="line">	f := <span class="type">float32</span>(<span class="number">10.0</span>)</span><br><span class="line">	v2 := reflect.ValueOf(&amp;f)</span><br><span class="line">	v2.Elem().SetFloat(<span class="number">20.0</span>)</span><br><span class="line">	assert.Equal(t, <span class="type">float32</span>(<span class="number">20.0</span>), f)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过反射修改值的时候，需要通过 <code>Elem()</code> 方法的返回值来修改。</p>
+</blockquote>
+<h2 id="数组类型的反射">数组类型的反射</h2>
+<p>通过反射修改数组中元素的值，可以使用 <code>Index</code> 方法取得对应下标的元素，然后再使用 <code>Set</code> 方法修改值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestArray</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过反射修改数组元素的值</span></span><br><span class="line">	arr := [<span class="number">3</span>]<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(&amp;arr)</span><br><span class="line">	<span class="comment">// 修改数组中的第一个元素</span></span><br><span class="line">	v.Elem().Index(<span class="number">0</span>).SetInt(<span class="number">10</span>)</span><br><span class="line">	assert.Equal(t, [<span class="number">3</span>]<span class="type">int</span>&#123;<span class="number">10</span>, <span class="number">2</span>, <span class="number">3</span>&#125;, arr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="chan-反射">chan 反射</h2>
+<p>我们可以通过反射对象来向 <code>chan</code> 中发送数据，也可以从 <code>chan</code> 中接收数据：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestChan</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过反射修改 chan</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">	v := reflect.ValueOf(&amp;ch)</span><br><span class="line">	<span class="comment">// 通过反射对象向 chan 发送数据</span></span><br><span class="line">	v.Elem().Send(reflect.ValueOf(<span class="number">2</span>))</span><br><span class="line">	<span class="comment">// 在反射对象外部从 chan 接收数据</span></span><br><span class="line">	assert.Equal(t, <span class="number">2</span>, &lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="map-反射">map 反射</h2>
+<p>通过反射修改 <code>map</code> 中的值，可以使用 <code>SetMapIndex</code> 方法修改 <code>map</code> 中对应的 <code>key</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestMap</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过反射修改 map 元素的值</span></span><br><span class="line">	m := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">int</span>&#123;<span class="string">&quot;a&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(&amp;m)</span><br><span class="line">	<span class="comment">// 修改 a 的 key，修改其值为 2</span></span><br><span class="line">	v.Elem().SetMapIndex(reflect.ValueOf(<span class="string">&quot;a&quot;</span>), reflect.ValueOf(<span class="number">2</span>))</span><br><span class="line">	<span class="comment">// 外部的 m 可以看到反射对象的修改</span></span><br><span class="line">	assert.Equal(t, <span class="number">2</span>, m[<span class="string">&quot;a&quot;</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="迭代反射-map-对象">迭代反射 map 对象</h3>
+<p>我们可以通过反射对象的 <code>MapRange</code> 方法来迭代 <code>map</code> 对象：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestIterateMap</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 遍历 map</span></span><br><span class="line">	m := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">int</span>&#123;<span class="string">&quot;a&quot;</span>: <span class="number">1</span>, <span class="string">&quot;b&quot;</span>: <span class="number">2</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(m)</span><br><span class="line">	<span class="comment">// 创建 map 迭代器</span></span><br><span class="line">	iter := v.MapRange()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 迭代 map 的元素</span></span><br><span class="line">	<span class="keyword">for</span> iter.Next() &#123;</span><br><span class="line">		<span class="comment">// a 1</span></span><br><span class="line">		<span class="comment">// b 2</span></span><br><span class="line">		fmt.Println(iter.Key(), iter.Value())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="slice-反射">slice 反射</h2>
+<p>通过反射修改 <code>slice</code> 中的值，可以使用 <code>Index</code> 方法取得对应下标的元素，然后再使用 <code>Set*</code> 方法修改值，跟数组类似：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestSlice</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过反射修改 slice 元素的值</span></span><br><span class="line">	sli := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(&amp;sli)</span><br><span class="line">	v.Elem().Index(<span class="number">0</span>).SetInt(<span class="number">10</span>)</span><br><span class="line">	assert.Equal(t, []<span class="type">int</span>&#123;<span class="number">10</span>, <span class="number">2</span>, <span class="number">3</span>&#125;, sli)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="string-反射">string 反射</h2>
+<p>对于 <code>string</code> 类型，我们可以通过其反射对象的 <code>String</code> 方法来修改其内容：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestString</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过反射修改字符串的值</span></span><br><span class="line">	s := <span class="string">&quot;hello&quot;</span></span><br><span class="line">	v := reflect.ValueOf(&amp;s)</span><br><span class="line">	v.Elem().SetString(<span class="string">&quot;world&quot;</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;world&quot;</span>, s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="interfacepointer-反射">interface/Pointer 反射</h2>
+<p>对于 <code>interface</code> 或 <code>Pointer</code> 类型，我们可以通过其反射对象的 <code>Elem</code> 方法来修改其内容：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPointer</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	a := <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 接口类型</span></span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125; = &amp;a</span><br><span class="line">	v1 := reflect.ValueOf(i)</span><br><span class="line">	v1.Elem().SetInt(<span class="number">10</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">10</span>, a)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 指针类型</span></span><br><span class="line">	<span class="keyword">var</span> p = &amp;a</span><br><span class="line">	v2 := reflect.ValueOf(p)</span><br><span class="line">	v2.Elem().SetInt(<span class="number">20</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">20</span>, a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两种类型，我们都需要通过 <code>Elem</code> 方法来先获取其实际保存的值，然后再修改其值。</p>
+<h2 id="结构体的反射">结构体的反射</h2>
+<p>对于 go 中的结构体，反射系统中为我们提供了很多操作结构体的方法，比如获取结构体的字段、方法、标签、通过反射对象调用其方法等。</p>
+<p>先假设我们有如下结构体：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="type">string</span></span><br><span class="line">	Age  <span class="type">int</span></span><br><span class="line"></span><br><span class="line">	sex <span class="type">uint8</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span></span> M1() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;person m1&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Person)</span></span> M2() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;person m2&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="遍历结构体字段">遍历结构体字段</h3>
+<p>我们可以通过 <code>NumField</code> 方法来获取结构体的字段数量，然后通过 <code>Field</code> 方法来获取结构体的字段：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct1</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// string Tom</span></span><br><span class="line">	<span class="comment">// int 18</span></span><br><span class="line">	<span class="comment">// uint8 1</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; v.NumField(); i++ &#123;</span><br><span class="line">		fmt.Println(v.Field(i).Type(), v.Field(i))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="根据名称或索引获取结构体字段">根据名称或索引获取结构体字段</h3>
+<p>我们可以根据结构体字段的名称或索引来获取结构体的字段：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct2</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	assert.Equal(t, <span class="number">18</span>, v.Field(<span class="number">1</span>).Interface())</span><br><span class="line">	assert.Equal(t, <span class="number">18</span>, v.FieldByName(<span class="string">&quot;Age&quot;</span>).Interface())</span><br><span class="line">	assert.Equal(t, <span class="number">18</span>, v.FieldByIndex([]<span class="type">int</span>&#123;<span class="number">1</span>&#125;).Interface())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="修改结构体字段">修改结构体字段</h3>
+<p>我们可以通过 <code>Field</code> 方法来获取结构体的字段，然后再使用 <code>Set*</code> 方法来修改其值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct2</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(&amp;p)</span><br><span class="line"></span><br><span class="line">	v.Elem().FieldByName(<span class="string">&quot;Name&quot;</span>).SetString(<span class="string">&quot;Jack&quot;</span>)</span><br><span class="line"></span><br><span class="line">	assert.Equal(t, <span class="string">&quot;Jack&quot;</span>, p.Name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面因为 <code>Name</code> 是 <code>string</code> 类型，所以我们使用 <code>SetString</code> 方法来修改其值，如果是 <code>int</code> 类型，我们可以使用 <code>SetInt</code> 方法来修改其值，依此类推。</p>
+<h3 id="结构体方法调用">结构体方法调用</h3>
+<p>通过反射对象来调用结构体的方法时，需要注意的是，<strong>如果我们需要调用指针接收者的方法，则需要传递地址</strong>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct3</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 值接收者（receiver）</span></span><br><span class="line">	v1 := reflect.ValueOf(p)</span><br><span class="line">	assert.Equal(t, <span class="number">1</span>, v1.NumMethod())</span><br><span class="line">	<span class="comment">// 注意：值接收者没有 M2 方法</span></span><br><span class="line">	assert.False(t, v1.MethodByName(<span class="string">&quot;M2&quot;</span>).IsValid())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 通过值接收者调用 M1 方法</span></span><br><span class="line">	results := v1.MethodByName(<span class="string">&quot;M1&quot;</span>).Call(<span class="literal">nil</span>)</span><br><span class="line">	assert.Len(t, results, <span class="number">1</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;person m1&quot;</span>, results[<span class="number">0</span>].Interface())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 指针接收者（pointer receiver）</span></span><br><span class="line">	v2 := reflect.ValueOf(&amp;p)</span><br><span class="line">	assert.Equal(t, <span class="number">2</span>, v2.NumMethod())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 通过指针接收者调用 M1 和 M2 方法</span></span><br><span class="line">	results = v2.MethodByName(<span class="string">&quot;M1&quot;</span>).Call(<span class="literal">nil</span>)</span><br><span class="line">	assert.Len(t, results, <span class="number">1</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;person m1&quot;</span>, results[<span class="number">0</span>].Interface())</span><br><span class="line"></span><br><span class="line">	results = v2.MethodByName(<span class="string">&quot;M2&quot;</span>).Call(<span class="literal">nil</span>)</span><br><span class="line">	assert.Len(t, results, <span class="number">1</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;person m2&quot;</span>, results[<span class="number">0</span>].Interface())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li>结构体参数是值的时候，<code>reflect.ValueOf</code> 返回的反射对象只能调用值接收者的方法，不能调用指针接收者的方法。</li>
+<li>结构体参数是指针的时候，<code>reflect.ValueOf</code> 返回的反射对象可以调用值接收者和指针接收者的方法。</li>
+<li>调用 <code>MethodByName</code> 方法时，如果方法不存在，则返回的反射对象的 <code>IsValid</code> 方法返回 <code>false</code>。</li>
+<li>调用 <code>Call</code> 方法时，如果没有参数，传 <code>nil</code> 参数即可。如果方法没有返回值，则返回的结果切片为空。</li>
+<li>调用 <code>Call</code> 方法的参数是 <code>reflect.Value</code> 类型的切片，返回值也是 <code>reflect.Value</code> 类型的切片。</li>
+</ul>
+<h3 id="是否实现接口">是否实现接口</h3>
+<p>对于这个，其实有一个更简单的方法，那就是利用接口断言：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStrunct4_0</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">type</span> TestInterface <span class="keyword">interface</span> &#123;</span><br><span class="line">		M1() <span class="type">string</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v.Interface() 返回的是 interface&#123;&#125; 类型</span></span><br><span class="line">	<span class="comment">// v.Interface().(TestInterface) 将 interface&#123;&#125; 类型转换为 TestInterface 类型</span></span><br><span class="line">	v1, ok := v.Interface().(TestInterface)</span><br><span class="line">	assert.True(t, ok)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;person m1&quot;</span>, v1.M1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外一个方法是，通过反射对象的 <code>Type</code> 方法获取类型对象，然后调用 <code>Implements</code> 方法来判断是否实现了某个接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct4</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">type</span> TestInterface <span class="keyword">interface</span> &#123;</span><br><span class="line">		M1() <span class="type">string</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	typ := reflect.TypeOf(p)</span><br><span class="line"></span><br><span class="line">	typ1 := reflect.TypeOf((*TestInterface)(<span class="literal">nil</span>)).Elem()</span><br><span class="line">	assert.True(t, typ.Implements(typ1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="结构体的-tag">结构体的 tag</h3>
+<p>这在序列化、反序列化、ORM 库中用得非常多，常见的 <code>validator</code> 库也是通过 tag 来实现的。 下面的例子中，通过获取变量的 <code>Type</code> 就可以获取其 <code>tag</code> 了：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person1 <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="type">string</span> <span class="string">`json:&quot;name&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct5</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person1&#123;Name: <span class="string">&quot;Tom&quot;</span>&#125;</span><br><span class="line">	typ := reflect.TypeOf(p)</span><br><span class="line">	tag := typ.Field(<span class="number">0</span>).Tag</span><br><span class="line"></span><br><span class="line">	assert.Equal(t, <span class="string">&quot;name&quot;</span>, tag.Get(<span class="string">&quot;json&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="修改结构体未导字段">修改结构体未导字段</h3>
+<p>我们知道，结构体的字段如果首字母小写，则是未导出的，不能被外部包访问。但是我们可以通过反射修改它：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStruct6</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(&amp;p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 下面这样写会报错：</span></span><br><span class="line">	<span class="comment">// panic: reflect: reflect.Value.SetInt using value obtained using unexported field</span></span><br><span class="line">	<span class="comment">// v.Elem().FieldByName(&quot;sex&quot;).SetInt(0)</span></span><br><span class="line">	ft := v.Elem().FieldByName(<span class="string">&quot;sex&quot;</span>)</span><br><span class="line"></span><br><span class="line">	sexV := reflect.NewAt(ft.Type(), unsafe.Pointer(ft.UnsafeAddr())).Elem()</span><br><span class="line"></span><br><span class="line">	assert.Equal(t, <span class="number">1</span>, p.sex)           <span class="comment">// 修改前是 1</span></span><br><span class="line">	sexV.Set(reflect.ValueOf(<span class="type">uint8</span>(<span class="number">0</span>))) <span class="comment">// 将 sex 字段修改为 0</span></span><br><span class="line">	assert.Equal(t, <span class="number">0</span>, p.sex)           <span class="comment">// 修改后是 0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里通过 <code>NewAt</code> 方法针对 <code>sex</code> 这个未导出的字段创建了一个指针，然后我们就可以通过这个指针来修改 <code>sex</code> 字段了。</p>
+<h2 id="方法的反射">方法的反射</h2>
+<p>这里说的方法包括函数和结构体的方法。</p>
+<h3 id="入参和返回值">入参和返回值</h3>
+<p><code>reflect</code> 包中提供了 <code>In</code> 和 <code>Out</code> 方法来获取方法的入参和返回值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span></span> Test(a <span class="type">int</span>, b <span class="type">string</span>) <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestMethod</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	m := v.MethodByName(<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">	<span class="comment">// 参数个数为 2</span></span><br><span class="line">	assert.Equal(t, <span class="number">2</span>, m.Type().NumIn())</span><br><span class="line">	<span class="comment">// 返回值个数为 1</span></span><br><span class="line">	assert.Equal(t, <span class="number">1</span>, m.Type().NumOut())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// In(0) 是第一个参数，In(1) 是第二个参数</span></span><br><span class="line">	arg1 := m.Type().In(<span class="number">0</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;int&quot;</span>, arg1.Name())</span><br><span class="line">	arg2 := m.Type().In(<span class="number">1</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;string&quot;</span>, arg2.Name())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Out(0) 是第一个返回值</span></span><br><span class="line">	ret0 := m.Type().Out(<span class="number">0</span>)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;int&quot;</span>, ret0.Name())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>In</code> 和 <code>Out</code> 方法返回的是 <code>reflect.Type</code> 类型，可以通过 <code>Name</code> 方法获取类型名称。</li>
+<li><code>NumIn</code> 和 <code>NumOut</code> 方法返回的是参数和返回值的个数。</li>
+<li><code>reflect.Value</code> 类型的 <code>MethodByName</code> 方法可以获取结构体的方法。</li>
+</ul>
+<h3 id="通过反射调用方法">通过反射调用方法</h3>
+<p><code>reflect.Value</code> 中对于方法类型的反射对象，有一个 <code>Call</code> 方法，可以通过它来调用方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestMethod2</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> p = Person&#123;Name: <span class="string">&quot;Tom&quot;</span>, Age: <span class="number">18</span>, sex: <span class="number">1</span>&#125;</span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 通过反射调用 Test 方法</span></span><br><span class="line">	m := v.MethodByName(<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">	arg1 := reflect.ValueOf(<span class="number">1</span>)</span><br><span class="line">	arg2 := reflect.ValueOf(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">	args := []reflect.Value&#123;arg1, arg2&#125;</span><br><span class="line"></span><br><span class="line">	rets := m.Call(args)</span><br><span class="line">	assert.Len(t, rets, <span class="number">1</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">1</span>, rets[<span class="number">0</span>].Interface())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>Call</code> 方法的参数是 <code>[]reflect.Value</code> 类型，需要将参数转换为 <code>reflect.Value</code> 类型。</li>
+<li><code>Call</code> 方法的返回值也是 <code>[]reflect.Value</code> 类型。</li>
+<li><code>reflect.Value</code> 类型的 <code>MethodByName</code> 方法可以获取结构体的方法的反射对象。</li>
+<li>通过方法的反射对象的 <code>Call</code> 方法可以实现调用方法。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<ul>
+<li>通过 <code>reflect.Kind</code> 可以判断反射对象的类型，<code>Kind</code> 涵盖了 go 中所有的基本类型，所以反射的时候判断 <code>Kind</code> 就足够了。</li>
+<li>如果要获取反射对象的值，需要传递指针给 <code>reflect.Value</code>。</li>
+<li>可以往 <code>chan</code> 的反射对象中发送数据，也可以从 <code>chan</code> 的反射对象中接收数据。</li>
+<li><code>SetMapIndex</code> 方法可以修改 <code>map</code> 中的元素。<code>MapRange</code> 方法可以获取 <code>map</code> 的迭代器。</li>
+<li>可以通过 <code>Index</code> 方法获取 <code>slice</code> 的元素，也可以通过 <code>SetIndex</code> 方法修改 <code>slice</code> 的元素。</li>
+<li>可以通过 <code>SetString</code> 方法修改 <code>string</code> 的值。</li>
+<li>对于 <code>interface</code> 和 <code>Pointer</code> 类型的反射对象，可以通过 <code>Elem</code> 方法获取它们的值，同时也只有通过 <code>Elem</code> 获取到的反射对象能调用 <code>Set*</code> 方法来修改其指向的对象。</li>
+<li><code>reflect</code> 包中提供了很多操作结构体的功能：如获取结构体的字段、获取结构体的方法、调用结构体的方法等。我们使用一些类库的时候，会需要通过结构体的 <code>tag</code> 来设置一些元信息，这些信息只有通过反射才能获取。</li>
+<li>我们可以通过 <code>NewAt</code> 来创建一个指向结构体未导出字段的反射对象，这样就可以修改结构体的未导出字段了。</li>
+<li>对于函数和方法，go 的反射系统也提供了很多功能，如获取参数和返回值信息、使用 <code>Call</code> 来调用函数和方法等。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/01/02/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E8%A6%81%E4%B8%8D%E8%A6%81%E4%BC%A0%E6%8C%87%E9%92%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/02/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E8%A6%81%E4%B8%8D%E8%A6%81%E4%BC%A0%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">深入理解 go reflect - 要不要传指针</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-02 20:28:30" itemprop="dateCreated datePublished" datetime="2023-01-02T20:28:30+08:00">2023-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-01-03 08:29:24" itemprop="dateModified" datetime="2023-01-03T08:29:24+08:00">2023-01-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在我们看一些使用反射的代码的时候，会发现，<code>reflect.ValueOf</code> 或 <code>reflect.TypeOf</code> 的参数有些地方使用的是指针参数，有些地方又不是指针参数， 但是好像这两者在使用上没什么区别，比如下面这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">v1 := reflect.ValueOf(a)</span><br><span class="line">v2 := reflect.ValueOf(&amp;a)</span><br><span class="line"></span><br><span class="line">fmt.Println(v1.Int())        <span class="comment">// 1</span></span><br><span class="line">fmt.Println(v2.Elem().Int()) <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>它们的区别貌似只是需不需要使用 <code>Elem()</code> 方法，但这个跟我们是否传递指针给 <code>reflect.ValueOf</code> 其实关系不大， 相信没有人为了使用一下 <code>Elem()</code> 方法，就去传递指针给 <code>reflect.ValueOf</code> 吧。</p>
+<p>那我们什么时候应该传递指针参数呢？</p>
+<h2 id="什么时候传递指针">什么时候传递指针？</h2>
+<p>要回答这个问题，我们可以思考一下以下列出的几点内容：</p>
+<ol type="1">
+<li>是否要修改变量的值，要修改就要用指针</li>
+<li>结构体类型：是否要修改<strong>结构体里的字段</strong>，要修改就要用指针</li>
+<li>结构体类型：是否要调用<strong>指针接收值方法</strong>，要调用就要用指针</li>
+<li>对于 <code>chan</code>、<code>map</code>、<code>slice</code> 类型，我们传递值和传递指针都可以修改其内容</li>
+<li>对于非 <code>interface</code> 类型，传递给 <code>TypeOf</code> 和 <code>ValueOf</code> 的时候都会转换为 <code>interface</code> 类型，如果本身就是 <code>interface</code> 类型，则不需转换。</li>
+<li>指针类型不可修改，但是可以修改指针指向的值。（<code>v := reflect.ValueOf(&amp;a)</code>，<code>v.CanSet()</code> 是 <code>false</code>，<code>v.Elem().CanSet()</code> 是 <code>true</code>）</li>
+<li>字符串：我们可以对字符串进行替换，但不能修改字符串的某一个字符</li>
+</ol>
+<p>大概总结下来，就是：如果我们想修改变量的内容，就传递指针，否则就传递值。对于某些复合类型如果其内部包含了底层数据的指针， 也是可以通过传值来修改其底层数据的，这些类型有 <code>chan</code>、<code>map</code>、<code>slice</code>。 又或者如果我们想修改结构体类型里面的指针类型字段，传递结构体的拷贝也能实现。</p>
+<h2 id="通过传递指针修改变量的值">1. 通过传递指针修改变量的值</h2>
+<p>对于一些基础类型的变量，如果我们想修改其内容，就要传递指针。这是因为在 go 里面参数传递都是值传递，如果我们不传指针， 那么在函数内部拿到的只是参数的拷贝，对其进行修改，不会影响到外部的变量（事实上在对这种反射值进行修改的时候会直接 <code>panic</code>）。</p>
+<h3 id="传值无法修改变量本身">传值无法修改变量本身</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x := <span class="number">1</span></span><br><span class="line">v := reflect.ValueOf(x)</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>v</code> 中保存的是 <code>x</code> 的拷贝，对这份拷贝在反射的层面上做修改其实是没有实际意义的，因为对拷贝进行修改并不会影响到 <code>x</code> 本身。 我们在通过反射来修改变量的时候，我们的预期行为往往是修改变量本身。鉴于实际的使用场景，go 的反射系统已经帮我们做了限制了， 在我们对拷贝类型的反射对象进行修改的时候，会直接 <code>panic</code>。</p>
+<figure>
+<img src="/images/go/reflect1/reflect_1.png" alt="reflect_1" /><figcaption aria-hidden="true">reflect_1</figcaption>
+</figure>
+<h3 id="传指针可以修改变量">传指针可以修改变量</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x := <span class="number">1</span></span><br><span class="line">v := reflect.ValueOf(&amp;x).Elem()</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们传递了 <code>x</code> 的指针到 <code>reflect.ValueOf</code> 中，这样一来，<code>v</code> 指向的就是 <code>x</code> 本身了。 在这种情况下，我们对 <code>v</code> 的修改就会影响到 <code>x</code> 本身。</p>
+<figure>
+<img src="/images/go/reflect1/reflect_2.png" alt="reflect_2" /><figcaption aria-hidden="true">reflect_2</figcaption>
+</figure>
+<h2 id="通过传递指针修改结构体的字段">2. 通过传递指针修改结构体的字段</h2>
+<p>对于结构体类型，如果我们想修改其字段的值，也是要传递指针的。这是因为结构体类型的字段是值类型，如果我们不传递指针， <code>reflect.ValueOf</code> 拿到的也是一份拷贝，对其进行修改并不会影响到结构体本身。当然，这种情况下，我们修改它的时候也会 <code>panic</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="type">string</span></span><br><span class="line">	Age  <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">p := person&#123;</span><br><span class="line">    Name: <span class="string">&quot;foo&quot;</span>,</span><br><span class="line">    Age:  <span class="number">30</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// v 本质上是指向 p 的指针</span></span><br><span class="line">v := reflect.ValueOf(&amp;p)</span><br><span class="line"></span><br><span class="line"><span class="comment">// v.CanSet() 为 false，v 是指针，指针本身是不能修改的</span></span><br><span class="line"><span class="comment">// v.Elem() 是 p 本身，是可以修改的</span></span><br><span class="line"></span><br><span class="line">fmt.Println(v.Elem().FieldByName(<span class="string">&quot;Name&quot;</span>).CanSet()) <span class="comment">// true</span></span><br><span class="line">fmt.Println(v.Elem().FieldByName(<span class="string">&quot;Age&quot;</span>).CanSet())  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure>
+<img src="/images/go/reflect1/reflect_3.png" alt="reflect_3" /><figcaption aria-hidden="true">reflect_3</figcaption>
+</figure>
+<h2 id="结构体获取指针接收值方法">3. 结构体：获取指针接收值方法</h2>
+<p><strong>对于结构体而言，如果我们想通过反射来调用指针接收者方法，那么我们需要传递指针。</strong></p>
+<p>在开始讲解这一点之前，需要就以下内容达成共识：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p person)</span></span> M1() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *person)</span></span> M2() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPerson</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	p := person&#123;&#125;</span><br><span class="line">	v1 := reflect.ValueOf(p)</span><br><span class="line">	v2 := reflect.ValueOf(&amp;p)</span><br><span class="line"></span><br><span class="line">	assert.Equal(t, <span class="number">1</span>, v1.NumMethod())</span><br><span class="line">	assert.Equal(t, <span class="number">2</span>, v2.NumMethod())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v1 和 v2 都有 M1 方法</span></span><br><span class="line">	assert.True(t, v1.MethodByName(<span class="string">&quot;M1&quot;</span>).IsValid())</span><br><span class="line">	assert.True(t, v2.MethodByName(<span class="string">&quot;M1&quot;</span>).IsValid())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v1 没有 M2 方法</span></span><br><span class="line">	<span class="comment">// v2 有 M2 方法</span></span><br><span class="line">	assert.False(t, v1.MethodByName(<span class="string">&quot;M2&quot;</span>).IsValid())</span><br><span class="line">	assert.True(t, v2.MethodByName(<span class="string">&quot;M2&quot;</span>).IsValid())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，<code>p</code> 只有一个方法 <code>M1</code>，而 <code>&amp;p</code> 有两个方法 <code>M1</code> 和 <code>M2</code>。 <strong>但是在实际使用中，我们使用 p 来调用 M2 也是可以的</strong>， <code>p</code> 之所以能调用 <code>M2</code> 是因为编译器帮我们做了一些处理，将 <code>p</code> 转换成了 <code>&amp;p</code>，然后调用 <code>M2</code>。</p>
+<figure>
+<img src="/images/go/reflect1/reflect_4.png" alt="reflect_4" /><figcaption aria-hidden="true">reflect_4</figcaption>
+</figure>
+<p>但是在反射的时候，我们是无法做到这一点的，这个需要特别注意。如果我们想通过反射来调用指针接收者的方法，就需要传递指针。</p>
+<h2 id="变量本身包含指向数据的指针">4. 变量本身包含指向数据的指针</h2>
+<blockquote>
+<p>最好不要通过值的反射对象来修改值的数据，就算有些类型可以实现这种功能。</p>
+</blockquote>
+<p>对于 <code>chan</code>、<code>map</code>、<code>slice</code> 这三种类型，我们可以通过 <code>reflect.ValueOf</code> 来获取它们的值， 但是这个值本身包含了指向数据的指针，因此我们依然可以通过反射系统修改其数据。但是，<strong>我们最好不这么用，从规范的角度，这是一种错误的操作。</strong></p>
+<h3 id="通过值反射对象修改-chanmap-和-slice">通过值反射对象修改 chan、map 和 slice</h3>
+<figure>
+<img src="/images/go/reflect1/reflect_5.png" alt="reflect_5" /><figcaption aria-hidden="true">reflect_5</figcaption>
+</figure>
+<p>在 go 中，<code>chan</code>、<code>map</code>、<code>slice</code> 这几种数据结构中，存储数据都是通过一个 <code>unsafe.Pointer</code> 类型的变量来指向实际存储数据的内存。 这是因为，这几种类型能够存储的元素个数都是不确定的，都需要根据我们指定的大小和存储的元素类型来进行内存分配。</p>
+<p>正因如此，我们复制 <code>chan</code>、<code>map</code>、<code>slice</code> 的时候，虽然值被复制了一遍，但是存储数据的指针也被复制了， 这样我们依然可以通过拷贝的数据指针来修改其数据，如下面的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPointer1</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 数组需要传递引用才能修改其元素</span></span><br><span class="line">	arr := [<span class="number">3</span>]<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">	v1 := reflect.ValueOf(&amp;arr)</span><br><span class="line">	v1.Elem().Index(<span class="number">1</span>).SetInt(<span class="number">100</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">100</span>, arr[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">	<span class="comment">// chan 传值也可以修改其元素</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">	v2 := reflect.ValueOf(ch)</span><br><span class="line">	v2.Send(reflect.ValueOf(<span class="number">10</span>))</span><br><span class="line">	assert.Equal(t, <span class="number">10</span>, &lt;-ch)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// map 传值也可以修改其元素</span></span><br><span class="line">	m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line">	v3 := reflect.ValueOf(m)</span><br><span class="line">	v3.SetMapIndex(reflect.ValueOf(<span class="number">1</span>), reflect.ValueOf(<span class="number">10</span>))</span><br><span class="line">	assert.Equal(t, <span class="number">10</span>, m[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">	<span class="comment">// slice 传值也可以修改其元素</span></span><br><span class="line">	s := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">	v4 := reflect.ValueOf(s)</span><br><span class="line">	v4.Index(<span class="number">1</span>).SetInt(<span class="number">20</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">20</span>, s[<span class="number">1</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="slice-反射对象扩容的影响">slice 反射对象扩容的影响</h3>
+<p>但是，我们需要注意的是，对于 <code>map</code> 和 <code>slice</code> 类型，在其分配的内存容纳不下新的元素的时候，会进行<strong>扩容</strong>， <strong>扩容之后，保存数据字段的指针就指向了一片新的内存了</strong>。 这意味着什么呢？这意味着，我们通过 <code>map</code> 和 <code>slice</code> 的值创建的反射值对象中拿到的那份数据指针已经跟旧的 <code>map</code> 和 <code>slice</code> 指向的内存不一样了。</p>
+<figure>
+<img src="/images/go/reflect1/reflect_6.png" alt="reflect_6" /><figcaption aria-hidden="true">reflect_6</figcaption>
+</figure>
+<p>说明：在上图中，我们在反射对象中往 <code>slice</code> 追加元素后，导致反射对象 <code>slice</code> 的 <code>array</code> 指针指向了一片新的内存区域了， 这个时候我们再对反射对象进行修改的时候，不会影响到原 <code>slice</code>。这也就是我们不能通过 <code>slice</code> 或 <code>map</code> 的拷贝的反射对象来修改 <code>slice</code> 或 <code>map</code> 的原因。</p>
+<p>示例代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPointer1</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	s := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">	v4 := reflect.ValueOf(s)</span><br><span class="line">	v4.Index(<span class="number">1</span>).SetInt(<span class="number">20</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">20</span>, s[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 这里发生了扩容</span></span><br><span class="line">	<span class="comment">// v5 的 array 跟 s 的 array 指向的是不同的内存区域了。</span></span><br><span class="line">	v5 := reflect.Append(v4, reflect.ValueOf(<span class="number">4</span>))</span><br><span class="line">	fmt.Println(s) <span class="comment">// [1 20 3]</span></span><br><span class="line">	fmt.Println(v5.Interface().([]<span class="type">int</span>)) <span class="comment">// [1 20 3 4]</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 这里修改 v5 的时候影响不到 s 了</span></span><br><span class="line">	v5.Index(<span class="number">1</span>).SetInt(<span class="number">30</span>)</span><br><span class="line">	fmt.Println(s) <span class="comment">// [1 20 3]</span></span><br><span class="line">	fmt.Println(v5.Interface().([]<span class="type">int</span>)) <span class="comment">// [1 30 3 4]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：在上面的代码中，<code>v5</code> 实际上是 <code>v4</code> 扩容后的切片，底层的 <code>array</code> 指针指向的是跟 <code>s</code> 不一样的 <code>array</code> 了， 因此在我们修改 <code>v5</code> 的时候，会发现原来的 <code>s</code> 并没有发生改变。</p>
+<blockquote>
+<p>虽然通过值反射对象可以修改 slice 的数据，但是如果通过反射对象 append 元素到 slice 的反射对象的时候， 可能会触发 slice 扩容，这个时候再修改反射对象的时候，就影响不了原来的 slice 了。</p>
+</blockquote>
+<h3 id="slice-容量够的话是不是就可以正常追加元素了">slice 容量够的话是不是就可以正常追加元素了？</h3>
+<p>只能说，能，也不能。我们看看下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPointer000</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	s1 := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">3</span>, <span class="number">6</span>)</span><br><span class="line">	s1[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">	s1[<span class="number">1</span>] = <span class="number">2</span></span><br><span class="line">	s1[<span class="number">2</span>] = <span class="number">3</span></span><br><span class="line">	fmt.Println(s1) <span class="comment">// [1 2 3]</span></span><br><span class="line"></span><br><span class="line">	v6 := reflect.ValueOf(s1)</span><br><span class="line">	v7 := reflect.Append(v6, reflect.ValueOf(<span class="number">4</span>))</span><br><span class="line">	<span class="comment">// 虽然 s1 的容量足够大，但是 s1 还是看不到追加的元素</span></span><br><span class="line">	fmt.Println(s1)                     <span class="comment">// [1 2 3]</span></span><br><span class="line">	fmt.Println(v7.Interface().([]<span class="type">int</span>)) <span class="comment">// [1 2 3 4]</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// s1 和 s2 底层数组还是同一个</span></span><br><span class="line">	<span class="comment">// array1 是 s1 底层数组的内存地址</span></span><br><span class="line">	array1 := (*(*reflect.SliceHeader)(unsafe.Pointer(&amp;s1))).Data</span><br><span class="line">	s2 := v7.Interface().([]<span class="type">int</span>)</span><br><span class="line">    <span class="comment">// array2 是 s2 底层数组的内存地址</span></span><br><span class="line">	array2 := (*(*reflect.SliceHeader)(unsafe.Pointer(&amp;s2))).Data</span><br><span class="line">	assert.Equal(t, array1, array2)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 这是因为 s1 的长度并没有发生改变，</span></span><br><span class="line">	<span class="comment">// 所以 s1 看不到追加的那个元素</span></span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(s1), <span class="built_in">cap</span>(s1)) <span class="comment">// 3 6</span></span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(s2), <span class="built_in">cap</span>(s2)) <span class="comment">// 4 6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们给 <code>slice</code> 分配了足够大的容量，但是我们通过反射对象来追加元素的时候， 虽然数据被正常追加到了 <code>s1</code> 底层数组，但是由于在反射对象以外的 <code>s1</code> 的 <code>len</code> 并没有发生改变， 因此 <code>s1</code> 还是看不到反射对象追加的元素。所以上面说<strong>可以正常追加元素</strong>。</p>
+<p>但是，外部由于 <code>len</code> 没有发生改变，因此外部看不到反射对象追加的元素，所以上面也说<strong>不能正常追加元素</strong>。</p>
+<p>因此，虽然理论上修改的是同一片内存，我们依然不能通过传值的方式来通过反射对象往 <code>slice</code> 中追加元素。 但是修改 <code>[0, len(s))</code> 范围内的元素在反射对象外部是可以看到的。</p>
+<h3 id="map-也不能通过值反射对象来修改其元素">map 也不能通过值反射对象来修改其元素。</h3>
+<p>跟 <code>slice</code> 类似，通过 <code>map</code> 的值反射对象来<strong>追加</strong>元素的时候，同样可能导致扩容， 扩容之后，保存数据的内存区域会发生改变。</p>
+<p>但是，从另一个角度看，如果我们只是<strong>修改</strong>其元素的话，是可以正常修改的。</p>
+<h3 id="chan-没有追加">chan 没有追加</h3>
+<p><code>chan</code> 跟 <code>slice</code>、<code>map</code> 有个不一样的地方，它的长度是我们创建 <code>chan</code> 的时候就已经固定的了， 因此，<strong>不存在扩容导致指向内存区域发生改变的问题。</strong></p>
+<p>因此，对于 <code>chan</code> 类型的元素，我们传 <code>ch</code> 或者 <code>&amp;ch</code> 给 <code>reflect.ValueOf</code> 都可以实现修改 <code>ch</code>。</p>
+<h3 id="结构体字段包含指针的情况">结构体字段包含指针的情况</h3>
+<p>如果结构体里面包含了指针字段，我们也只是想通过反射对象来修改这个指针字段的话， 那么我们也还是可以通过传值给 <code>reflect.ValueOf</code> 来创建反射对象来修改这个指针字段：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name *<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPointerPerson</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	name := <span class="string">&quot;foo&quot;</span></span><br><span class="line">	p := person&#123;Name: &amp;name&#125;</span><br><span class="line"></span><br><span class="line">	v := reflect.ValueOf(p)</span><br><span class="line">	fmt.Println(v.Field(<span class="number">0</span>).Elem().CanAddr())</span><br><span class="line">	fmt.Println(v.Field(<span class="number">0</span>).Elem().CanSet())</span><br><span class="line"></span><br><span class="line">	name1 := <span class="string">&quot;bar&quot;</span></span><br><span class="line">	v.Field(<span class="number">0</span>).Elem().Set(reflect.ValueOf(name1))</span><br><span class="line">	<span class="comment">// p 的 Name 字段已经被成功修改</span></span><br><span class="line">	fmt.Println(*p.Name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们虽然使用了 <code>p</code> 而不是 <code>&amp;p</code> 来创建反射对象， 但是我们依然可以修改 <code>Name</code> 字段，因为反射对象拿到了 <code>Name</code> 的指针的拷贝， 通过这个拷贝是可以定位到 <code>p</code> 的 <code>Name</code> 字段本身指向的内存的。</p>
+<p><strong>但是我们依然是不能修改 <code>p</code> 中的其他字段。</strong></p>
+<h2 id="interface-类型处理">5. interface 类型处理</h2>
+<p>对于 <code>interface</code> 类型的元素，我们可以将以下两种操作看作是等价的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// v1 跟 v2 都拿到了 a 的拷贝</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">v1 := reflect.ValueOf(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">interface</span>&#123;&#125; = a</span><br><span class="line">v2 := reflect.ValueOf(b)</span><br></pre></td></tr></table></figure>
+<p>我们可以通过下面的断言来证明：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">assert.Equal(t, v1.Kind(), v2.Kind())</span><br><span class="line">assert.Equal(t, v1.CanAddr(), v2.CanAddr())</span><br><span class="line">assert.Equal(t, v1.CanSet(), v2.CanSet())</span><br><span class="line">assert.Equal(t, v1.Interface(), v2.Interface())</span><br></pre></td></tr></table></figure>
+<p>当然，对于指针类型也是一样的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// v1 跟 v2 都拿到了 a 的指针</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">v1 := reflect.ValueOf(&amp;a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">interface</span>&#123;&#125; = &amp;a</span><br><span class="line">v2 := reflect.ValueOf(b)</span><br></pre></td></tr></table></figure>
+<p>同样的，我们可以通过下面的断言来证明：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">assert.Equal(t, v1.Kind(), v2.Kind())</span><br><span class="line">assert.Equal(t, v1.Elem().Kind(), v2.Elem().Kind())</span><br><span class="line">assert.Equal(t, v1.Elem().CanAddr(), v2.Elem().CanAddr())</span><br><span class="line">assert.Equal(t, v1.Elem().Addr(), v2.Elem().Addr())</span><br><span class="line">assert.Equal(t, v1.Interface(), v2.Interface())</span><br><span class="line">assert.Equal(t, v1.Elem().Interface(), v2.Elem().Interface())</span><br></pre></td></tr></table></figure>
+<h3 id="interface-底层类型是值">interface 底层类型是值</h3>
+<p><code>interface</code> 类型的底层类型是值的时候，我们将其传给 <code>reflect.ValueOf</code> 跟直接传值是一样的。 是没有办法修改 <code>interface</code> 底层数据的值的（除了指针类型字段，因为反射对象也拿到了指针字段的地址）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name *<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestInterface1</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	name := <span class="string">&quot;foo&quot;</span></span><br><span class="line">	p := person&#123;Name: &amp;name&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v 拿到的是 p 的拷贝</span></span><br><span class="line">    <span class="comment">// 下面两行等价于 v := reflect.ValueOf(p)</span></span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125; = p</span><br><span class="line">	v := reflect.ValueOf(i)</span><br><span class="line">	assert.False(t, v.CanAddr())</span><br><span class="line">	assert.Equal(t, reflect.Struct, v.Kind())</span><br><span class="line">	assert.True(t, v.Field(<span class="number">0</span>).Elem().CanAddr())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面这个例子中 <code>v := reflect.ValueOf(i)</code> 其实等价于 <code>v := reflect.ValueOf(p)</code>， 因为在我们调用 <code>reflect.ValueOf(p)</code> 的时候，go 语言本身会帮我们将 <code>p</code> 转换为 <code>interface&#123;&#125;</code> 类型。 在我们赋值给 <code>i</code> 的时候，go 语言也会帮我们将 <code>p</code> 转换为 <code>interface&#123;&#125;</code> 类型。 这样再调用 <code>reflect.ValueOf</code> 的时候就不需要再做转换了。</p>
+<figure>
+<img src="/images/go/reflect1/reflect_7.png" alt="reflect_7" /><figcaption aria-hidden="true">reflect_7</figcaption>
+</figure>
+<h3 id="interface-底层类型是指针">interface 底层类型是指针</h3>
+<p>传递底层数据是指针类型的 <code>interface</code> 给 <code>reflect.ValueOf</code> 的时候，我们可以修改 <code>interface</code> 底层指针指向的值， 效果等同于直接传递指针给 <code>reflect.ValueOf</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestInterface</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">	v1 := reflect.ValueOf(&amp;a)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">interface</span>&#123;&#125; = &amp;a</span><br><span class="line">	v2 := reflect.ValueOf(b)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v1 和 v2 本质上都接收了一个 interface 参数，</span></span><br><span class="line">	<span class="comment">// 这个 interface 参数的数据部分都是 &amp;a</span></span><br><span class="line"></span><br><span class="line">	v1.Elem().SetInt(<span class="number">10</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">10</span>, a)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 通过 v1 修改 a 的值，v2 也能看到</span></span><br><span class="line">	assert.Equal(t, <span class="number">10</span>, v2.Elem().Interface())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 同样的，通过 v2 修改 a 的值，v1 也能看到</span></span><br><span class="line">	v2.Elem().SetInt(<span class="number">20</span>)</span><br><span class="line">	assert.Equal(t, <span class="number">20</span>, a)</span><br><span class="line">	assert.Equal(t, <span class="number">20</span>, v1.Elem().Interface())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="不要再对接口类型取地址">不要再对接口类型取地址</h3>
+<blockquote>
+<p>能不能通过反射 Value 对象来修改变量只取决于，能不能根据反射对象拿到最初变量的内存地址。 如果拿到的只是原始值的拷贝，不管我们怎么做都无法修改原始值。</p>
+</blockquote>
+<p>对于初学者另外一个令人困惑的地方可能是下面这样的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestInterface</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125; = a</span><br><span class="line">	v1 := reflect.ValueOf(&amp;a)</span><br><span class="line">	v2 := reflect.ValueOf(&amp;i)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// v1 和 v2 的类型都是 reflect.Ptr</span></span><br><span class="line">	assert.Equal(t, reflect.Ptr, v1.Kind())</span><br><span class="line">	assert.Equal(t, reflect.Ptr, v2.Kind())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 但是两者的 Elem() 类型不同，</span></span><br><span class="line">	<span class="comment">// v1 的 Elem() 是 reflect.Int，</span></span><br><span class="line">	<span class="comment">// v2 的 Elem() 是 reflect.Interface</span></span><br><span class="line">	assert.Equal(t, reflect.Int, v1.Elem().Kind())</span><br><span class="line">	assert.Equal(t, reflect.Interface, v2.Elem().Kind())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>困惑的源头在于，<code>reflect.ValueOf()</code> 这个函数的参数是 <code>interface&#123;&#125;</code> 类型的， 这意味着我们可以传递任意类型的值给它，包括指针类型的值。</p>
+<p>正因如此，如果我们不懂得 <code>reflect</code> 包的工作原理的话， 就会传错变量到 <code>reflect.ValueOf()</code> 函数中，导致程序出错。</p>
+<p>对于上面例子的 <code>v2</code>，它是一个指向 <code>interface&#123;&#125;</code> 类型的指针的反射对象，它也能找到最初的变量 <code>a</code>：</p>
+<blockquote>
+<p>但是能不能修改 <code>a</code>，还是取决于 <code>a</code> 是否是可寻址的。也就是最初传递给 <code>i</code> 的值是不是一个指针类型。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">assert.Equal(t, <span class="string">&quot;&lt;*interface &#123;&#125; Value&gt;&quot;</span>, v2.String())</span><br><span class="line">assert.Equal(t, <span class="string">&quot;&lt;interface &#123;&#125; Value&gt;&quot;</span>, v2.Elem().String())</span><br><span class="line">assert.Equal(t, <span class="string">&quot;&lt;int Value&gt;&quot;</span>, v2.Elem().Elem().String())</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，我们传递给 <code>i</code> 的是 <code>a</code> 的值，而不是 <code>a</code> 的指针，所以 <code>i</code> 是不可寻址的，也就是说 <code>v2</code> 是不可寻址的。</p>
+<figure>
+<img src="/images/go/reflect1/reflect_8.png" alt="reflect_8" /><figcaption aria-hidden="true">reflect_8</figcaption>
+</figure>
+<p>上图说明：</p>
+<ul>
+<li><code>i</code> 是接口类型，它的数据部分是 <code>a</code> 的拷贝，它的类型部分是 <code>int</code> 类型。</li>
+<li><code>&amp;i</code> 是指向接口的指针，它指向了上图的 <code>eface</code>。</li>
+<li><code>v2</code> 是指向 <code>eface</code> 的指针的反射对象。</li>
+<li>最终，我们通过 <code>v2</code> 找到 <code>i</code> 这个接口，然后通过 <code>i</code> 找到 <code>a</code> 这个变量的<strong>拷贝</strong>。</li>
+</ul>
+<p>所以，绕了一大圈，我们最终还是修改不了 <code>a</code> 的值。到最后我们只拿到了 <code>a</code> 的拷贝。</p>
+<h2 id="指针类型反射对象不可修改其指向地址">6. 指针类型反射对象不可修改其指向地址</h2>
+<p>其实这一点上面有些地方也有涉及到，但是这里再强调一下。一个例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPointer</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">	<span class="keyword">var</span> b = &amp;a</span><br><span class="line">	v := reflect.ValueOf(b)</span><br><span class="line"></span><br><span class="line">	assert.False(t, v.CanAddr())</span><br><span class="line">	assert.False(t, v.CanSet())</span><br><span class="line"></span><br><span class="line">	assert.True(t, v.Elem().CanAddr())</span><br><span class="line">	assert.True(t, v.Elem().CanSet())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="/images/go/reflect1/reflect_9.png" alt="reflect_9" /><figcaption aria-hidden="true">reflect_9</figcaption>
+</figure>
+<p>说明：</p>
+<ul>
+<li><code>v</code> 是指向 <code>&amp;a</code> 的指针的反射对象。</li>
+<li>通过这个反射对象的 <code>Elem()</code> 方法，我们可以找到原始的变量 <code>a</code>。</li>
+<li>反射对象本身不能修改，但是它的 <code>Elem()</code> 方法返回的反射对象可以修改。</li>
+</ul>
+<blockquote>
+<p>对于指针类型的反射对象，其本身不能修改，但是它的 <code>Elem()</code> 方法返回的反射对象可以修改。</p>
+</blockquote>
+<h2 id="反射也不能修改字符串中的字符">7. 反射也不能修改字符串中的字符</h2>
+<p>这是因为，go 中的字符串本身是不可变的，我们无法像在 C 语言中那样修改其中某一个字符。 其实不止是 go，其实很多编程语言的字符串都是不可变的，比如 Java 中的 <code>String</code> 类型。</p>
+<p>在 go 中，字符串是用一个结构体来表示的，大概长下面这个样子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> StringHeader <span class="keyword">struct</span> &#123;</span><br><span class="line">	Data <span class="type">uintptr</span></span><br><span class="line">	Len  <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Data</code> 是指向字符串的指针。</li>
+<li><code>Len</code> 是字符串的长度（单位为字节）。</li>
+</ul>
+<p>在 go 中 <code>str[1] = 'a'</code> 这样的操作是不允许的，因为字符串是不可变的。</p>
+<h3 id="相同的字符串只有一个实例">相同的字符串只有一个实例</h3>
+<p>假设我们定义了两个相同的字符串，如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s1 := <span class="string">&quot;hello&quot;</span></span><br><span class="line">s2 := <span class="string">&quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
+<p>这两个字符串的值是相同的，但是它们的地址是不同的。那既然如此，为什么我们还是不能修改它的其中某一个字符呢？ 这是因为，虽然 <code>s1</code> 和 <code>s2</code> 的地址不一样，但是它们实际保存 <code>hello</code> 这个字符串的地址是一样的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">v1 := (*reflect.StringHeader)(unsafe.Pointer(&amp;s1))</span><br><span class="line">v2 := (*reflect.StringHeader)(unsafe.Pointer(&amp;s2))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 两个字符串实例保存字符串的内存地址是一样的</span></span><br><span class="line">assert.Equal(t, v1.Data, v2.Data)</span><br></pre></td></tr></table></figure>
+<p>两个字符串内存表示如下：</p>
+<figure>
+<img src="/images/go/reflect1/reflect_10.png" alt="reflect_10" /><figcaption aria-hidden="true">reflect_10</figcaption>
+</figure>
+<p>所以，我们可以看到，<code>s1</code> 和 <code>s2</code> 实际上是指向同一个字符串的指针，所以我们无法修改其中某一个字符。 <strong>因为如果允许这种行为存在的话，我们对其中一个字符串实例修改，也会影响到另外一个字符串实例。</strong></p>
+<h3 id="字符串本身可以替换">字符串本身可以替换</h3>
+<p>虽然我们不能修改字符串中的某一个字符，但是我们可以通过反射对象把整个字符串替换掉：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStirng</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	s := <span class="string">&quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line">	v := reflect.ValueOf(&amp;s)</span><br><span class="line">	fmt.Println(v.Elem().CanAddr())</span><br><span class="line">	fmt.Println(v.Elem().CanSet())</span><br><span class="line"></span><br><span class="line">	v.Elem().SetString(<span class="string">&quot;world&quot;</span>)</span><br><span class="line">	fmt.Println(s) <span class="comment">// world</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里实际上是把 <code>s</code> 中保存字符串的地址替换成了指向 <code>world</code> 这个字符串的地址，而不是将 <code>hello</code> 指向的内存修改成 <code>world</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStirng</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	s := <span class="string">&quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line">	oldAddr := (*reflect.StringHeader)(unsafe.Pointer(&amp;s)).Data</span><br><span class="line"></span><br><span class="line">	v := reflect.ValueOf(&amp;s)</span><br><span class="line">	v.Elem().SetString(<span class="string">&quot;world&quot;</span>)</span><br><span class="line"></span><br><span class="line">	newAddr := (*reflect.StringHeader)(unsafe.Pointer(&amp;s)).Data</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 修改之后，实际保存字符串的内存地址发生了改变</span></span><br><span class="line">	assert.NotEqual(t, oldAddr, newAddr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这可以用下图表示：</p>
+<figure>
+<img src="/images/go/reflect1/reflect_10.png" alt="reflect_10" /><figcaption aria-hidden="true">reflect_10</figcaption>
+</figure>
+<h2 id="总结">总结</h2>
+<ul>
+<li>如果我们需要通过反射对象来修改变量的值，那么我们必须得有办法拿到变量实际存储的内存地址。这种情况下，很多时候都是通过传递指针给 <code>reflect.ValueOf()</code> 方法来实现的。</li>
+<li>但是对于 <code>chan</code>、<code>map</code> 和 <code>slice</code> 或者其他类似的数据结构，它们通过指针来引用实际存储数据的内存，这种数据结构是通过通过传值给 <code>reflect.ValueOf()</code> 方法来实现修改其中的元素的。因为这些数据结构的数据部分可以通过指针的拷贝来修改。</li>
+<li>但是 <code>map</code> 和 <code>slice</code> 有可能会扩容，如果通过反射对象来追加元素，可能导致追加失败。这是因为，通过反射对象追加元素的时候，如果扩容了，那么原来的内存地址就会失效，这样我们其实就修改不了原来的 <code>map</code> 和 <code>slice</code> 了。</li>
+<li>同样的，<strong>结构体传值</strong>来创建反射对象的时候，如果其中有指针类型的字段，那么我们也可以通过指针来修改其中的元素。但是其他字段也还是修改不了的。</li>
+<li>如果我们创建反射对象的参数是 <code>interface</code> 类型，那么能不能修改元素的变量还是取决于我们这个 <code>interface</code> 类型变量的数据部分是值还是指针。如果 <code>interface</code> 变量中存储的是值，那么我们就不能修改其中的元素了。如果 <code>interface</code> 变量中存储的是指针，就可以修改。</li>
+<li>我们无法修改字符串的某一个字符，通过反射也不能，因为字符串本身是不可变的。不同的 <code>stirng</code> 类型的变量，如果它们的值是一样的，那么它们会共享实际存储字符串的内存。</li>
+<li>但是我们可以直接用一个新的字符串替代旧的字符串。</li>
+</ul>
+<p>但其实说了那么多，简单来说只有一点，就是我们<strong>只能通过反射对象来修改指针类型的变量</strong>。如果拿不到实际存储数据的指针，那么我们就无法通过反射对象来修改其中的元素了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/63/">63</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">315</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">96</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ogliu.com/" title="https:&#x2F;&#x2F;ogliu.com&#x2F;" rel="noopener" target="_blank">OG-Liu's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+    <div>
+
+  </div>
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">eleven26</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
