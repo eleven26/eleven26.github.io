@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="常量 变量 函数  func Compare(a, b []byte) int func Contains(b, subslice []byte) bool func ContainsAny(b []byte, chars string) bool func ContainsRune(b []byte, r rune) bool func Count(s, sep []byte) int fun">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang bytes 包学习">
+<meta property="og:url" content="https://eleven26.github.io/2020/03/29/golang/Golang%20bytes%20%E5%8C%85%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="常量 变量 函数  func Compare(a, b []byte) int func Contains(b, subslice []byte) bool func ContainsAny(b []byte, chars string) bool func ContainsRune(b []byte, r rune) bool func Count(s, sep []byte) int fun">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-29T05:01:30.000Z">
+<meta property="article:modified_time" content="2022-11-15T03:11:42.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2020/03/29/golang/Golang%20bytes%20%E5%8C%85%E5%AD%A6%E4%B9%A0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2020/03/29/golang/Golang%20bytes%20%E5%8C%85%E5%AD%A6%E4%B9%A0/","path":"2020/03/29/golang/Golang bytes 包学习/","title":"Golang bytes 包学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Golang bytes 包学习 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">常量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compare"><span class="nav-number">3.1.</span> <span class="nav-text">Compare</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#contains"><span class="nav-number">3.2.</span> <span class="nav-text">Contains</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#containsany"><span class="nav-number">3.3.</span> <span class="nav-text">ContainsAny</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#containsrune"><span class="nav-number">3.4.</span> <span class="nav-text">ContainsRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count"><span class="nav-number">3.5.</span> <span class="nav-text">Count</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#equal"><span class="nav-number">3.6.</span> <span class="nav-text">Equal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#equalfold"><span class="nav-number">3.7.</span> <span class="nav-text">EqualFold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fields"><span class="nav-number">3.8.</span> <span class="nav-text">Fields</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fieldsfunc"><span class="nav-number">3.9.</span> <span class="nav-text">FieldsFunc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hasprefix"><span class="nav-number">3.10.</span> <span class="nav-text">HasPrefix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hassuffix"><span class="nav-number">3.11.</span> <span class="nav-text">HasSuffix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#index"><span class="nav-number">3.12.</span> <span class="nav-text">Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexany"><span class="nav-number">3.13.</span> <span class="nav-text">IndexAny</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexbyte"><span class="nav-number">3.14.</span> <span class="nav-text">IndexByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexfunc"><span class="nav-number">3.15.</span> <span class="nav-text">IndexFunc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexrune"><span class="nav-number">3.16.</span> <span class="nav-text">IndexRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">3.17.</span> <span class="nav-text">Join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lastindex"><span class="nav-number">3.18.</span> <span class="nav-text">LastIndex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lastindexany"><span class="nav-number">3.19.</span> <span class="nav-text">LastIndexAny</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lastindexbyte"><span class="nav-number">3.20.</span> <span class="nav-text">LastIndexByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lastindexfunc"><span class="nav-number">3.21.</span> <span class="nav-text">LastIndexFunc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">3.22.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#repeat"><span class="nav-number">3.23.</span> <span class="nav-text">Repeat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replace"><span class="nav-number">3.24.</span> <span class="nav-text">Replace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replaceall"><span class="nav-number">3.25.</span> <span class="nav-text">ReplaceAll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runes"><span class="nav-number">3.26.</span> <span class="nav-text">Runes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split"><span class="nav-number">3.27.</span> <span class="nav-text">Split</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#splitafter"><span class="nav-number">3.28.</span> <span class="nav-text">SplitAfter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#splitaftern"><span class="nav-number">3.29.</span> <span class="nav-text">SplitAfterN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#splitn"><span class="nav-number">3.30.</span> <span class="nav-text">SplitN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#title"><span class="nav-number">3.31.</span> <span class="nav-text">Title</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tolower"><span class="nav-number">3.32.</span> <span class="nav-text">ToLower</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tolowerspecial"><span class="nav-number">3.33.</span> <span class="nav-text">ToLowerSpecial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#totitle"><span class="nav-number">3.34.</span> <span class="nav-text">ToTitle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#totitlespecial"><span class="nav-number">3.35.</span> <span class="nav-text">ToTitleSpecial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toupper"><span class="nav-number">3.36.</span> <span class="nav-text">ToUpper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toupperspecial"><span class="nav-number">3.37.</span> <span class="nav-text">ToUpperSpecial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tovalidutf8"><span class="nav-number">3.38.</span> <span class="nav-text">ToValidUTF8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trim"><span class="nav-number">3.39.</span> <span class="nav-text">Trim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimfunc"><span class="nav-number">3.40.</span> <span class="nav-text">TrimFunc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimleft"><span class="nav-number">3.41.</span> <span class="nav-text">TrimLeft</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimleftfunc"><span class="nav-number">3.42.</span> <span class="nav-text">TrimLeftFunc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimprefix"><span class="nav-number">3.43.</span> <span class="nav-text">TrimPrefix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimright"><span class="nav-number">3.44.</span> <span class="nav-text">TrimRight</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimrightfunc"><span class="nav-number">3.45.</span> <span class="nav-text">TrimRightFunc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimspace"><span class="nav-number">3.46.</span> <span class="nav-text">TrimSpace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trimsuffix"><span class="nav-number">3.47.</span> <span class="nav-text">TrimSuffix</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#buffer"><span class="nav-number">4.</span> <span class="nav-text">Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#newbuffer"><span class="nav-number">4.1.</span> <span class="nav-text">NewBuffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#newbufferstring"><span class="nav-number">4.2.</span> <span class="nav-text">NewBufferString</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#buffer-%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">Buffer 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bytes"><span class="nav-number">5.1.</span> <span class="nav-text">Bytes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cap"><span class="nav-number">5.2.</span> <span class="nav-text">Cap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grow"><span class="nav-number">5.3.</span> <span class="nav-text">Grow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#len"><span class="nav-number">5.4.</span> <span class="nav-text">Len</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#next"><span class="nav-number">5.5.</span> <span class="nav-text">Next</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read"><span class="nav-number">5.6.</span> <span class="nav-text">Read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readbyte"><span class="nav-number">5.7.</span> <span class="nav-text">ReadByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readbytes"><span class="nav-number">5.8.</span> <span class="nav-text">ReadBytes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readfrom"><span class="nav-number">5.9.</span> <span class="nav-text">ReadFrom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readrune"><span class="nav-number">5.10.</span> <span class="nav-text">ReadRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readstring"><span class="nav-number">5.11.</span> <span class="nav-text">ReadString</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reset"><span class="nav-number">5.12.</span> <span class="nav-text">Reset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#string"><span class="nav-number">5.13.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#truncate"><span class="nav-number">5.14.</span> <span class="nav-text">Truncate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unreadbyte"><span class="nav-number">5.15.</span> <span class="nav-text">UnreadByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unreadrune"><span class="nav-number">5.16.</span> <span class="nav-text">UnreadRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write"><span class="nav-number">5.17.</span> <span class="nav-text">Write</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writebyte"><span class="nav-number">5.18.</span> <span class="nav-text">WriteByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writerune"><span class="nav-number">5.19.</span> <span class="nav-text">WriteRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writestring"><span class="nav-number">5.20.</span> <span class="nav-text">WriteString</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeto"><span class="nav-number">5.21.</span> <span class="nav-text">WriteTo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reader"><span class="nav-number">6.</span> <span class="nav-text">Reader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#newreader"><span class="nav-number">6.1.</span> <span class="nav-text">NewReader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#len-1"><span class="nav-number">6.2.</span> <span class="nav-text">Len</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read-1"><span class="nav-number">6.3.</span> <span class="nav-text">Read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readat"><span class="nav-number">6.4.</span> <span class="nav-text">ReadAt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readbyte-1"><span class="nav-number">6.5.</span> <span class="nav-text">ReadByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readrune-1"><span class="nav-number">6.6.</span> <span class="nav-text">ReadRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reset-1"><span class="nav-number">6.7.</span> <span class="nav-text">Reset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#seek"><span class="nav-number">6.8.</span> <span class="nav-text">Seek</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#size"><span class="nav-number">6.9.</span> <span class="nav-text">Size</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unreadbyte-1"><span class="nav-number">6.10.</span> <span class="nav-text">UnreadByte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unreadrune-1"><span class="nav-number">6.11.</span> <span class="nav-text">UnreadRune</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeto-1"><span class="nav-number">6.12.</span> <span class="nav-text">WriteTo</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/03/29/golang/Golang%20bytes%20%E5%8C%85%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Golang bytes 包学习 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Golang bytes 包学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-29 13:01:30" itemprop="dateCreated datePublished" datetime="2020-03-29T13:01:30+08:00">2020-03-29</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><ol type="1">
+<li><a href="#常量">常量</a></li>
+<li><a href="#变量">变量</a></li>
+<li><a href="#函数">函数</a>
+<ul>
+<li><a href="#Compare">func Compare(a, b []byte) int</a></li>
+<li><a href="#Contains">func Contains(b, subslice []byte) bool</a></li>
+<li><a href="#ContainsAny">func ContainsAny(b []byte, chars string)
+bool</a></li>
+<li><a href="#ContainsRune">func ContainsRune(b []byte, r rune)
+bool</a></li>
+<li><a href="#Count">func Count(s, sep []byte) int</a></li>
+<li><a href="#Equal">func Equal(a, b []byte) bool</a></li>
+<li><a href="#EqualFold">func EqualFold(s, t []byte) bool</a></li>
+<li><a href="#Fields">func Fields(s []byte) [][]byte</a></li>
+<li><a href="#FieldsFunc">func FieldsFunc(s []byte, f func(rune) bool)
+[][]byte</a></li>
+<li><a href="#HasPrefix">func HasPrefix(s, prefix []byte) bool</a></li>
+<li><a href="#HasSuffix">func HasSuffix(s, suffix []byte) bool</a></li>
+<li><a href="#Index">func Index(s, sep []byte) int</a></li>
+<li><a href="#IndexAny">func IndexAny(s []byte, chars string)
+int</a></li>
+<li><a href="#IndexByte">func IndexByte(b []byte, c byte) int</a></li>
+<li><a href="#IndexFunc">func IndexFunc(s []byte, f func(r rune) bool)
+int</a></li>
+<li><a href="#IndexRune">func IndexRune(s []byte, r rune) int</a></li>
+<li><a href="#Join">func Join(s [][]byte, sep []byte) []byte</a></li>
+<li><a href="#LastIndex">func LastIndex(s, sep []byte) int</a></li>
+<li><a href="#LastIndexAny">func LastIndexAny(s []byte, chars string)
+int</a></li>
+<li><a href="#LastIndexByte">func LastIndexByte(s []byte, c byte)
+int</a></li>
+<li><a href="#LastIndexFunc">func LastIndexFunc(s []byte, f func(r rune)
+bool) int</a></li>
+<li><a href="#Map">func Map(mapping func(r rune) rune, s []byte)
+[]byte</a></li>
+<li><a href="#Repeat">func Repeat(b []byte, count int) []byte</a></li>
+<li><a href="#Replace">func Replace(s, old, new []byte, n int)
+[]byte</a></li>
+<li><a href="#ReplaceAll">func ReplaceAll(s, old, new []byte)
+[]byte</a></li>
+<li><a href="#Runes">func Runes(s []byte) []rune</a></li>
+<li><a href="#Split">func Split(s, sep []byte) [][]byte</a></li>
+<li><a href="#SplitAfter">func SplitAfter(s, sep []byte)
+[][]byte</a></li>
+<li><a href="#SplitAfterN">func SplitAfterN(s, sep []byte, n int)
+[][]byte</a></li>
+<li><a href="#SplitN">func SplitN(s, sep []byte, n int)
+[][]byte</a></li>
+<li><a href="#Title">func Title(s []byte) []byte</a></li>
+<li><a href="#ToLower">func ToLower(s []byte) []byte</a></li>
+<li><a href="#ToLowerSpecial">func ToLowerSpecial(c unicode.SpecialCase,
+s []byte) []byte</a></li>
+<li><a href="#ToTitle">func ToTitle(s []byte) []byte</a></li>
+<li><a href="#ToTitleSpecial">func ToTitleSpecial(c unicode.SpecialCase,
+s []byte) []byte</a></li>
+<li><a href="#ToUpper">func ToUpper(s []byte) []byte</a></li>
+<li><a href="#ToUpperSpecial">func ToUpperSpecial(c unicode.SpecialCase,
+s []byte) []byte</a></li>
+<li><a href="#ToValidUTF8">func ToValidUTF8(s, replacement []byte)
+[]byte</a></li>
+<li><a href="#Trim">func Trim(s []byte, cutset string) []byte</a></li>
+<li><a href="#TrimFunc">func TrimFunc(s []byte, f func(r rune) bool)
+[]byte</a></li>
+<li><a href="#TrimLeft">func TrimLeft(s []byte, cutset string)
+[]byte</a></li>
+<li><a href="#TrimLeftFunc">func TrimLeftFunc(s []byte, f func(r rune)
+bool) []byte</a></li>
+<li><a href="#TrimPrefix">func TrimPrefix(s, prefix []byte)
+[]byte</a></li>
+<li><a href="#TrimRight">func TrimRight(s []byte, cutset string)
+[]byte</a></li>
+<li><a href="#TrimRightFunc">func TrimRightFunc(s []byte, f func(r rune)
+bool) []byte</a></li>
+<li><a href="#TrimSpace">func TrimSpace(s []byte) []byte</a></li>
+<li><a href="#TrimSuffix">func TrimSuffix(s, suffix []byte)
+[]byte</a></li>
+</ul></li>
+<li><a href="#Buffer">Buffer</a>
+<ul>
+<li><a href="#NewBuffer">func NewBuffer(buf []byte) *Buffer</a></li>
+<li><a href="#NewBufferString">func NewBufferString(s string)
+*Buffer</a></li>
+</ul></li>
+<li><a href="#Buffer%20方法">Buffer 方法</a>
+<ul>
+<li><a href="#Bytes">func (b *Buffer) Bytes() []byte</a></li>
+<li><a href="#Cap">func (b *Buffer) Cap() int</a></li>
+<li><a href="#Grow">func (b *Buffer) Grow(n int)</a></li>
+<li><a href="#Len">func (b *Buffer) Len() int</a></li>
+<li><a href="#Next">func (b *Buffer) Next(n int) []byte</a></li>
+<li><a href="#Read">func (b *Buffer) Read(p []byte) (n int, err
+error)</a></li>
+<li><a href="#ReadByte">func (b *Buffer) ReadByte() (byte,
+error)</a></li>
+<li><a href="#ReadBytes">func (b *Buffer) ReadBytes(delim byte) (line
+[]byte, err error)</a></li>
+<li><a href="#ReadFrom">func (b *Buffer) ReadFrom(r io.Reader) (n int64,
+err error)</a></li>
+<li><a href="#ReadRune">func (b *Buffer) ReadRune() (r rune, size int,
+err error)</a></li>
+<li><a href="#ReadString">func (b *Buffer) ReadString(delim byte) (line
+string, err error)</a></li>
+<li><a href="#Reset">func (b *Buffer) Reset()</a></li>
+<li><a href="#String">func (b *Buffer) String() string</a></li>
+<li><a href="#Truncate">func (b *Buffer) Truncate(n int)</a></li>
+<li><a href="#UnreadByte">func (b *Buffer) UnreadByte() error</a></li>
+<li><a href="#UnreadRune">func (b *Buffer) UnreadRune() error</a></li>
+<li><a href="#Write">func (b *Buffer) Write(p []byte) (n int, err
+error)</a></li>
+<li><a href="#WriteByte">func (b *Buffer) WriteByte(c byte)
+error</a></li>
+<li><a href="#WriteRune">func (b *Buffer) WriteRune(r rune) (n int, err
+error)</a></li>
+<li><a href="#WriteString">func (b *Buffer) WriteString(s string) (n
+int, err error)</a></li>
+<li><a href="#WriteTo">func (b *Buffer) WriteTo(w io.Writer) (n int64,
+err error)</a></li>
+</ul></li>
+<li><a href="#Reader">Reader</a>
+<ul>
+<li><a href="#NewReader">func NewReader(b []byte) *Reader</a></li>
+</ul></li>
+<li><a href="#Reader%20方法">Reader 方法</a>
+<ul>
+<li><a href="#Len">func (r *Reader) Len() int</a></li>
+<li><a href="#Read">func (r *Reader) Read(b []byte) (n int, err
+error)</a></li>
+<li><a href="#ReadAt">func (r *Reader) ReadAt(b []byte, off int64) (n
+int, err error)</a></li>
+<li><a href="#ReadByte">func (r *Reader) ReadByte() (byte,
+error)</a></li>
+<li><a href="#ReadRune">func (r *Reader) ReadRune() (ch rune, size int,
+err error)</a></li>
+<li><a href="#Reset">func (r *Reader) Reset(b []byte)</a></li>
+<li><a href="#Seek">func (r *Reader) Seek(offset int64, whence int)
+(int64, error)</a></li>
+<li><a href="#Size">func (r *Reader) Size() int64</a></li>
+<li><a href="#UnreadByte">func (r *Reader) UnreadByte() error</a></li>
+<li><a href="#UnreadRune">func (r *Reader) UnreadRune() error</a></li>
+<li><a href="#WriteTo">func (r *Reader) WriteTo(w io.Writer) (n int64,
+err error)</a></li>
+</ul></li>
+</ol>
+<h2 id="常量">常量</h2>
+<p><code>MinRead</code> 是传递给 <code>Buffer.ReadFrom</code>
+方法的最小切片大小。只要 <code>Buffer</code> 里面的内容长度没有超出
+<code>MinRead</code> 个字节，<code>ReadFrom</code> 不会增长
+<code>Buffer</code> 里面的缓冲区大小。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MinRead = <span class="number">512</span></span><br></pre></td></tr></table></figure>
+<h2 id="变量">变量</h2>
+<p>当内存装不下需要放入 buffer 的数据的时候，会抛出一个 panic，内容就是
+<code>ErrTooLarge</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ErrTooLarge = errors.New(<span class="string">&quot;bytes.Buffer: too large&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="函数">函数</h2>
+<h3 id="compare">Compare</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Compare</span><span class="params">(a, b []<span class="type">byte</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p>按字典顺序比较两个字节切片。如果 a == b，返回 0，如果 a &lt; b 返回
+-1，如果 a &gt; b 返回 1。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleCompare</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 通过将结果与零进行比较来解释比较结果</span></span><br><span class="line">	<span class="keyword">var</span> a, b []<span class="type">byte</span></span><br><span class="line"></span><br><span class="line">	a = []<span class="type">byte</span>(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">	b = []<span class="type">byte</span>(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> bytes.Compare(a, b) &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// a 小于 b</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;a = &#x27;%s&#x27;, b = &#x27;%s&#x27;, a &lt; b\n&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	a = []<span class="type">byte</span>(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">	b = []<span class="type">byte</span>(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> bytes.Compare(a, b) &lt;= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// a 小于或等于 b</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;a = &#x27;%s&#x27;, b = &#x27;%s&#x27;, a &lt;= b\n&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	a = []<span class="type">byte</span>(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">	b = []<span class="type">byte</span>(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> bytes.Compare(a, b) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// a 大于 b</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;a = &#x27;%s&#x27;, b = &#x27;%s&#x27;, a &gt; b\n&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	a = []<span class="type">byte</span>(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">	b = []<span class="type">byte</span>(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> bytes.Compare(a, b) &gt;= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// a 大于或等于 b</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;a = &#x27;%s&#x27;, b = &#x27;%s&#x27;, a &gt;= b\n&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 判断两个字节切片是否相等</span></span><br><span class="line">	<span class="keyword">if</span> bytes.Equal(a, b) &#123;</span><br><span class="line">		<span class="comment">// a 等于 b</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;a = &#x27;%s&#x27;, b = &#x27;%s&#x27;, a == b\n&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line">	b = []<span class="type">byte</span>(<span class="string">&quot;c&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> !bytes.Equal(a, b) &#123;</span><br><span class="line">		<span class="comment">// a 不等于 b</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;a = &#x27;%s&#x27;, b = &#x27;%s&#x27;, a != b\n&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// a = &#x27;a&#x27;, b = &#x27;b&#x27;, a &lt; b</span></span><br><span class="line">	<span class="comment">// a = &#x27;a&#x27;, b = &#x27;a&#x27;, a &lt;= b</span></span><br><span class="line">	<span class="comment">// a = &#x27;b&#x27;, b = &#x27;a&#x27;, a &gt; b</span></span><br><span class="line">	<span class="comment">// a = &#x27;b&#x27;, b = &#x27;b&#x27;, a &gt;= b</span></span><br><span class="line">	<span class="comment">// a = &#x27;b&#x27;, b = &#x27;b&#x27;, a == b</span></span><br><span class="line">	<span class="comment">// a = &#x27;b&#x27;, b = &#x27;c&#x27;, a != b</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleSearch</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> needle []<span class="type">byte</span></span><br><span class="line">	<span class="keyword">var</span> haystack [][]<span class="type">byte</span> <span class="comment">// 假设是有序的</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 模拟测试数据</span></span><br><span class="line">	needle = []<span class="type">byte</span>(<span class="string">&quot;ccb&quot;</span>)</span><br><span class="line">	haystack = [][]<span class="type">byte</span>&#123;</span><br><span class="line">		[]<span class="type">byte</span>(<span class="string">&quot;cca&quot;</span>),</span><br><span class="line">		[]<span class="type">byte</span>(<span class="string">&quot;ccb&quot;</span>),</span><br><span class="line">		[]<span class="type">byte</span>(<span class="string">&quot;ccc&quot;</span>),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// haystack 需要是有序的</span></span><br><span class="line">	i := sort.Search(<span class="built_in">len</span>(haystack), <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">		<span class="comment">// Return haystack[i] &gt;= needle.</span></span><br><span class="line">		<span class="keyword">return</span> bytes.Compare(haystack[i], needle) &gt;= <span class="number">0</span></span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> i &lt; <span class="built_in">len</span>(haystack) &amp;&amp; bytes.Equal(haystack[i], needle) &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Found it!&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Found it!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="contains">Contains</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Contains</span><span class="params">(b, subslice []<span class="type">byte</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<p>检查 <code>b</code> 里面是否包含了 <code>subslice</code>
+字节序列。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleContains</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.Contains([]<span class="type">byte</span>(<span class="string">&quot;seafood&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;foo&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.Contains([]<span class="type">byte</span>(<span class="string">&quot;seafood&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;bar&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.Contains([]<span class="type">byte</span>(<span class="string">&quot;seafood&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.Contains([]<span class="type">byte</span>(<span class="string">&quot;&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="containsany">ContainsAny</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ContainsAny</span><span class="params">(b []<span class="type">byte</span>, chars <span class="type">string</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<p><code>ContainsAny</code> 检查字符串 <code>chars</code>
+utf-8编码的字符切片里面是否有任何字节在 b 里面。</p>
+<blockquote>
+<p>chars 是空字符串的时候都返回 false</p>
+</blockquote>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleContainsAny</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.ContainsAny([]<span class="type">byte</span>(<span class="string">&quot;I like seafood.&quot;</span>), <span class="string">&quot;fAo!&quot;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsAny([]<span class="type">byte</span>(<span class="string">&quot;I like seafood.&quot;</span>), <span class="string">&quot;去是伟大的.&quot;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsAny([]<span class="type">byte</span>(<span class="string">&quot;I like seafood.&quot;</span>), <span class="string">&quot;&quot;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsAny([]<span class="type">byte</span>(<span class="string">&quot;&quot;</span>), <span class="string">&quot;&quot;</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="containsrune">ContainsRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ContainsRune</span><span class="params">(b []<span class="type">byte</span>, r <span class="type">rune</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>rune 可以简单看作是字符类型（可以是多字节字符）。</p>
+</blockquote>
+<p><code>ContainsRune</code> 检查 <code>r</code> 是否出现在 utf-8
+编码的字节序列中。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleContainsRune</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.ContainsRune([]<span class="type">byte</span>(<span class="string">&quot;I like seafood.&quot;</span>), <span class="string">&#x27;f&#x27;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsRune([]<span class="type">byte</span>(<span class="string">&quot;I like seafood.&quot;</span>), <span class="string">&#x27;ö&#x27;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsRune([]<span class="type">byte</span>(<span class="string">&quot;去是伟大的!&quot;</span>), <span class="string">&#x27;大&#x27;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsRune([]<span class="type">byte</span>(<span class="string">&quot;去是伟大的!&quot;</span>), <span class="string">&#x27;!&#x27;</span>))</span><br><span class="line">	fmt.Println(bytes.ContainsRune([]<span class="type">byte</span>(<span class="string">&quot;&quot;</span>), <span class="string">&#x27;@&#x27;</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="count">Count</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Count</span><span class="params">(s, sep []<span class="type">byte</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>Count</code> 用来计算 <code>sep</code> 出现在 <code>s</code>
+中的次数，其中 <code>s</code> 是 utf-8 编码的字节序列。</p>
+<blockquote>
+<p>如果 sep 为空，则返回 s 的长度 + 1</p>
+</blockquote>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleCount</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.Count([]<span class="type">byte</span>(<span class="string">&quot;cheese&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;e&quot;</span>)))</span><br><span class="line">	<span class="comment">// before &amp; after each rune</span></span><br><span class="line">	fmt.Println(bytes.Count([]<span class="type">byte</span>(<span class="string">&quot;five&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	<span class="comment">// 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="equal">Equal</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Equal</span><span class="params">(a, b []<span class="type">byte</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<p><code>Equal</code> 判断字节切片 <code>a</code> 和 <code>b</code>
+的是否相等。如果传 <code>nil</code>，则视作空切片。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleEqual</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.Equal([]<span class="type">byte</span>(<span class="string">&quot;Go&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;Go&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.Equal([]<span class="type">byte</span>(<span class="string">&quot;Go&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;C++&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="equalfold">EqualFold</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">EqualFold</span><span class="params">(s, t []<span class="type">byte</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<p><code>EqualFold</code> 比较 UTF-8 编码是否相等，不区分大小写。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleEqualFold</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.EqualFold([]<span class="type">byte</span>(<span class="string">&quot;Go&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;go&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="fields">Fields</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Fields</span><span class="params">(s []<span class="type">byte</span>)</span></span> [][]<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>Fields</code> 将参数当作一个 UTF-8 编码的字节切片，根据
+<code>unicode.IsSpace</code>
+定义的空白字符来拆分该字节切片，但是拆分的结果不会包含空白字符。如果只包含空白字符，则返回一个空的二维切片。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleFields</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Fields are: %q\n&quot;</span>, bytes.Fields([]<span class="type">byte</span>(<span class="string">&quot;  foo bar baz  &quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Fields are: [&quot;foo&quot; &quot;bar&quot; &quot;baz&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="fieldsfunc">FieldsFunc</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FieldsFunc</span><span class="params">(s []<span class="type">byte</span>, f <span class="keyword">func</span>(<span class="type">rune</span>)</span></span> <span class="type">bool</span>) [][]<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Fields</code>
+类似，只不过这里接收一个回调让用户可以返回一个布尔值，系统根据返回值决定是否使用这个字符来分割
+<code>Field</code>。如果所有的字符都满足 <code>f(r)</code> 或者字节切片
+<code>s</code> 的长度为 0，<code>FieldsFunc</code>
+返回一个空的切片。<code>FieldsFunc</code> 不保证其调用 <code>f(c)</code>
+的顺序。如果 <code>f</code> 对于给定的 <code>c</code>
+没有返回一致的结果，则 <code>FieldsFunc</code> 可能会崩溃。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleFieldsFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="type">rune</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> !unicode.IsLetter(c) &amp;&amp; !unicode.IsNumber(c)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Fields are: %q\n&quot;</span>, bytes.FieldsFunc([]<span class="type">byte</span>(<span class="string">&quot;  foo1;bar2,baz3...&quot;</span>), f))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Fields are: [&quot;foo1&quot; &quot;bar2&quot; &quot;baz3&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="hasprefix">HasPrefix</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">HasPrefix</span><span class="params">(s, prefix []<span class="type">byte</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<p><code>HasPrefix</code> 检查字节切片是否以 <code>prefix</code>
+切片开头。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleHasPrefix</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.HasPrefix([]<span class="type">byte</span>(<span class="string">&quot;Gopher&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;Go&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.HasPrefix([]<span class="type">byte</span>(<span class="string">&quot;Gopher&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;C&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.HasPrefix([]<span class="type">byte</span>(<span class="string">&quot;Gopher&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="hassuffix">HasSuffix</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">HasSuffix</span><span class="params">(s, suffix []<span class="type">byte</span>)</span></span> <span class="type">bool</span></span><br></pre></td></tr></table></figure>
+<p><code>HasPrefix</code> 检查字节切片 <code>s</code> 是否以字节切片
+<code>prefix</code> 结尾。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleHasSuffix</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.HasSuffix([]<span class="type">byte</span>(<span class="string">&quot;Amigo&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;go&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.HasSuffix([]<span class="type">byte</span>(<span class="string">&quot;Amigo&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;O&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.HasSuffix([]<span class="type">byte</span>(<span class="string">&quot;Amigo&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;Ami&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.HasSuffix([]<span class="type">byte</span>(<span class="string">&quot;Amigo&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	<span class="comment">// false</span></span><br><span class="line">	<span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="index">Index</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Index</span><span class="params">(s, sep []<span class="type">byte</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>Index</code> 返回 <code>sep</code> 在 <code>s</code>
+中的下标，如果 <code>sep</code> 不在 <code>s</code> 中则返回 -1。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleIndex</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.Index([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;ken&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.Index([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;dmr&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 4</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="indexany">IndexAny</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IndexAny</span><span class="params">(s []<span class="type">byte</span>, chars <span class="type">string</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p>检查 <code>chars</code> 任意字符是否在 <code>s</code>
+中，如果在，则返回对应的下标，不存在或者 <code>chars</code> 为空则返回
+-1。该函数将 <code>s</code> 视作 UTF-8 编码的字节切片。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleIndexAny</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.IndexAny([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), <span class="string">&quot;aeiouy&quot;</span>))</span><br><span class="line">	fmt.Println(bytes.IndexAny([]<span class="type">byte</span>(<span class="string">&quot;crwth&quot;</span>), <span class="string">&quot;aeiouy&quot;</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 2</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="indexbyte">IndexByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IndexByte</span><span class="params">(b []<span class="type">byte</span>, c <span class="type">byte</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>IndexByte</code> 返回字节 <code>c</code> 在字节切片
+<code>b</code> 中首次出现的下标，如果 <code>c</code> 不在 <code>b</code>
+中返回 -1。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleIndexByte</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.IndexByte([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), <span class="type">byte</span>(<span class="string">&#x27;k&#x27;</span>)))</span><br><span class="line">	fmt.Println(bytes.IndexByte([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), <span class="type">byte</span>(<span class="string">&#x27;g&#x27;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 4</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="indexfunc">IndexFunc</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IndexFunc</span><span class="params">(s []<span class="type">byte</span>, f <span class="keyword">func</span>(r <span class="type">rune</span>)</span></span> <span class="type">bool</span>) <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Index</code>
+类似，不过接收一个自定义的回调函数来判断字符是否是满足条件的字符，是则返回
+true，这个字符的索引就是 <code>IndexFunc</code> 的返回值。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleIndexFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="type">rune</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> unicode.Is(unicode.Han, c)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(bytes.IndexFunc([]<span class="type">byte</span>(<span class="string">&quot;Hello, 世界&quot;</span>), f))</span><br><span class="line">	fmt.Println(bytes.IndexFunc([]<span class="type">byte</span>(<span class="string">&quot;Hello, world&quot;</span>), f))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 7</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="indexrune">IndexRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IndexRune</span><span class="params">(s []<span class="type">byte</span>, r <span class="type">rune</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>IndexRune</code> 将 <code>s</code> 当作 UTF-8 字节切片，返回
+<code>r</code> 在 <code>s</code> 中第一次出现的索引，没有在
+<code>s</code> 中则返回 -1。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleIndexRune</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.IndexRune([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), <span class="string">&#x27;k&#x27;</span>))</span><br><span class="line">	fmt.Println(bytes.IndexRune([]<span class="type">byte</span>(<span class="string">&quot;chicken&quot;</span>), <span class="string">&#x27;d&#x27;</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 4</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="join">Join</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Join</span><span class="params">(s [][]<span class="type">byte</span>, sep []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>Join</code> 使用 <code>sep</code> 作为分隔符来连接多个
+<code>[]byte</code>，返回连接后的结果。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleJoin</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := [][]<span class="type">byte</span>&#123;</span><br><span class="line">		[]<span class="type">byte</span>(<span class="string">&quot;foo&quot;</span>),</span><br><span class="line">		[]<span class="type">byte</span>(<span class="string">&quot;bar&quot;</span>),</span><br><span class="line">		[]<span class="type">byte</span>(<span class="string">&quot;baz&quot;</span>),</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s&quot;</span>, bytes.Join(s, []<span class="type">byte</span>(<span class="string">&quot;, &quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// foo, bar, baz</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="lastindex">LastIndex</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LastIndex</span><span class="params">(s, sep []<span class="type">byte</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>LastIndex</code> 返回 <code>sep</code> 在 <code>s</code>
+中最后出现的索引，没有出现返回 -1。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleLastIndex</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.Index([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;go&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.LastIndex([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;go&quot;</span>)))</span><br><span class="line">	fmt.Println(bytes.LastIndex([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;rodent&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 0</span></span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="lastindexany">LastIndexAny</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LastIndexAny</span><span class="params">(s []<span class="type">byte</span>, chars <span class="type">string</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>IndexAny</code> 类似，但是这个是返回最终出现的位置。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleLastIndexAny</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.LastIndexAny([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), <span class="string">&quot;MüQp&quot;</span>))</span><br><span class="line">	fmt.Println(bytes.LastIndexAny([]<span class="type">byte</span>(<span class="string">&quot;go 地鼠&quot;</span>), <span class="string">&quot;地大&quot;</span>))</span><br><span class="line">	fmt.Println(bytes.LastIndexAny([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), <span class="string">&quot;z,!.&quot;</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 5</span></span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="lastindexbyte">LastIndexByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LastIndexByte</span><span class="params">(s []<span class="type">byte</span>, c <span class="type">byte</span>)</span></span> <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>LastIndexByte</code> 返回 <code>c</code> 在 <code>s</code>
+中最后出现的下标。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleLastIndexByte</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.LastIndexByte([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), <span class="type">byte</span>(<span class="string">&#x27;g&#x27;</span>)))</span><br><span class="line">	fmt.Println(bytes.LastIndexByte([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), <span class="type">byte</span>(<span class="string">&#x27;r&#x27;</span>)))</span><br><span class="line">	fmt.Println(bytes.LastIndexByte([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>), <span class="type">byte</span>(<span class="string">&#x27;z&#x27;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	<span class="comment">// 8</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="lastindexfunc">LastIndexFunc</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LastIndexFunc</span><span class="params">(s []<span class="type">byte</span>, f <span class="keyword">func</span>(r <span class="type">rune</span>)</span></span> <span class="type">bool</span>) <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>LastIndexFunc</code> 和 <code>IndexFunc</code>
+的效果类似，只不过这个是返回最后出现的下标。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleLastIndexFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.LastIndexFunc([]<span class="type">byte</span>(<span class="string">&quot;go gopher!&quot;</span>), unicode.IsLetter))</span><br><span class="line">	fmt.Println(bytes.LastIndexFunc([]<span class="type">byte</span>(<span class="string">&quot;go gopher!&quot;</span>), unicode.IsPunct))</span><br><span class="line">	fmt.Println(bytes.LastIndexFunc([]<span class="type">byte</span>(<span class="string">&quot;go gopher!&quot;</span>), unicode.IsNumber))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 8</span></span><br><span class="line">	<span class="comment">// 9</span></span><br><span class="line">	<span class="comment">// -1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="map">Map</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Map</span><span class="params">(mapping <span class="keyword">func</span>(r <span class="type">rune</span>)</span></span> <span class="type">rune</span>, s []<span class="type">byte</span>) []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>对 <code>s</code> 中的每一个字符 <code>c</code> 调用
+<code>mapping(c)</code>，返回新字符组成的字节切片，如果返回
+-1，则返回的结果不包含这个字符。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleMap</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rot13 := <span class="function"><span class="keyword">func</span><span class="params">(r <span class="type">rune</span>)</span></span> <span class="type">rune</span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> r &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; r &lt;= <span class="string">&#x27;Z&#x27;</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&#x27;A&#x27;</span> + (r - <span class="string">&#x27;A&#x27;</span> + <span class="number">13</span>) % <span class="number">26</span></span><br><span class="line">		<span class="keyword">case</span> r &gt;= <span class="string">&#x27;a&#x27;</span> &amp;&amp; r &lt;= <span class="string">&#x27;z&#x27;</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&#x27;a&#x27;</span> + (r - <span class="string">&#x27;a&#x27;</span> + <span class="number">13</span>) % <span class="number">26</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> r</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s&quot;</span>, bytes.Map(rot13, []<span class="type">byte</span>(<span class="string">&quot;&#x27;Twas brillig and the slithy gopher...&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// &#x27;Gjnf oevyyvt naq gur fyvgul tbcure...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="repeat">Repeat</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Repeat</span><span class="params">(b []<span class="type">byte</span>, count <span class="type">int</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>Repeat</code> 将一个字节切片 <code>b</code> 重复
+<code>count</code> 次，返回最后的结果。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleRepeat</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;ba%s&quot;</span>, bytes.Repeat([]<span class="type">byte</span>(<span class="string">&quot;na&quot;</span>), <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// banana</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="replace">Replace</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Replace</span><span class="params">(s, old, <span class="built_in">new</span> []<span class="type">byte</span>, n <span class="type">int</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>将 <code>s</code> 字节切片中的 <code>old</code> 切片替换为
+<code>new</code> 切片，最多替换 <code>n</code> 次。如果 <code>n</code>
+小于 0，则不限制替换次数。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleReplace</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, bytes.Replace([]<span class="type">byte</span>(<span class="string">&quot;oink oink oink&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;k&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;ky&quot;</span>), <span class="number">2</span>))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, bytes.Replace([]<span class="type">byte</span>(<span class="string">&quot;oink oink oink&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;oink&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;moo&quot;</span>), <span class="number">-1</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// oinky oinky oink</span></span><br><span class="line">	<span class="comment">// moo moo moo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="replaceall">ReplaceAll</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReplaceAll</span><span class="params">(s, old, <span class="built_in">new</span> []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Replace</code> 类似，不过这个是替换所有的 <code>old</code>
+为 <code>new</code>。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleReplaceAll</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, bytes.ReplaceAll([]<span class="type">byte</span>(<span class="string">&quot;oink oink oink&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;oink&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;moo&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// moo moo moo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="runes">Runes</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Runes</span><span class="params">(s []<span class="type">byte</span>)</span></span> []<span class="type">rune</span></span><br></pre></td></tr></table></figure>
+<p><code>Runes</code> 将字节切片转换为 <code>[]byte</code>
+类型，<code>s</code> 被视作是 UTF-8 编码的字节切片。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleRunes</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rs := bytes.Runes([]<span class="type">byte</span>(<span class="string">&quot;go gopher&quot;</span>))</span><br><span class="line">	<span class="keyword">for</span> _, r := <span class="keyword">range</span> rs &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;%#U\n&quot;</span>, r)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// U+0067 &#x27;g&#x27;</span></span><br><span class="line">	<span class="comment">// U+006F &#x27;o&#x27;</span></span><br><span class="line">	<span class="comment">// U+0020 &#x27; &#x27;</span></span><br><span class="line">	<span class="comment">// U+0067 &#x27;g&#x27;</span></span><br><span class="line">	<span class="comment">// U+006F &#x27;o&#x27;</span></span><br><span class="line">	<span class="comment">// U+0070 &#x27;p&#x27;</span></span><br><span class="line">	<span class="comment">// U+0068 &#x27;h&#x27;</span></span><br><span class="line">	<span class="comment">// U+0065 &#x27;e&#x27;</span></span><br><span class="line">	<span class="comment">// U+0072 &#x27;r&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="split">Split</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Split</span><span class="params">(s, sep []<span class="type">byte</span>)</span></span> [][]<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Join</code> 操作相反，根据 <code>sep</code> 来拆分
+<code>s</code>。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleSplit</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.Split([]<span class="type">byte</span>(<span class="string">&quot;a,b,c&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;,&quot;</span>)))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.Split([]<span class="type">byte</span>(<span class="string">&quot;a man a plan a cancel panama&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;a &quot;</span>)))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.Split([]<span class="type">byte</span>(<span class="string">&quot; xyz &quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;&quot;</span>)))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.Split([]<span class="type">byte</span>(<span class="string">&quot;&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;Bernardo O&#x27;Higgins&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// [&quot;a&quot; &quot;b&quot; &quot;c&quot;]</span></span><br><span class="line">	<span class="comment">// [&quot;&quot; &quot;man &quot; &quot;plan &quot; &quot;cancel panama&quot;]</span></span><br><span class="line">	<span class="comment">// [&quot; &quot; &quot;x&quot; &quot;y&quot; &quot;z&quot; &quot; &quot;]</span></span><br><span class="line">	<span class="comment">// [&quot;&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="splitafter">SplitAfter</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SplitAfter</span><span class="params">(s, sep []<span class="type">byte</span>)</span></span> [][]<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Split</code>
+类似，只不过最终结果的每一个字节切片里面包含了分隔符
+<code>sep</code>。包含在前一个字节切片中。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleSplitAfter</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.SplitAfter([]<span class="type">byte</span>(<span class="string">&quot;a,b,c&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;,&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// [&quot;a,&quot; &quot;b,&quot; &quot;c&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="splitaftern">SplitAfterN</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SplitAfterN</span><span class="params">(s, sep []<span class="type">byte</span>, n <span class="type">int</span>)</span></span> [][]<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>SplitAfter</code> 类似，但是最终返回的 <code>[][]byte</code>
+的长度，最多为 <code>n</code>，</p>
+<ul>
+<li><p>n &gt; 0: 最多返回 <code>n</code>
+个子切片，最后一个是剩余的切片</p></li>
+<li><p>n == 0: 返回 nil（0 个子切片）</p></li>
+<li><p>n &lt; 0: 返回所有子切片</p></li>
+</ul>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleSplitAfterN</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.SplitAfterN([]<span class="type">byte</span>(<span class="string">&quot;a,b,c&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;,&quot;</span>), <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// [&quot;a,&quot; &quot;b,c&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="splitn">SplitN</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SplitN</span><span class="params">(s, sep []<span class="type">byte</span>, n <span class="type">int</span>)</span></span> [][]<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>SplitAfterN</code>
+类似，但是这个函数返回的子切片不包含分割符号（除了最后一个有可能包含）。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleSplitN</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q\n&quot;</span>, bytes.SplitN([]<span class="type">byte</span>(<span class="string">&quot;a,b,c&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;,&quot;</span>), <span class="number">2</span>))</span><br><span class="line">	z := bytes.SplitN([]<span class="type">byte</span>(<span class="string">&quot;a,b,c&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;,&quot;</span>), <span class="number">0</span>)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q (nil = %v)\n&quot;</span>, z, z == <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// [&quot;a&quot; &quot;b,c&quot;]</span></span><br><span class="line">	<span class="comment">//[] (nil = true)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="title">Title</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Title</span><span class="params">(s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>将字节切片转换为标题格式（每个单词改成大写）。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTitle</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s&quot;</span>, bytes.Title([]<span class="type">byte</span>(<span class="string">&quot;her royal highness&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Her Royal Highness</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="tolower">ToLower</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToLower</span><span class="params">(s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>返回一个新的字节切片，所有的 Unicode 字符被转换为小写格式。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleToLower</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s&quot;</span>, bytes.ToLower([]<span class="type">byte</span>(<span class="string">&quot;Gopher&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// gopher</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="tolowerspecial">ToLowerSpecial</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToLowerSpecial</span><span class="params">(c unicode.SpecialCase, s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>第一个参数是指定不同语言的大小写的，有可能某些语言的大小写和英语不太一样，其他和
+<code>ToLower</code> 类似。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleToLowerSpecial</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := []<span class="type">byte</span>(<span class="string">&quot;AHOJ VÝVOJÁRİ GOLANG&quot;</span>)</span><br><span class="line">	totitle := bytes.ToLowerSpecial(unicode.AzeriCase, str)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Original : &quot;</span> + <span class="type">string</span>(str))</span><br><span class="line">	fmt.Println(<span class="string">&quot;ToLower : &quot;</span> + <span class="type">string</span>(totitle))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Original : AHOJ VÝVOJÁRİ GOLANG</span></span><br><span class="line">	<span class="comment">// ToLower : ahoj vývojári golang</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="totitle">ToTitle</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToTitle</span><span class="params">(s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>ToTitle</code> 将 <code>s</code> 视为 UTF-8
+编码的字节，并返回一个副本，其中所有 Unicode
+字母都映射到其标题大小写。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleToTitle</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, bytes.ToTitle([]<span class="type">byte</span>(<span class="string">&quot;loud noises&quot;</span>)))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, bytes.ToTitle([]<span class="type">byte</span>(<span class="string">&quot;хлеб&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// LOUD NOISES</span></span><br><span class="line">	<span class="comment">// ХЛЕБ</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="totitlespecial">ToTitleSpecial</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToTitleSpecial</span><span class="params">(c unicode.SpecialCase, s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>ToTitleSpecial</code> 将 <code>s</code> 视为 UTF-8
+编码的字节，并返回一个副本，其中所有 Unicode
+字母均映射到其标题大小写，并优先使用特殊的大小写规则。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleToTitleSpecial</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := []<span class="type">byte</span>(<span class="string">&quot;ahoj vývojári golang&quot;</span>)</span><br><span class="line">	totitle := bytes.ToTitleSpecial(unicode.AzeriCase, str)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Original : &quot;</span> + <span class="type">string</span>(str))</span><br><span class="line">	fmt.Println(<span class="string">&quot;ToTitle : &quot;</span> + <span class="type">string</span>(totitle))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Original : ahoj vývojári golang</span></span><br><span class="line">	<span class="comment">// ToTitle : AHOJ VÝVOJÁRİ GOLANG</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="toupper">ToUpper</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToUpper</span><span class="params">(s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>ToUpper</code> 返回字节片 <code>s</code> 的副本，其中所有
+Unicode 字母都映射到其大写字母。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleToUpper</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s&quot;</span>, bytes.ToUpper([]<span class="type">byte</span>(<span class="string">&quot;Gopher&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// GOPHER</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="toupperspecial">ToUpperSpecial</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToUpperSpecial</span><span class="params">(c unicode.SpecialCase, s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>ToUpperSpecial</code> 将 <code>s</code> 视为 UTF-8
+编码的字节，并返回一个副本，其中所有 Unicode
+字母均映射为它们的大写字母，优先考虑特殊的大小写规则。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleToUpperSpecial</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := []<span class="type">byte</span>(<span class="string">&quot;ahoj vývojári golang&quot;</span>)</span><br><span class="line">	totitle := bytes.ToUpperSpecial(unicode.AzeriCase, str)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Origin : &quot;</span> + <span class="type">string</span>(str))</span><br><span class="line">	fmt.Println(<span class="string">&quot;ToUpper : &quot;</span> + <span class="type">string</span>(totitle))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Origin : ahoj vývojári golang</span></span><br><span class="line">	<span class="comment">// ToUpper : AHOJ VÝVOJÁRİ GOLANG</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="tovalidutf8">ToValidUTF8</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToValidUTF8</span><span class="params">(s, replacement []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>ToValidUTF8</code> 将 <code>s</code> 视为 UTF-8
+编码的字节，并返回一个副本，将其中无效的 UTF-8 替换为
+<code>replacement</code>，<code>replacement</code> 可以为空。</p>
+<h3 id="trim">Trim</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Trim</span><span class="params">(s []<span class="type">byte</span>, cutset <span class="type">string</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>Trim</code> 去除 <code>s</code> 前后 <code>cutset</code>
+字符串里的子字符，返回最后的结果。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">package golang_bytes_package_example</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;bytes&quot;</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func ExampleTrim() &#123;</span><br><span class="line">	fmt.Printf(&quot;[%q]&quot;, bytes.Trim([]byte(&quot; !!! Achtung! Achtung! !!!&quot;), &quot;! &quot;))</span><br><span class="line"></span><br><span class="line">	// Output:</span><br><span class="line">	// [&quot;Achtung! Achtung&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimfunc">TrimFunc</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimFunc</span><span class="params">(s []<span class="type">byte</span>, f <span class="keyword">func</span>(r <span class="type">rune</span>)</span></span> <span class="type">bool</span>) []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Trim</code> 类似，只不过可以通过回调来筛选。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimFunc([]<span class="type">byte</span>(<span class="string">&quot;go-gopher!&quot;</span>), unicode.IsLetter)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimFunc([]<span class="type">byte</span>(<span class="string">&quot;\&quot;go-gopher!\&quot;&quot;</span>), unicode.IsLetter)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimFunc([]<span class="type">byte</span>(<span class="string">&quot;go-gopher!&quot;</span>), unicode.IsPunct)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimFunc([]<span class="type">byte</span>(<span class="string">&quot;1234go-gopher!567&quot;</span>), unicode.IsNumber)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// -gopher!</span></span><br><span class="line">	<span class="comment">// &quot;go-gopher!&quot;</span></span><br><span class="line">	<span class="comment">// go-gopher</span></span><br><span class="line">	<span class="comment">// go-gopher!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimleft">TrimLeft</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimLeft</span><span class="params">(s []<span class="type">byte</span>, cutset <span class="type">string</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Trim</code> 类似，但是只移除 <code>s</code> 左边的字符。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimLeft</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(<span class="type">string</span>(bytes.TrimLeft([]<span class="type">byte</span>(<span class="string">&quot;453gopher8257&quot;</span>), <span class="string">&quot;0123456789&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// gopher8257</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimleftfunc">TrimLeftFunc</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimLeftFunc</span><span class="params">(s []<span class="type">byte</span>, f <span class="keyword">func</span>(r <span class="type">rune</span>)</span></span> <span class="type">bool</span>) []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>TrimLeft</code>
+类似，但是可以通过回调筛选需要移除的字符。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimLeftFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimLeftFunc([]<span class="type">byte</span>(<span class="string">&quot;go-gopher&quot;</span>), unicode.IsLetter)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimLeftFunc([]<span class="type">byte</span>(<span class="string">&quot;.go-gopher!&quot;</span>), unicode.IsPunct)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimLeftFunc([]<span class="type">byte</span>(<span class="string">&quot;1234go-gopher!567&quot;</span>), unicode.IsNumber)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// -gopher</span></span><br><span class="line">	<span class="comment">// go-gopher!</span></span><br><span class="line">	<span class="comment">// go-gopher!567</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimprefix">TrimPrefix</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimPrefix</span><span class="params">(s, prefix []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>Trim</code> 类似，但是是移除 <code>prefix</code>
+指定的前缀。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimPrefix</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b = []<span class="type">byte</span>(<span class="string">&quot;Goodbye,, world!&quot;</span>)</span><br><span class="line">	b = bytes.TrimPrefix(b, []<span class="type">byte</span>(<span class="string">&quot;Goodbye,&quot;</span>))</span><br><span class="line">	b = bytes.TrimPrefix(b, []<span class="type">byte</span>(<span class="string">&quot;See ya,&quot;</span>))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Hello%s&quot;</span>, b)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Hello, world!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimright">TrimRight</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimRight</span><span class="params">(s []<span class="type">byte</span>, cutset <span class="type">string</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>TrimLeft</code> 类似，只不过是移除 <code>s</code>
+末尾的字符。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimRight</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(<span class="type">string</span>(bytes.TrimRight([]<span class="type">byte</span>(<span class="string">&quot;453gopher8257&quot;</span>), <span class="string">&quot;0123456789&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 453gopher</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimrightfunc">TrimRightFunc</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimRightFunc</span><span class="params">(s []<span class="type">byte</span>, f <span class="keyword">func</span>(r <span class="type">rune</span>)</span></span> <span class="type">bool</span>) []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>TrimRight</code>
+类似，只不过可以接收一个回调来筛选需要移除的字符。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimRightFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimRightFunc([]<span class="type">byte</span>(<span class="string">&quot;go-gopher&quot;</span>), unicode.IsLetter)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimRightFunc([]<span class="type">byte</span>(<span class="string">&quot;go-gopher!&quot;</span>), unicode.IsPunct)))</span><br><span class="line">	fmt.Println(<span class="type">string</span>(bytes.TrimRightFunc([]<span class="type">byte</span>(<span class="string">&quot;1234go-gopher!567&quot;</span>), unicode.IsNumber)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// go-</span></span><br><span class="line">	<span class="comment">// go-gopher</span></span><br><span class="line">	<span class="comment">// 1234go-gopher!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimspace">TrimSpace</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimSpace</span><span class="params">(s []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>移除字节切片 <code>s</code> 前后的空白字符。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimSpace</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s&quot;</span>, bytes.TrimSpace([]<span class="type">byte</span>(<span class="string">&quot; \t\n a lone gopher \n\t\r\n&quot;</span>)))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// a lone gopher</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="trimsuffix">TrimSuffix</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimSuffix</span><span class="params">(s, suffix []<span class="type">byte</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>移除字节切片 <code>s</code> 的后缀。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleTrimSuffix</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b = []<span class="type">byte</span>(<span class="string">&quot;Hello, goodbye, etc!&quot;</span>)</span><br><span class="line">	b = bytes.TrimSuffix(b, []<span class="type">byte</span>(<span class="string">&quot;goodbye, etc!&quot;</span>))</span><br><span class="line">	b = bytes.TrimSuffix(b, []<span class="type">byte</span>(<span class="string">&quot;gopher&quot;</span>))</span><br><span class="line">	b = <span class="built_in">append</span>(b, bytes.TrimSuffix([]<span class="type">byte</span>(<span class="string">&quot;world!&quot;</span>), []<span class="type">byte</span>(<span class="string">&quot;x!&quot;</span>))...)</span><br><span class="line">	os.Stdout.Write(b)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Hello, world!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h2 id="buffer">Buffer</h2>
+<p>一个 <code>Buffer</code>
+是一个大小不固定的字节缓冲区。<code>Buffer</code>
+的零值是一个空的缓冲区。</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleBuffer</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b bytes.Buffer <span class="comment">// 不需要初始化</span></span><br><span class="line">	b.Write([]<span class="type">byte</span>(<span class="string">&quot;Hello &quot;</span>))</span><br><span class="line">	fmt.Fprintf(&amp;b, <span class="string">&quot;world!&quot;</span>)</span><br><span class="line">	b.WriteTo(os.Stdout)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Hello world!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<details>
+<summary>
+点此查看实例(Reader)
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;encoding/base64&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleBuffer1</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// A Buffer can turn a string or a []byte into an io.Reader.</span></span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">&quot;R29waGVycyBydWxlIQ==&quot;</span>)</span><br><span class="line">	dec := base64.NewDecoder(base64.StdEncoding, buf)</span><br><span class="line">	io.Copy(os.Stdout, dec)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// Gophers rule!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="newbuffer">NewBuffer</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBuffer</span><span class="params">(buf []<span class="type">byte</span>)</span></span> *Buffer</span><br></pre></td></tr></table></figure>
+<p><code>NewBuffer</code> 使用 <code>buf</code>
+作为其初始内容创建并初始化一个新的 <code>Buffer</code>。 新的
+<code>Buffer</code> 拥有 <code>buf</code>
+的所有权，并且在此调用之后，调用方不应使用buf。 <code>NewBuffer</code>
+旨在准备一个 <code>Buffer</code> 以读取现有数据。
+它也可以用来设置用于写入的内部缓冲区的初始大小。 为此，<code>buf</code>
+应该具有所需的容量，但长度为零。</p>
+<p>在大多数情况下，<code>new(Buffer)</code>（或仅声明一个
+<code>Buffer</code> 变量）足以初始化 <code>Buffer</code>。</p>
+<h3 id="newbufferstring">NewBufferString</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBufferString</span><span class="params">(s <span class="type">string</span>)</span></span> *Buffer</span><br></pre></td></tr></table></figure>
+<p><code>NewBufferString</code> 使用字符串 <code>s</code>
+作为其初始内容创建并初始化一个新的
+<code>Buffer</code>。目的是准备一个缓冲区以读取现有的字符串。</p>
+<p>在大多数情况下，<code>new(Buffer)</code> (或仅声明一个
+<code>Buffer</code> 变量) 足以初始化 <code>Buffer</code>。</p>
+<h2 id="buffer-方法">Buffer 方法</h2>
+<h3 id="bytes">Bytes</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Bytes() []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p>字节返回长度为 <code>b.Len()</code>
+的切片，其中包含缓冲区的未读部分。
+该片仅在下一次修改缓冲区之前有效（即，仅在下一次调用诸如
+<code>Read</code>，<code>Write</code>，<code>Reset</code> 或
+<code>Truncate</code> 之类的方法之前）才有效。
+切片至少在下一次缓冲区修改之前就将缓冲区内容作为别名，因此对切片的立即更改将影响将来读取的结果。</p>
+<h3 id="cap">Cap</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Cap() <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>Cap</code>
+返回缓冲区底层字节切片的容量，即为缓冲区数据分配的总空间。</p>
+<h3 id="grow">Grow</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Grow(n <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+<p>如有必要，可以增加缓冲区的容量，以保证另外 n 个字节的空间。在
+<code>Grow(n)</code> 之后，至少可以将 n
+个字节写入缓冲区，而无需进行其他分配。如果 n 为负数，<code>Grow</code>
+会 panic。如果缓冲区无法增长，会引起一个 <code>ErrTooLarge</code> 的
+panic。</p>
+<h3 id="len">Len</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Len() <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>Len</code>
+返回缓冲区未读部分的字节数；<code>b.Len() == len(b.Bytes())</code></p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleBufferLen</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b bytes.Buffer</span><br><span class="line">	b.Grow(<span class="number">64</span>)</span><br><span class="line">	b.Write([]<span class="type">byte</span>(<span class="string">&quot;abcde&quot;</span>))</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%d&quot;</span>, b.Len())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="next">Next</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Next(n <span class="type">int</span>) []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+<p><code>Next</code> 返回一个包含缓冲区中接下来 <code>n</code>
+个字节的切片，使缓冲区前进，就好像该字节已由 <code>Read</code>
+返回。如果缓冲区中的字节数少于 <code>n</code> 个，则 <code>Next</code>
+返回整个缓冲区。切片仅在下一次调用 <code>read</code> 或
+<code>write</code> 方法之前才有效。</p>
+<h3 id="read">Read</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Read(p []<span class="type">byte</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>Read</code> 从缓冲区中读取下一个 <code>len(p)</code>
+字节，或者直到缓冲区耗尽为止。返回值 <code>n</code>
+是读取的字节数。如果缓冲区没有数据要返回，则 <code>err</code> 为
+<code>io.EOF</code>（除非 <code>len(p)</code> 为 0）；否则为零。</p>
+<h3 id="readbyte">ReadByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> ReadByte() (<span class="type">byte</span>, <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadByte</code>
+读取并从缓冲区返回下一个字节。如果没有可用的字节，则返回错误
+<code>io.EOF</code>。</p>
+<h3 id="readbytes">ReadBytes</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Readbytes(delim <span class="type">byte</span>) (line []<span class="type">byte</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadBytes</code> 读取直到输入中第一次出现 <code>delim</code>
+为止，并返回一个包含数据的切片，该数据直到并包括
+<code>delim</code>。如果 <code>ReadBytes</code>
+在找到定界符之前遇到错误，它将返回错误之前读取的数据和错误本身（通常为
+<code>io.EOF</code>）。并且仅当返回的数据未以 <code>delim</code>
+结尾时，<code>ReadBytes</code> 返回 <code>err != nil</code>。</p>
+<h3 id="readfrom">ReadFrom</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> ReadFrom(r io.Reader) (n <span class="type">int64</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadFrom</code> 从 <code>r</code> 读取数据，直到
+<code>EOF</code> 并将其附加到缓冲区，然后根据需要增大缓冲区。返回值
+<code>n</code> 是读取的字节数。读取期间遇到的除 <code>io.EOF</code>
+以外的任何错误也将返回。如果缓冲区太大，<code>ReadFrom</code> 会引发
+<code>ErrTooLarge</code> panic。</p>
+<h3 id="readrune">ReadRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> ReadRune() (r <span class="type">rune</span>, size <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadRune</code> 从缓冲区读取并返回下一个 UTF-8 编码的 Unicode
+字符。如果没有可用的字节，则返回的错误是
+<code>io.EOF</code>。如果字节是错误的 UTF-8 编码，则它消耗一个字节并返回
+U+FFFD，1。</p>
+<h3 id="readstring">ReadString</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> ReadString(delim <span class="keyword">type</span>) (line <span class="type">string</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadString</code> 读取直到输入中第一次出现 <code>delim</code>
+为止，并返回一个字符串，其中包含直到定界符（包括定界符）的数据。如果
+<code>ReadString</code>
+在找到定界符之前遇到错误，它将返回错误之前读取的数据和错误本身（通常为
+<code>io.EOF</code>）。当且仅当返回的数据未以 <code>delim</code>
+结尾时，<code>ReadString</code> 才返回 <code>err != nil</code>。</p>
+<h3 id="reset">Reset</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Reset()</span><br></pre></td></tr></table></figure>
+<p>重置会将缓冲区重置为空，但会保留基础存储空间以供将来的写操作使用。重置与
+<code>Truncate(0)</code> 相同。</p>
+<h3 id="string">String</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> String()</span><br></pre></td></tr></table></figure>
+<p><code>String</code> 以字符串形式返回缓冲区未读部分的内容。如果
+<code>Buffer</code> 是 <code>nil</code> 指针，则返回 "<nil>"。</p>
+<p>要更有效地构建字符串，请常见 <code>strings.Builder</code> 类型。</p>
+<h3 id="truncate">Truncate</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Truncate(n <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+<p><code>Truncate</code> 会丢弃缓冲区前 <code>n</code>
+个未读取字节以外的所有字节，但会继续使用相同的已分配存储。如果
+<code>n</code> 为负数或大于缓冲区的长度，则会发生 panic.</p>
+<h3 id="unreadbyte">UnreadByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> UnreadByte() <span class="type">error</span></span><br></pre></td></tr></table></figure>
+<p><code>UnreadByte</code>
+将最近一次成功读取操作的最后一个字节重新设置为未读取。如果自从上次成功读取后有写缓冲区操作，或者上次读取有错误，或者上次读取到
+0 字节，<code>UnreadByte</code> 返回一个错误。</p>
+<h3 id="unreadrune">UnreadRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> UnreadRune() <span class="type">error</span></span><br></pre></td></tr></table></figure>
+<p>和 <code>UnreadByte</code> 类似，只不过操作的是 <code>rune</code></p>
+<h3 id="write">Write</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> Write(p []<span class="type">byte</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p>写操作会将 <code>p</code>
+的内容附加到缓冲区，并根据需要扩展缓冲区。返回值 <code>n</code> 是
+<code>p</code> 的长度；错误始终为零。如果缓冲区太大，则
+<code>Write</code> 会引发 <code>ErrTooLarge</code> panic。</p>
+<h3 id="writebyte">WriteByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> WriteByte(c <span class="type">byte</span>) <span class="type">error</span></span><br></pre></td></tr></table></figure>
+<p>写入一个字节到 Buffer。</p>
+<p><code>WriteByte</code> 将字节 <code>c</code>
+附加到缓冲区，根据需要增大缓冲区。返回的错误始终为
+<code>nil</code>，但包含该错误以匹配 <code>bufio.Writer</code> 的
+<code>WriteByte</code>。如果缓冲区太大，<code>WriteByte</code> 会引发
+<code>ErrTooLarge</code> panic。</p>
+<h3 id="writerune">WriteRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> WriteRune(r <span class="type">rune</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p>和 <code>ReadRune</code> 类似，不过 <code>WriteRune</code> 是写入一个
+<code>rune</code> 类型的数据。</p>
+<h3 id="writestring">WriteString</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> WriteString(s <span class="type">string</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p>写入一个字符串到 Buffer。</p>
+<p><code>WriteString</code> 将 <code>s</code>
+的内容附加到缓冲区，根据需要增大缓冲区。返回值 <code>n</code> 是
+<code>s</code> 的长度；错误始终为 <code>nil</code>。如果缓冲区太大，引发
+<code>ErrTooLarge</code> panic。</p>
+<h3 id="writeto">WriteTo</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span></span> WriteTo(w io.Writer) (n <span class="type">int64</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>WriteTo</code> 将数据写入
+<code>w</code>，直到缓冲区耗尽或发生错误。返回值 <code>n</code>
+是写入的字节数。它始终适合 <code>int</code>，但与
+<code>io.WriterTo</code> 接口匹配为
+<code>int64</code>。写入期间遇到的任何错误也将返回。</p>
+<h2 id="reader">Reader</h2>
+<p><code>Reader</code> 通过读取字节切片来实现 <code>io.Reader</code>,
+<code>io.ReaderAt</code>, <code>io.WriterTo</code>,
+<code>io.Seeker</code>, <code>io.ByteScanner</code> 和
+<code>io.RuneScanner</code> 接口。与 <code>Buffer</code>
+不同，<code>Reader</code> 是只读的，并支持查找。<code>Reader</code>
+的零值的操作类似空切片的 <code>Reader</code>。</p>
+<h3 id="newreader">NewReader</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewReader</span><span class="params">(b []<span class="type">byte</span>)</span></span> *Reader</span><br></pre></td></tr></table></figure>
+<p><code>NewReader</code> 从 <code>b</code> 返回一个新的
+<code>Reader</code>，这个 <code>Reader</code> 将会从 <code>b</code>
+读取数据。</p>
+<h3 id="len-1">Len</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> Len() <span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p><code>Len</code> 返回切片中未读部分的长度</p>
+<details>
+<summary>
+点此查看实例
+</summary>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> golang_bytes_package_example</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleReaderLen</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(bytes.NewReader([]<span class="type">byte</span>(<span class="string">&quot;Hi!&quot;</span>)).Len())</span><br><span class="line">	fmt.Println(bytes.NewReader([]<span class="type">byte</span>(<span class="string">&quot;こんにちは!&quot;</span>)).Len())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	<span class="comment">// 16</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+<h3 id="read-1">Read</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> Read(b []<span class="type">byte</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>Read</code> 实现了 <code>io.Reader</code> 接口。</p>
+<h3 id="readat">ReadAt</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> ReadAt(b []<span class="type">byte</span>, off <span class="type">int64</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadAt</code> 实现了 <code>io.ReaderAt</code> 接口。</p>
+<h3 id="readbyte-1">ReadByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> ReadByte() (<span class="type">byte</span>, <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadByte</code> 实现了 <code>io.ByteReader</code> 接口</p>
+<h3 id="readrune-1">ReadRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> ReadRune() (ch <span class="type">rune</span>, size <span class="type">int</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>ReadRune</code> 实现了 <code>io.RuneReader</code> 接口</p>
+<h3 id="reset-1">Reset</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> Reset(b []<span class="type">byte</span>)</span><br></pre></td></tr></table></figure>
+<p><code>Reset</code> 将 <code>Reader</code> 的内容重置为 <code>b</code>
+字节切片。</p>
+<h3 id="seek">Seek</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> Seek(offset <span class="type">int64</span>, whence <span class="type">int</span>) (<span class="type">int64</span>, <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>Seek</code> 实现了 <code>io.Seeker</code> 接口</p>
+<h3 id="size">Size</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> Size() <span class="type">int64</span></span><br></pre></td></tr></table></figure>
+<p><code>Size</code> 返回了 <code>Reader</code>
+底层切片的原始长度。<code>Size</code> 是可通过 <code>ReadAt</code>
+读取的字节数。返回的值始终相同，并且不受任何其他方法调用的影响。</p>
+<h3 id="unreadbyte-1">UnreadByte</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> UnreadByte() <span class="type">error</span></span><br></pre></td></tr></table></figure>
+<p><code>UnreadByte</code> 在实现 <code>io.ByteScanner</code> 接口时对
+<code>ReadByte</code> 进行了补充。</p>
+<h3 id="unreadrune-1">UnreadRune</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> UnreadRune() <span class="type">error</span></span><br></pre></td></tr></table></figure>
+<p><code>UnreadRune</code> 在实现 <code>io.RuneScanner</code> 接口方面对
+<code>ReadRune</code> 进行了补充。</p>
+<h3 id="writeto-1">WriteTo</h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *Reader)</span></span> WriteTo(w io.Writer) (n <span class="type">int64</span>, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+<p><code>WriteTo</code> 实现了 <code>io.WriterTo</code> 接口。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/29/golang/Golang%20%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" rel="prev" title="Golang 常见问题">
+                  <i class="fa fa-angle-left"></i> Golang 常见问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/14/other/%E9%80%9A%E8%BF%87%20proxychains%20%E6%9D%A5%E5%8A%A0%E9%80%9F%E4%BD%A0%E7%9A%84%20git%20clone/" rel="next" title="通过 proxychains 来加速你的 git clone">
+                  通过 proxychains 来加速你的 git clone <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

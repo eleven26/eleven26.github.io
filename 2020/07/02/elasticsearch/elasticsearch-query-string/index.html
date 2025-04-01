@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="使用查询解析器来解析其内容的查询。下面是一个例子： 123456789GET &#x2F;_search&amp;#123;    &quot;query&quot;: &amp;#123;        &quot;query_string&quot;: &amp;#123;            &quot;default_field&quot;: &quot;content&quot;,            &quot;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch 查询 - query string">
+<meta property="og:url" content="https://eleven26.github.io/2020/07/02/elasticsearch/elasticsearch-query-string/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="使用查询解析器来解析其内容的查询。下面是一个例子： 123456789GET &#x2F;_search&amp;#123;    &quot;query&quot;: &amp;#123;        &quot;query_string&quot;: &amp;#123;            &quot;default_field&quot;: &quot;content&quot;,            &quot;q">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-02T01:17:03.000Z">
+<meta property="article:modified_time" content="2020-12-08T15:20:59.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="ElasticSearch">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2020/07/02/elasticsearch/elasticsearch-query-string/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2020/07/02/elasticsearch/elasticsearch-query-string/","path":"2020/07/02/elasticsearch/elasticsearch-query-string/","title":"Elasticsearch 查询 - query string"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Elasticsearch 查询 - query string | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#default-field"><span class="nav-number">1.</span> <span class="nav-text">Default Field</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-field"><span class="nav-number">2.</span> <span class="nav-text">Multi Field</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#query-stirng-%E8%AF%AD%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">Query stirng 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#field-names"><span class="nav-number">3.1.</span> <span class="nav-text">Field names</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wildcards-%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-number">3.2.</span> <span class="nav-text">Wildcards 通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#regular-expressions-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">3.3.</span> <span class="nav-text">Regular expressions
+正则表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fuzziness-%E6%A8%A1%E7%B3%8A"><span class="nav-number">3.4.</span> <span class="nav-text">Fuzziness 模糊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ranges-%E8%8C%83%E5%9B%B4"><span class="nav-number">3.5.</span> <span class="nav-text">Ranges 范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-boost-%E6%8F%90%E5%8D%87%E6%9D%83%E9%87%8D"><span class="nav-number">3.6.</span> <span class="nav-text">使用 Boost 提升权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boolean-operators-%E5%B8%83%E5%B0%94%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.7.</span> <span class="nav-text">Boolean operators 布尔运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grouping-%E5%88%86%E7%BB%84"><span class="nav-number">3.8.</span> <span class="nav-text">Grouping 分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reserved-characters-%E4%BF%9D%E7%95%99%E5%AD%97%E7%AC%A6"><span class="nav-number">3.9.</span> <span class="nav-text">Reserved characters 保留字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#empty-query-%E7%A9%BA%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.10.</span> <span class="nav-text">Empty Query 空查询</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2020/07/02/elasticsearch/elasticsearch-query-string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Elasticsearch 查询 - query string | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Elasticsearch 查询 - query string
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-07-02 09:17:03" itemprop="dateCreated datePublished" datetime="2020-07-02T09:17:03+08:00">2020-07-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>使用查询解析器来解析其内容的查询。下面是一个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;default_field&quot;: &quot;content&quot;,</span><br><span class="line">            &quot;query&quot;: &quot;this AND that OR thus&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>query_string</code>
+查询解析输入并在运算符周围分割文本。每个文本部分彼此独立地分析。例如以下查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;default_field&quot;: &quot;content&quot;,</span><br><span class="line">            &quot;query&quot;: &quot;(new york city) OR (big apple)&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将分成 <code>new york city</code> 或
+<code>big apple</code>，然后通过为该字段配置的分析器独立地分析每个部分。</p>
+<blockquote>
+<p>空格不被视为运算符，这意味着 new york city 将 “按原样”
+传递给为该字段配置的分析器。如果该字段是关键字字段，则分析器将创建单个术语
+new york
+city，并且查询构建器将在查询中使用此术语。如果要分别查询每个术语，则需要在术语周围添加显式运算符（例如
+new AND york AND city）。</p>
+</blockquote>
+<p>当提供多个字段时，也可以修改如何使用类型参数在每个文本部分内组合不同字段查询。这里描述了可能的模式，默认是
+Bestfield。query_string 顶级参数包括：</p>
+<ul>
+<li>query: 要解析的实际查询。参见<a
+target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.4/query-dsl-query-string-query.html#query-string-syntax">查询字符串语法</a>。</li>
+<li>default_field: 如果未指定前缀字段，则查询字词的默认字段。默认为
+<code>index.query.default_field</code> 索引设置，而索引设置默认为
+<code>*.*</code>
+提取映射中符合术语查询条件的所有字段，并过滤元数据字段。然后组合所有提取的字段以在没有提供前缀字段时构建查询。</li>
+<li>default_operator:
+如果未显式指定运算符，则使用默认运算符。例如，使用默认运算符 OR，查询
+capital of Hungary 将转换为 capital OR of OR Hungary，并且使用默认运算符
+AND，将相同的查询转换为 capital AND of AND Hungary。默认值为 OR。</li>
+<li>analyzer：用于分析查询字符串的分析器名称。</li>
+<li>quote_analyzer：分析器的名称，用于分析查询字符串中的引用短语。对于这些部件，它将覆盖使用
+analyzer 参数或 search_quote_analyzer 设置设置的其他分析器。</li>
+<li>allow_leading_wildcard: 设置时，* 或 ? 允许作为第一个字符。默认为
+true。</li>
+<li>enable_position_increments：设置为 true
+在结果查询中启用位置增量。默认为 true。</li>
+<li>fuzzy_max_expansions：控制模糊查询将扩展到的术语数。默认为 50</li>
+<li>fuzziness：设置模糊查询的模糊性。默认为 AUTO。</li>
+<li>fuzzy_prefix_length：设置模糊查询的前缀长度。默认是 0.</li>
+<li>fuzzy_transpositions：设置为 false 禁用模糊转置（ab-&gt;ba）。默认是
+true。</li>
+<li>phrase_slop: 设置短语的默认斜率。如果为
+0，则需要精确的短语匹配。默认值是 0。</li>
+<li>boost：设置查询的提升值。默认为 1.0。</li>
+<li>auto_generate_phrase_queries：默认为 false。</li>
+<li>analyze_wildcard:
+默认情况下，不分析查询字符串中的通配符。通过将此值设置为
+true，将尽最大努力分析这些值。</li>
+<li>max_determinized_states: 限制允许创建的 regexp
+查询的自动机状态数。这可以防止太难（例如指数级）的 regexp。默认为
+10000。</li>
+<li>minimum_should_match: 一个值，用于控制生成的布尔查询中应该匹配的
+"should"
+子句的数量。它可以是绝对值（2），百分比（30%）或两者的组合。</li>
+<li>lenient：如果设置为 true
+将导致基于格式的失败（如向数字字段提供文本）将被忽略。</li>
+<li>time_zone: 时区应用于与日期相关的任何范围查询。</li>
+<li>quote_field_suffix:
+附加到查询字符串的引用部分的字段的后缀。这允许使用具有不同分析链的字段进行精确匹配。</li>
+<li>auto_generate_synonyms_phrase_query:
+是否应为多项同义词自动生成短语查询。默认为 true。</li>
+<li>all_fields：执行上可以查询映射检测到的所有字段的查询。</li>
+</ul>
+<h2 id="default-field">Default Field</h2>
+<p>如果未在查询字符串语法中明确指定要搜索的字段，<code>index.query.default_field</code>
+则将使用该字段来派生要搜索的字段。如果
+<code>index.query.default_field</code> 未指定，query_string
+则将自动尝试确定索引映射中可查询的现有字段，并对这些字段执行搜索。请注意，这不包括嵌套文档，使用嵌套查询来搜索这些文档。</p>
+<h2 id="multi-field">Multi Field</h2>
+<p>该 query_string 查询还可以指定查询的字段。可以通过 "fields"
+参数提供字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">field1: query_term OR field2: query_term | ...</span><br></pre></td></tr></table></figure>
+<p>query_string 针对多个字段运行查询的想法是将每个查询字词扩展为 OR
+子句，如下所示：</p>
+<p>例如，以下查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;fields&quot;: [&quot;content&quot;, &quot;name&quot;],</span><br><span class="line">            &quot;query&quot;: &quot;this AND that&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>匹配相同的单词</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &quot;(content:this OR name:this) AND (content:that OR name:that)&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于从单个搜索项生成了多个查询，因此使用 <code>dis_max</code> 带有
+<code>tie_breaker</code> 的查询自动组合它们。例如（name 使用 ^5
+符号表示增强 5）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;fields&quot;: [&quot;content&quot;, &quot;name^5&quot;],</span><br><span class="line">            &quot;query&quot;: &quot;this AND that OR thus&quot;,</span><br><span class="line">            &quot;tie_breaker&quot;: 0</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单通配符也可以用于搜索文档的特定内部元素。例如，如果我们有一个 city
+包含多个字段（或带有字段的内部对象）的对象，我们可以自动搜索所有 “城市”
+字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;fields&quot;: [&quot;city.*&quot;],</span><br><span class="line">            &quot;query&quot;: &quot;this AND that OR thus&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另一种选择是在查询字符串本身中提供通配符字段搜索（正确转义*符号），例如
+<code>city.\*:something</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;city.\\*:(this AND that OR thus)&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于
+(反斜杠)是json字符串中的特殊字符，因此需要对其进行转义，因此上面的两个反斜杠
+query_string。</p>
+</blockquote>
+<p>query_string 对多个字段运行查询时，允许使用以下附加参数：</p>
+<ul>
+<li>type: 应如何组合字段以构建文本查询。</li>
+</ul>
+<p>fields
+参数还可以包括基于通配符字段名称，允许自动扩展到相关字段（包括动态引入的字段）。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot;: &#123;</span><br><span class="line">            &quot;fields&quot;: [&quot;content&quot;, &quot;name.*^5&quot;],</span><br><span class="line">            &quot;query&quot;: &quot;this AND that OR thus&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="query-stirng-语法">Query stirng 语法</h2>
+<p>查询字符串被解析为一些列术语和运算符。术语可以是单个单词 - quick 或
+brown - 或短语，由双引号括起来 - "quick brown"
+以相同的顺序搜索短语中的所有单词。</p>
+<p>operator 允许你自定义搜索 - 可用选项如下：</p>
+<h3 id="field-names">Field names</h3>
+<p>如 query_string 查询中所述
+default_field，搜索搜索词，但可以在查询语法中指定其他字段：</p>
+<ul>
+<li>其中 status 字段包含 active：
+<ul>
+<li><code>status:active</code></li>
+</ul></li>
+<li>其中 title 字段包含 quick 或 brown。如果省略 OR
+运算符，将使用默认运算符：
+<ul>
+<li><code>title:(quick OR brown)</code></li>
+<li><code>title:(quick brown)</code></li>
+</ul></li>
+<li>其中 author 字段包含精确短语 "john smith"
+<ul>
+<li><code>author:"john smith"</code></li>
+</ul></li>
+<li>book 中任何字段包含 quick 或 brown（注意我们需要对 *
+使用反斜杠转义）
+<ul>
+<li><code>book.\*:(quick brown)</code></li>
+</ul></li>
+<li>该字段 title 具有任何非 null 值：
+<ul>
+<li><code>_exists_:title</code></li>
+</ul></li>
+</ul>
+<h3 id="wildcards-通配符">Wildcards 通配符</h3>
+<p>通配符可以在单个术语上运行，使用 ? 替换单个字符，使用 *
+替换零个或多个字符：</p>
+<p><code>qu?ck bro *</code></p>
+<ul>
+<li>请注意，通配符查询可能使用大量的内存，并且执行得很糟糕，只要想想需要查询多少项来匹配查询字符串
+<code>a*b*c*</code></li>
+<li>纯通配符 * 被重写为 exists。因此，通配符 "field:*"
+将匹配具有空值的文档，如下所示：<code>&#123;"field": ""&#125;</code>，如果字段丢失或使用显式空值设置则不匹配：<code>&#123;"field": null&#125;</code></li>
+<li>允许在单词的开头（例如
+"*ing"）使用通配符特别重，因为需要检查索引中的所有术语，以防它们匹配。可以通过设置
+<code>allow_leading_wildcard</code> 为禁用前导通配符 false。</li>
+</ul>
+<h3 id="regular-expressions-正则表达式">Regular expressions
+正则表达式</h3>
+<p>正则表达式模式可以通过将它们包装在 forward-slashes("/")
+中嵌入查询字符串中：</p>
+<p><code>name:/jo?n(ath[oa]n)/</code></p>
+<p>正则表达式语法中解释了受支持的正则表达式语法。</p>
+<blockquote>
+<p>该 <code>allow_leading_wildcard</code>
+参数对正则表达式没有任何控制权。如下所示的查询字符串将强制 Elasticsearch
+访问索引中的每个术语：/.*n/ 谨慎使用！</p>
+</blockquote>
+<h3 id="fuzziness-模糊">Fuzziness 模糊</h3>
+<p>我们可以使用 "fuzzy"
+运算符搜索与我们的搜索字词类似但不完全相同的字词：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quikc~ brwn~ foks~</span><br></pre></td></tr></table></figure>
+<h3 id="ranges-范围">Ranges 范围</h3>
+<p>可以为日期，数字或字符串字段指定范围。包含范围用方括号指定，<code>[min TO max]</code>
+排他范围用大括号指定 <code>&#123;min TO max&#125;</code>。</p>
+<ul>
+<li>All days in 2012:
+<ul>
+<li><code>date:[2012-01-01 TO 2012-12-31]</code></li>
+</ul></li>
+<li>Numbers 1..5
+<ul>
+<li><code>count:[1 TO 5]</code></li>
+</ul></li>
+<li>Tags between alpha and omega，excluding alpha and omega:
+<ul>
+<li><code>tag:&#123;alpha TO omega&#125;</code></li>
+</ul></li>
+<li>Numbers from 10 upwards
+<ul>
+<li><code>count:[10 TO *]</code></li>
+</ul></li>
+<li>Dates before 2012
+<ul>
+<li><code>date:&#123;* TO 2012-01-01&#125;</code></li>
+</ul></li>
+</ul>
+<p>可以组合使用大括号和方括号：</p>
+<ul>
+<li>数字从 1 到 5 但不包括 5:
+<ul>
+<li><code>count:[1 TO 5&#125;</code></li>
+</ul></li>
+<li>一边无范围的范围可以使用如下语法：
+<ul>
+<li><code>age:&gt;10</code></li>
+<li><code>age:&gt;=10</code></li>
+<li><code>age:&lt;10</code></li>
+<li><code>age:&lt;=10</code></li>
+</ul></li>
+</ul>
+<p>要将上限和下限与简化语法结合使用，你需要将两个子句与 AND
+运算符连接：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">age:(&gt;=10 AND &lt;20)</span><br><span class="line">age:(+&gt;=10 +&lt;20)</span><br></pre></td></tr></table></figure>
+<h3 id="使用-boost-提升权重">使用 Boost 提升权重</h3>
+<p>使用 boost 运算符 ^
+使一个术语比另一个术语更相关。例如，如果我们想要找到关于 foxes
+的所有文档，但我们对 quick foxes 特别感兴趣：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quick^2 fox</span><br></pre></td></tr></table></figure>
+<p>默认 boost 值为 1，但可以是任何正浮点数。0 到 1
+之间的提升会降低相关性。</p>
+<p>提升也可以应用于短语或群组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;john smith&quot;^2 (foo bar)^4</span><br></pre></td></tr></table></figure>
+<h3 id="boolean-operators-布尔运算符">Boolean operators 布尔运算符</h3>
+<p>默认情况下，只要一个术语匹配，所有术语都是可选的。搜索 foo bar baz
+将查找包含一个或多个 foo 或 bar 或 baz 的任何文档。我们已经讨论了
+default_operator
+上面的内容，它允许你强制要求所有的术语，但也有一些布尔运算符可以在查询字符串本身中使用，以提供更多的控制。</p>
+<p>首选运算符+（此术语必须存在）和-（此术语不得出现）。所有其他条款都是可选的。例如，这个查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quick brown +fox -news</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li>fox 必须存在</li>
+<li>news 一定不能存在</li>
+<li>quick 和 brown 是可选的 - 它们的存在增加了相关性</li>
+</ul>
+<p>熟悉的布尔运算符 AND，OR 以及 NOT （也写作 &amp;&amp;, || 和
+!）也支持，但要小心，他们不遵守通常的优先级规则，所以每当多个运算符一起使用时，应使用括号。例如，以前的查询可以重写为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((quick AND fox) OR (brown AND fox) OR fox) AND NOT news</span><br></pre></td></tr></table></figure>
+<p>此表单现在可以正确复制原始查询中的逻辑，但相关性评分与原始查询几乎没有相似之处。</p>
+<p>相反，使用查询 bool 查询重写相同 match 查询将如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">        &quot;must&quot;: &#123;</span><br><span class="line">            &quot;match&quot;: &quot;fox&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;should&quot;: &#123;</span><br><span class="line">            &quot;match&quot;: &quot;quick brown&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;must_not&quot;: &#123;</span><br><span class="line">            &quot;match&quot;: &quot;news&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="grouping-分组">Grouping 分组</h3>
+<p>可以将多个术语或子句与括号组合在一起，以形成子查询：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(quick OR brown) AND fox</span><br></pre></td></tr></table></figure>
+<p>组可用于定位特定字段，或用于提升子查询的结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">status:(active OR pending) title:(full text search)^2</span><br></pre></td></tr></table></figure>
+<h3 id="reserved-characters-保留字符">Reserved characters 保留字符</h3>
+<p>如果你需要在查询本身中使用任何作为运算符的字符（而不是运算符），那么你应该使用前导反斜杠来转义它们。例如，要搜索
+(1+1)=2，你需要将查询编写为 <code>\(1\+1\)\=2</code>。</p>
+<p>保留的字符是：<code>+ - = &amp;&amp; || &gt; &lt; ! ( ) &#123; &#125; [ ] ^ " ~ * ? : \ /</code></p>
+<p>无法正确转义这些特殊字符可能会导致语法错误，从而阻止你的查询运行。</p>
+<blockquote>
+<p><code>&lt;and&gt;</code>
+根本无法转义。阻止它们尝试创建范围查询的唯一方法是安全从查询字符串中删除它们。</p>
+</blockquote>
+<h3 id="empty-query-空查询">Empty Query 空查询</h3>
+<p>如果查询字符串为空或仅包含空格，则查询将生成空结果集。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ElasticSearch/" rel="tag"><i class="fa fa-tag"></i> ElasticSearch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/07/02/elasticsearch/elasticsearch-match-term/" rel="prev" title="Elasticsearch 查询 - match 和 term">
+                  <i class="fa fa-angle-left"></i> Elasticsearch 查询 - match 和 term
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/07/02/elasticsearch/elasticsearch-nested-type/" rel="next" title="Elasticsearch 嵌套对象之嵌套类型">
+                  Elasticsearch 嵌套对象之嵌套类型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

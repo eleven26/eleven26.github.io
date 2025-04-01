@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在上一篇文章《go interface 基本用法》中，我们了解了 go 中 interface 的一些基本用法，其中提到过 接口本质是一种自定义类型，本文就来详细说说为什么说 接口本质是一种自定义类型，以及这种自定义类型是如何构建起 go 的 interface 系统的。  本文使用的源码版本： go 1.19。另外本文中提到的 interface 和 接口 是同一个东西。  前言 在了解 go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go interface 设计与实现">
+<meta property="og:url" content="https://eleven26.github.io/2022/12/06/golang/go%20interface%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="在上一篇文章《go interface 基本用法》中，我们了解了 go 中 interface 的一些基本用法，其中提到过 接口本质是一种自定义类型，本文就来详细说说为什么说 接口本质是一种自定义类型，以及这种自定义类型是如何构建起 go 的 interface 系统的。  本文使用的源码版本： go 1.19。另外本文中提到的 interface 和 接口 是同一个东西。  前言 在了解 go">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_5.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_6.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_7.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_8.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_9.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_10.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_11.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_12.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_13.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_14.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_15.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_16.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_17.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/interface/interface_18.png">
+<meta property="article:published_time" content="2022-12-06T12:08:30.000Z">
+<meta property="article:modified_time" content="2022-12-07T03:39:25.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/go/interface/interface_5.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2022/12/06/golang/go%20interface%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2022/12/06/golang/go%20interface%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/","path":"2022/12/06/golang/go interface 设计与实现/","title":"go interface 设计与实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>go interface 设计与实现 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">接口是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iface-%E5%92%8C-eface-%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">3.</span> <span class="nav-text">iface 和 eface 结构体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#type-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">4.</span> <span class="nav-text">_type 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#itab-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">5.</span> <span class="nav-text">itab 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E7%9A%84-itab-%E6%98%AF%E6%80%8E%E4%B9%88%E8%A2%AB%E4%BD%BF%E7%94%A8%E7%9A%84"><span class="nav-number">6.</span> <span class="nav-text">生成的 itab 是怎么被使用的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#itab-%E5%85%B3%E9%94%AE%E6%96%B9%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">itab 关键方法的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE-interfacetype-%E5%92%8C-_type-%E5%88%9D%E5%A7%8B%E5%8C%96-itab"><span class="nav-number">8.</span> <span class="nav-text">根据 interfacetype 和
+_type 初始化 itab</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%96%AD%E8%A8%80%E8%BF%87%E7%A8%8B%E6%80%BB%E8%A7%88%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E7%9A%84%E5%85%B3%E9%94%AE"><span class="nav-number">9.</span> <span class="nav-text">接口断言过程总览（类型转换的关键）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#panicdottypei-%E4%B8%8E-panicdottypee"><span class="nav-number">10.</span> <span class="nav-text">panicdottypeI 与
+panicdottypeE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iface-%E5%92%8C-eface-%E9%87%8C%E9%9D%A2%E7%9A%84-data-%E6%98%AF%E6%80%8E%E4%B9%88%E6%9D%A5%E7%9A%84"><span class="nav-number">11.</span> <span class="nav-text">iface 和 eface 里面的
+data 是怎么来的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#convt-%E6%96%B9%E6%B3%95"><span class="nav-number">12.</span> <span class="nav-text">convT* 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-%E9%87%8C%E9%9D%A2%E7%9A%84%E5%B0%8F%E6%95%B4%E6%95%B0%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">12.1.</span> <span class="nav-text">Java 里面的小整数享元模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">13.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2022/12/06/golang/go%20interface%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="go interface 设计与实现 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          go interface 设计与实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-12-06 20:08:30" itemprop="dateCreated datePublished" datetime="2022-12-06T20:08:30+08:00">2022-12-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上一篇文章<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIyMTI0MzA4OQ==&amp;mid=2650072023&amp;idx=1&amp;sn=512aa1f0d31a83d400f282744989d605&amp;chksm=f03ff069c748797f2c2187ac1bd4fb5112dd95e25ed15f5e0d5de5b13300397435db10acfa3c#rd">《go
+interface 基本用法》</a>中，我们了解了 go 中 <code>interface</code>
+的一些基本用法，其中提到过
+<code>接口本质是一种自定义类型</code>，本文就来详细说说为什么说
+<code>接口本质是一种自定义类型</code>，以及这种自定义类型是如何构建起 go
+的 <code>interface</code> 系统的。</p>
+<blockquote>
+<p>本文使用的源码版本： go 1.19。另外本文中提到的 <code>interface</code>
+和 <code>接口</code> 是同一个东西。</p>
+</blockquote>
+<h2 id="前言">前言</h2>
+<p>在了解 go <code>interface</code>
+的设计过程中，看了不少资料，但是大多数资料都有生成汇编的操作，但是在我的电脑上指向生成汇编的操作的时候，
+生成的汇编代码却不太一样，所以有很多的东西无法验证正确性，这部分内容不会出现在本文中。本文只写那些经过本机验证正确的内容，但也不用担心，因为涵盖了
+go <code>interface</code>
+设计与实现的核心部分内容，但由于水平有限，所以只能尽可能地传达我所知道的关于
+<code>interface</code>
+的一切东西。对于有疑问的部分，有兴趣的读者可以自行探索。</p>
+<p>如果想详细地了解，建议还是去看看
+<code>iface.go</code>，里面有接口实现的一些关键的细节。但是还是有一些东西被隐藏了起来，
+导致我们无法知道我们 go 代码会是 <code>iface.go</code>
+里面的哪一段代码实现的。</p>
+<h2 id="接口是什么">接口是什么？</h2>
+<blockquote>
+<p>接口（<code>interface</code>）本质上是一种结构体。</p>
+</blockquote>
+<p>我们先来看看下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Flyable <span class="keyword">interface</span> &#123;</span><br><span class="line">	Fly()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// go tool compile -N -S -l main.go</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> f1 <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	<span class="built_in">println</span>(f1) <span class="comment">// CALL    runtime.printeface(SB)</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> f2 Flyable</span><br><span class="line">	<span class="built_in">println</span>(f2) <span class="comment">// CALL    runtime.printiface(SB)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以通过 <code>go tool compile -N -S -l main.go</code> 命令来生成
+<code>main.go</code>
+的伪汇编代码，生成的代码会很长，下面省略所有跟本文主题无关的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// main.go:10 =&gt; println(f1)</span><br><span class="line">0x0029 00041 (main.go:10)  CALL  runtime.printeface(SB)</span><br><span class="line">// main.go:13 =&gt; println(f2)</span><br><span class="line">0x004f 00079 (main.go:13)  CALL  runtime.printiface(SB)</span><br></pre></td></tr></table></figure>
+<p>我们从这段汇编代码中可以看到，我们 <code>println(f1)</code>
+实际上是对 <code>runtime.printeface</code> 的调用，我们看看这个
+<code>printeface</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printeface</span><span class="params">(e eface)</span></span> &#123;</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&quot;(&quot;</span>, e._type, <span class="string">&quot;,&quot;</span>, e.data, <span class="string">&quot;)&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到了，这个 <code>printeface</code> 接收的参数实际上是
+<code>eface</code> 类型，而不是 <code>interface&#123;&#125;</code>
+类型，我们再来看看 <code>println(f2)</code> 实际调用的
+<code>runtime.printiface</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printiface</span><span class="params">(i iface)</span></span> &#123;</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&quot;(&quot;</span>, i.tab, <span class="string">&quot;,&quot;</span>, i.data, <span class="string">&quot;)&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>也就是说 <code>interface&#123;&#125;</code> 类型在底层实际上是
+<code>eface</code> 类型，而 <code>Flyable</code> 类型在底层实际上是
+<code>iface</code> 类型。</strong></p>
+<p>这就是本文要讲述的内容，go 中的接口变量其实是用 <code>iface</code> 和
+<code>eface</code> 这两个结构体来表示的：</p>
+<ul>
+<li><code>iface</code> 表示某一个具体的接口（含有方法的接口）。</li>
+<li><code>eface</code> 表示一个空接口（<code>interface&#123;&#125;</code>）</li>
+</ul>
+<p><img src="/images/go/interface/interface_5.png" /></p>
+<h2 id="iface-和-eface-结构体">iface 和 eface 结构体</h2>
+<p><code>iface</code> 和 <code>eface</code>
+的结构体定义（<code>runtime/iface.go</code>）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 非空接口（如：io.Reader）</span></span><br><span class="line"><span class="keyword">type</span> iface <span class="keyword">struct</span> &#123;</span><br><span class="line">	tab  *itab          <span class="comment">// 方法表</span></span><br><span class="line">	data unsafe.Pointer <span class="comment">// 指向变量本身的指针</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 空接口（interface&#123;&#125;）</span></span><br><span class="line"><span class="keyword">type</span> eface <span class="keyword">struct</span> &#123;</span><br><span class="line">	_type *_type         <span class="comment">// 接口变量的类型</span></span><br><span class="line">	data  unsafe.Pointer <span class="comment">// 指向变量本身的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>go 底层的类型信息是使用 <code>_type</code> 结构体来存储的。</p>
+</blockquote>
+<p>比如，我们有下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Bird <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b Bird)</span></span> Fly() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Flyable <span class="keyword">interface</span> &#123;</span><br><span class="line">	Fly()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bird := Bird&#123;name: <span class="string">&quot;b1&quot;</span>&#125;</span><br><span class="line">	<span class="keyword">var</span> efc <span class="keyword">interface</span>&#123;&#125; = bird <span class="comment">// efc 是 eface</span></span><br><span class="line">	<span class="keyword">var</span> ifc Flyable = bird <span class="comment">// ifc 是 iface</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">println</span>(efc) <span class="comment">// runtime.printeface</span></span><br><span class="line">	<span class="built_in">println</span>(ifc) <span class="comment">// runtime.printiface</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面代码中，<code>efc</code> 是 <code>eface</code>
+类型的变量，对应到 <code>eface</code> 结构体的话，<code>_type</code>
+就是 <code>Bird</code> 这个类型本身，而 <code>data</code> 就是
+<code>&amp;bird</code> 这个指针：</p>
+<p><img src="/images/go/interface/interface_6.png" /></p>
+<p>类似的，<code>ifc</code> 是 <code>iface</code> 类型的变量，对应到
+<code>iface</code> 结构体的话，<code>data</code> 也是
+<code>&amp;bird</code> 这个指针：</p>
+<p><img src="/images/go/interface/interface_7.png" /></p>
+<h2 id="type-是什么">_type 是什么？</h2>
+<p>在 go 中，<code>_type</code>
+是保存了变量类型的元数据的结构体，定义如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// _type 是 go 里面所有类型的一个抽象，里面包含 GC、反射、大小等需要的细节，</span></span><br><span class="line"><span class="comment">// 它也决定了 data 如何解释和操作。</span></span><br><span class="line"><span class="comment">// 里面包含了非常多信息：类型的大小、哈希、对齐及 kind 等信息</span></span><br><span class="line"><span class="keyword">type</span> _type <span class="keyword">struct</span> &#123;</span><br><span class="line">    size       <span class="type">uintptr</span> <span class="comment">// 数据类型共占用空间的大小</span></span><br><span class="line">    ptrdata    <span class="type">uintptr</span> <span class="comment">// 含有所有指针类型前缀大小</span></span><br><span class="line">    hash       <span class="type">uint32</span>  <span class="comment">// 类型 hash 值；避免在哈希表中计算</span></span><br><span class="line">    tflag      tflag   <span class="comment">// 额外类型信息标志</span></span><br><span class="line">    align      <span class="type">uint8</span>   <span class="comment">// 该类型变量对齐方式</span></span><br><span class="line">    fieldAlign <span class="type">uint8</span>   <span class="comment">// 该类型结构体字段对齐方式</span></span><br><span class="line">    kind       <span class="type">uint8</span>   <span class="comment">// 类型编号</span></span><br><span class="line">    <span class="comment">// 用于比较此类型对象的函数</span></span><br><span class="line">    equal <span class="function"><span class="keyword">func</span><span class="params">(unsafe.Pointer, unsafe.Pointer)</span></span> <span class="type">bool</span></span><br><span class="line">    <span class="comment">// gc 相关数据</span></span><br><span class="line">    gcdata    *<span class="type">byte</span></span><br><span class="line">    str       nameOff <span class="comment">// 类型名字的偏移</span></span><br><span class="line">    ptrToThis typeOff</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个 <code>_type</code> 结构体定义大家随便看看就好了，实际上，go
+底层的类型表示也不是上面这个结构体这么简单。</p>
+<p><strong>但是，我们需要知道的一点是（与本文有关的信息），通过
+<code>_type</code> 我们可以得到结构体里面所包含的方法这些信息。</strong>
+具体我们可以看 <code>itab</code> 的 <code>init</code>
+方法（<code>runtime/iface.go</code>），我们会看到如下几行：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typ := m._type</span><br><span class="line">x := typ.uncommon() <span class="comment">// 结构体类型</span></span><br><span class="line"></span><br><span class="line">nt := <span class="type">int</span>(x.mcount)   <span class="comment">// 实际类型的方法数量</span></span><br><span class="line"><span class="comment">// 实际类型的方法数组，数组元素为 method</span></span><br><span class="line">xmhdr := (*[<span class="number">1</span> &lt;&lt; <span class="number">16</span>]method)(add(unsafe.Pointer(x), <span class="type">uintptr</span>(x.moff)))[:nt:nt]</span><br></pre></td></tr></table></figure>
+<p>在底层，go 是通过 <code>_type</code> 里面 <code>uncommon</code>
+返回的地址，加上一个偏移量（<code>x.moff</code>）来得到实际结构体类型的方法列表的。</p>
+<p>我们可以参考一下下图想象一下：</p>
+<p><img src="/images/go/interface/interface_8.png" /></p>
+<h2 id="itab-是什么">itab 是什么？</h2>
+<p>我们从 <code>iface</code> 中可以看到，它包含了一个 <code>*itab</code>
+类型的字段，我们看看这个 <code>itab</code> 的定义：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译器已知的 itab 布局</span></span><br><span class="line"><span class="keyword">type</span> itab <span class="keyword">struct</span> &#123;</span><br><span class="line">	inter *interfacetype <span class="comment">// 接口类型</span></span><br><span class="line">	_type *_type</span><br><span class="line">	hash  <span class="type">uint32</span></span><br><span class="line">	_     [<span class="number">4</span>]<span class="type">byte</span></span><br><span class="line">	fun   [<span class="number">1</span>]<span class="type">uintptr</span> <span class="comment">// 变长数组. fun[0]==0 意味着 _type 没有实现 inter 这个接口</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接口类型</span></span><br><span class="line"><span class="comment">// 对应源代码：type xx interface &#123;&#125;</span></span><br><span class="line"><span class="keyword">type</span> interfacetype <span class="keyword">struct</span> &#123;</span><br><span class="line">    typ     _type     <span class="comment">// 类型信息</span></span><br><span class="line">    pkgpath name      <span class="comment">// 包路径</span></span><br><span class="line">    mhdr    []imethod <span class="comment">// 接口的方法列表</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>根据 <code>interfacetype</code>
+我们可以得到关于接口所有方法的信息。同样的，通过 <code>_type</code>
+也可以获取结构体类型的所有方法信息。</p>
+</blockquote>
+<p>从定义上，我们可以看到 <code>itab</code> 跟
+<code>*interfacetype</code> 和 <code>*_type</code>
+有关，但实际上有什么关系从定义上其实不太能看得出来，
+但是我们可以看它是怎么被使用的，现在，假设我们有如下代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// i 在底层是一个 interfacetype 类型</span></span><br><span class="line"><span class="keyword">type</span> i <span class="keyword">interface</span> &#123;</span><br><span class="line">	A()</span><br><span class="line">	C()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// t 底层会用 _type 来表示</span></span><br><span class="line"><span class="comment">// t 里面有 A、B、C、D 方法</span></span><br><span class="line"><span class="comment">// 因为实现了 i 中的所有方法，所以 t 实现了接口 i</span></span><br><span class="line"><span class="keyword">type</span> t <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t)</span></span> A()  &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t)</span></span> B()  &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t)</span></span> C()  &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t)</span></span> D()  &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>下图描述了上面代码对应的 <code>itab</code> 生成的过程：</p>
+<p><img src="/images/go/interface/interface_9.png" /></p>
+<p>说明：</p>
+<ul>
+<li><code>itab</code> 里面的 <code>inter</code>
+是接口类型的指针（比如通过 <code>type Reader interface&#123;&#125;</code>
+这种形式定义的接口，记录的是这个类型本身的信息），这个接口类型本身定义了一系列的方法，如图中的
+<code>i</code> 包含了 <code>A</code>、<code>C</code> 两个方法。</li>
+<li><code>_type</code>
+是实际类型的指针，记录的是这个实际类型本身的信息，比如这个类型包含哪些方法。图中的
+<code>i</code> 实现了
+<code>A</code>、<code>B</code>、<code>C</code>、<code>D</code>
+四个方法，因为实现了 <code>i</code> 的所有方法，所以说 <code>t</code>
+实现了 <code>i</code> 接口。</li>
+<li>在底层做类型转换的时候，比如 <code>t</code> 转换为 <code>i</code>
+的时候（<code>var v i = t&#123;&#125;</code>），会生成一个 <code>itab</code>，如果
+<code>t</code> 没有实现 <code>i</code> 中的所有方法，那么生成的
+<code>itab</code> 中不包含任何方法。</li>
+<li>如果 <code>t</code> 实现了 <code>i</code> 中的所有方法，那么生成的
+<code>itab</code> 中包含了 <code>i</code>
+中的所有方法指针，但是实际指向的方法是实际类型的方法（也就是指向的是
+<code>t</code> 中的方法地址）</li>
+<li><code>mhdr</code> 就是 <code>itab</code>
+中的方法表，里面的方法名就是接口的所有方法名，这个方法表中保存了实际类型（<code>t</code>）中同名方法的函数地址，通过这个地址就可以调用实际类型的方法了。</li>
+</ul>
+<p>所以，我们有如下结论：</p>
+<ul>
+<li><code>itab</code> 实际上定义了 <code>interfacetype</code> 和
+<code>_type</code>
+之间方法的交集。作用是什么呢？就是用来判断一个结构体是否实现某个接口的。</li>
+<li><code>itab</code>
+包含了接口的所有方法，这里面的方法是实际类型的子集。</li>
+<li><code>itab</code>
+里面的方法列表包含了实际类型的方法指针（也就是实际类型的方法的地址），通过这个地址可以对实际类型进行方法的调用。</li>
+<li><code>itab</code>
+在实际类型没有实现接口的所有方法的时候，生成失败（失败的意思是，生成的
+<code>itab</code> 里面的方法列表是空的，在底层实现上是用
+<code>fun[0] = 0</code> 来表示）。</li>
+</ul>
+<h2 id="生成的-itab-是怎么被使用的">生成的 itab 是怎么被使用的？</h2>
+<p>go 里面定义了一个全局变量 <code>itabTable</code>，用来缓存
+<code>itab</code>，因为在判断某一个结构体是否实现了某一个接口的时候，
+需要比较两者的方法集，如果结构体实现了接口的所有方法，那么就表明结构体实现了接口（这也就是生成
+<code>itab</code> 的过程）。
+如果在每一次做接口断言的时候都要做一遍这个比较，性能无疑会大大地降低，因此
+go 就把这个比较得出的结果缓存起来，也就是 <code>itab</code>。
+这样在下一次判断结构体是否实现了某一个接口的时候，就可以直接使用之前的
+<code>itab</code>，性能也就得到提升了。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 表里面缓存了 itab</span></span><br><span class="line">itabTable     = &amp;itabTableInit</span><br><span class="line">itabTableInit = itabTableType&#123;size: itabInitSize&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局的 itab 表</span></span><br><span class="line"><span class="keyword">type</span> itabTableType <span class="keyword">struct</span> &#123;</span><br><span class="line">    size    <span class="type">uintptr</span>             <span class="comment">// entries 的长度，2 的次方</span></span><br><span class="line">    count   <span class="type">uintptr</span>             <span class="comment">// 当前 entries 的数量</span></span><br><span class="line">    entries [itabInitSize]*itab <span class="comment">// 保存 itab 的哈希表</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>itabTableType</code> 里面的 <code>entries</code>
+是一个哈希表，在实际保存的时候，会用 <code>interfacetype</code> 和
+<code>_type</code> 这两个生成一个哈希表的键。 也就是说，这个保存
+<code>itab</code> 的缓存哈希表中，只要我们有 <code>interfacetype</code>
+和 <code>_type</code> 这两个信息，就可以获取一个 <code>itab</code>。</p>
+<p>具体怎么使用，我们可以看看下面的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Flyable <span class="keyword">interface</span> &#123;</span><br><span class="line">	Fly()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Runnable <span class="keyword">interface</span> &#123;</span><br><span class="line">	Run()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _ Flyable = (*Bird)(<span class="literal">nil</span>)</span><br><span class="line"><span class="keyword">var</span> _ Runnable = (*Bird)(<span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Bird <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b Bird)</span></span> Fly() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b Bird)</span></span> Run() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOS=linux GOARCH=amd64 go tool compile -N -S -l main.go &gt; main.s</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// f 的类型是 iface</span></span><br><span class="line">	<span class="keyword">var</span> f Flyable = Bird&#123;&#125;</span><br><span class="line">	<span class="comment">// Flyable 转 Runnable 本质上是 iface 到 iface 的转换</span></span><br><span class="line">	f.(Runnable).Run() <span class="comment">// CALL	runtime.assertI2I(SB)</span></span><br><span class="line">	<span class="comment">// 这个 switch 里面的类型断言本质上也是 iface 到 iface 的转换</span></span><br><span class="line">	<span class="comment">// 但是 switch 里面的类型断言失败不会引发 panic</span></span><br><span class="line">	<span class="keyword">switch</span> f.(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">case</span> Flyable: <span class="comment">// CALL	runtime.assertI2I2(SB)</span></span><br><span class="line">	<span class="keyword">case</span> Runnable: <span class="comment">// CALL	runtime.assertI2I2(SB)</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> _, ok := f.(Runnable); ok &#123; <span class="comment">// CALL	runtime.assertI2I2(SB)</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// i 的类型是 eface</span></span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125; = Bird&#123;&#125;</span><br><span class="line">	<span class="comment">// i 转 Flyable 本质上是 eface 到 iface 的转换</span></span><br><span class="line">	i.(Flyable).Fly() <span class="comment">// CALL	runtime.assertE2I(SB)</span></span><br><span class="line">	<span class="comment">// 这个 switch 里面的类型断言本质上也是 eface 到 iface 的转换</span></span><br><span class="line">	<span class="comment">// 但是 switch 里面的类型断言失败不会引发 panic</span></span><br><span class="line">	<span class="keyword">switch</span> i.(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">case</span> Flyable: <span class="comment">// CALL	runtime.assertE2I2(SB)</span></span><br><span class="line">	<span class="keyword">case</span> Runnable: <span class="comment">// CALL	runtime.assertE2I2(SB)</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> _, ok := i.(Runnable); ok &#123; <span class="comment">// CALL	runtime.assertE2I2(SB)</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们对上面的代码生成伪汇编代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GOOS=linux GOARCH=amd64 go tool compile -N -S -l main.go &gt; main.s</span><br></pre></td></tr></table></figure>
+<p>然后我们去查看
+<code>main.s</code>，就会发现类型断言的代码，本质上是对
+<code>runtime.assert*</code>
+方法的调用（<code>assertI2I</code>、<code>assertI2I2</code>、<code>assertE2I</code>、<code>assertE2I2</code>），
+这几个方法名都是以 <code>assert</code> 开头的，<code>assert</code>
+在编程语言中的含义是，判断后面的条件是否为 <code>true</code>，如果
+<code>false</code> 则抛出异常或者其他中断程序执行的操作，为
+<code>true</code> 则接着执行。
+这里的用处就是，<strong>判断一个接口是否能够转换为另一个接口或者另一个类型</strong>。</p>
+<p>但在这里有点不太一样，这里有两个函数最后有个数字 <code>2</code>
+的，表明了我们对接口的类型转换会有两种情况，我们上面的代码生成的汇编其实已经很清楚了，
+<strong>一种情况是直接断言，使用 <code>i.(T)</code>
+这种形式，另外一种是在 <code>switch...case</code>
+里面使用，</strong>。</p>
+<p>我们可以看看它们的源码，看看有什么不一样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接根据 interfacetype/_type 获取 itab</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assertE2I</span><span class="params">(inter *interfacetype, t *_type)</span></span> *itab &#123;</span><br><span class="line">	<span class="keyword">if</span> t == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// 显式转换需要非nil接口值。</span></span><br><span class="line">		<span class="built_in">panic</span>(&amp;TypeAssertionError&#123;<span class="literal">nil</span>, <span class="literal">nil</span>, &amp;inter.typ, <span class="string">&quot;&quot;</span>&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// getitab 的第三个参数是 false</span></span><br><span class="line">	<span class="comment">// 表示 getiab 获取不到 itab 的时候需要 panic</span></span><br><span class="line">	<span class="keyword">return</span> getitab(inter, t, <span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 eface 转换为 iface</span></span><br><span class="line"><span class="comment">// 因为 e 包含了 *_type</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assertE2I2</span><span class="params">(inter *interfacetype, e eface)</span></span> (r iface) &#123;</span><br><span class="line">	t := e._type</span><br><span class="line">	<span class="keyword">if</span> t == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// getitab 的第三个参数是 true</span></span><br><span class="line">	<span class="comment">// 表示 getitab 获取不到 itab 的时候不需要 panic</span></span><br><span class="line">	tab := getitab(inter, t, <span class="literal">true</span>)</span><br><span class="line">	<span class="keyword">if</span> tab == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	r.tab = tab</span><br><span class="line">	r.data = e.data</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>getitab</code> 的源码后面会有。</p>
+</blockquote>
+<p>从上面的代码可以看到，其实带 <code>2</code> 和不带 <code>2</code>
+后缀的关键区别在于：<code>getitab</code> 的调用允不允许失败。
+这有点类似于 <code>chan</code> 里面的
+<code>select</code>，<code>chan</code> 的 <code>select</code> 语句中读写
+<code>chan</code> 不会阻塞，而其他地方会阻塞。</p>
+<p><code>assertE2I2</code> 是用在 <code>switch...case</code>
+中的，这个调用是允许失败的，因为我们还需要判断能否转换为其他类型；
+又或者 <code>v, ok := i.(T)</code>
+的时候，也是允许失败的，但是这种情况会返回第二个值给用户判断是否转换成功。
+而直接使用类型断言的时候，如 <code>i.(T)</code> 这种，如果
+<code>i</code> 不能转换为 <code>T</code> 类型，则直接
+<code>panic</code>。</p>
+<p>对于 go 中的接口断言可以总结如下：</p>
+<ul>
+<li><code>assertI2I</code> 用于将一个 <code>iface</code> 转换为另一个
+<code>iface</code>，转换失败的时候<strong>会</strong>
+<code>panic</code></li>
+<li><code>assertI2I2</code> 用于将一个 <code>iface</code> 转换为另一个
+<code>iface</code>，转换失败的时候<strong>不会</strong>
+<code>panic</code></li>
+<li><code>assertE2I</code> 用于将一个 <code>eface</code> 转换为另一个
+<code>iface</code>，转换失败的时候<strong>会</strong>
+<code>panic</code></li>
+<li><code>assertE2I2</code> 用于将一个 <code>eface</code> 转换为另一个
+<code>iface</code>，转换失败的时候<strong>不会</strong>
+<code>panic</code></li>
+<li><code>assert</code> 相关的方法后缀的
+<code>I2I</code>、<code>E2E</code> 里面的 <code>I</code> 表示的是
+<code>iface</code>，<code>E</code> 表示的是 <code>eface</code></li>
+<li>带 <code>2</code> 后缀的允许失败，用于 <code>v, ok := i.(T)</code>
+或者 <code>switch x.(type) ... case</code> 中</li>
+<li>不带 <code>2</code> 后缀的不允许失败，用于 <code>i.(T)</code>
+这种形式中</li>
+</ul>
+<blockquote>
+<p>当然，这里说的转换不是说直接转换，只是说，在转换的过程中会用到
+assert* 方法。</p>
+</blockquote>
+<p>如果我们足够细心，然后也去看了 <code>assertI2I</code> 和
+<code>assertI2I2</code> 的源码，就会发现，这几个方法本质上都是， 通过
+<code>interfacetype</code> 和 <code>_type</code> 来获取一个
+<code>itab</code> 然后转换为另外一个 <code>itab</code> 或者 `iface。</p>
+<blockquote>
+<p>同时，我们也应该注意到，上面的转换都是转换到 iface 而没有转换到 eface
+的操作，这是因为，所有类型都可以转换为空接口（interface{}，也就是
+eface）。根本就不需要断言。</p>
+</blockquote>
+<p>上面的内容可以结合下图理解一下：</p>
+<p><img src="/images/go/interface/interface_10.png" /></p>
+<h2 id="itab-关键方法的实现">itab 关键方法的实现</h2>
+<p>下面，让我们再来深入了解一下 <code>itab</code>
+是怎么被创建出来的，以及是怎么保存到全局的哈希表中的。我们先来看看下图：</p>
+<p><img src="/images/go/interface/interface_11.png" /></p>
+<p>这个图描述了 go 底层存储 <code>itab</code> 的方式：</p>
+<ul>
+<li>通过一个 <code>itabTableType</code> 类型来存储所有的
+<code>itab</code>。</li>
+<li>在调用 <code>getitab</code> 的时候，会先根据 <code>inter</code> 和
+<code>_type</code> 计算出哈希值，然后从 <code>entries</code>
+中查找是否存在，存在就返回对应的 <code>itab</code>，不存在则新建一个
+<code>itab</code>。</li>
+<li>在调用 <code>itabAdd</code> 的时候，会将 <code>itab</code> 加入到
+<code>itabTableType</code> 类型变量里面的 <code>entries</code> 中，其中
+<code>entries</code> 里面的键是根据 <code>inter</code> 和
+<code>_type</code> 做哈希运算得出的。</li>
+</ul>
+<p><code>itab</code> 两个比较关键的方法：</p>
+<ul>
+<li><code>getitab</code> 让我们可以通过 <code>interfacetype</code> 和
+<code>_type</code> 获取一个
+<code>itab</code>，会现在缓存中找，找不到会新建一个。</li>
+<li><code>itabAdd</code> 是在我们缓存找不到
+<code>itab</code>，然后新建之后，将这个新建的 <code>itab</code>
+加入到缓存的方法。</li>
+</ul>
+<p><code>getitab</code> 方法的第三个参数 <code>canfail</code>
+表示当前操作是否允许失败，上面说了，如果是用在
+<code>switch...case</code> 或者 <code>v, ok := i.(T)</code>
+这种是允许失败的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取某一个类型的 itab（从 itabTable 中查找，键是 inter 和 _type 的哈希值）</span></span><br><span class="line"><span class="comment">// 查找 interfacetype + _type 对应的 itab</span></span><br><span class="line"><span class="comment">// 找不到就新增。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getitab</span><span class="params">(inter *interfacetype, typ *_type, canfail <span class="type">bool</span>)</span></span> *itab &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(inter.mhdr) == <span class="number">0</span> &#123;</span><br><span class="line">		throw(<span class="string">&quot;internal error - misuse of itab&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 不包含 Uncommon 信息的类型直接报错</span></span><br><span class="line">	<span class="keyword">if</span> typ.tflag&amp;tflagUncommon == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> canfail &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">		&#125;</span><br><span class="line">		name := inter.typ.nameOff(inter.mhdr[<span class="number">0</span>].name)</span><br><span class="line">		<span class="built_in">panic</span>(&amp;TypeAssertionError&#123;<span class="literal">nil</span>, typ, &amp;inter.typ, name.name()&#125;)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 保存返回的 itab</span></span><br><span class="line">	<span class="keyword">var</span> m *itab</span><br><span class="line"></span><br><span class="line">	<span class="comment">// t 指向了 itabTable（全局的 itab 表）</span></span><br><span class="line">	t := (*itabTableType)(atomic.Loadp(unsafe.Pointer(&amp;itabTable)))</span><br><span class="line">	<span class="comment">// 会先从全局 itab 表中查找，找到就直接返回</span></span><br><span class="line">	<span class="keyword">if</span> m = t.find(inter, typ); m != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">goto</span> finish</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 没有找到，获取锁，再次查找。</span></span><br><span class="line">	<span class="comment">// 找到则返回</span></span><br><span class="line">	lock(&amp;itabLock)</span><br><span class="line">	<span class="keyword">if</span> m = itabTable.find(inter, typ); m != <span class="literal">nil</span> &#123;</span><br><span class="line">		unlock(&amp;itabLock)</span><br><span class="line">		<span class="keyword">goto</span> finish</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 没有在缓存中找到，新建一个 itab</span></span><br><span class="line">	m = (*itab)(persistentalloc(unsafe.Sizeof(itab&#123;&#125;)+<span class="type">uintptr</span>(<span class="built_in">len</span>(inter.mhdr)<span class="number">-1</span>)*goarch.PtrSize, <span class="number">0</span>, &amp;memstats.other_sys))</span><br><span class="line">	<span class="comment">// itab 的</span></span><br><span class="line">	m.inter = inter</span><br><span class="line">	m._type = typ</span><br><span class="line">	m.hash = <span class="number">0</span></span><br><span class="line">	<span class="comment">// itab 初始化</span></span><br><span class="line">	m.init()</span><br><span class="line">	<span class="comment">// 将新创建的 itab 加入到全局的 itabTable 中</span></span><br><span class="line">	itabAdd(m)</span><br><span class="line">	<span class="comment">// 释放锁</span></span><br><span class="line">	unlock(&amp;itabLock)</span><br><span class="line">finish:</span><br><span class="line">	<span class="comment">// == 0 表示没有任何方法</span></span><br><span class="line">	<span class="comment">// 下面 != 0 表示有 inter 和 typ 有方法的交集</span></span><br><span class="line">	<span class="keyword">if</span> m.fun[<span class="number">0</span>] != <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> m</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 用在 switch x.(type) 中的时候，允许失败而不是直接 panic</span></span><br><span class="line">	<span class="comment">// 但在 x.(Flyable).Fly() 这种场景会直接 panic</span></span><br><span class="line">	<span class="keyword">if</span> canfail &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 没有找到有方法的交集，panic</span></span><br><span class="line">	<span class="built_in">panic</span>(&amp;TypeAssertionError&#123;concrete: typ, asserted: &amp;inter.typ, missingMethod: m.init()&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>itabAdd</code> 将给定的 <code>itab</code> 添加到
+<code>itab</code> 哈希表中（<code>itabTable</code>）。</p>
+<blockquote>
+<p>注意：<code>itabAdd</code> 中在判断到哈希表的使用量超过
+<code>75%</code> 的时候，会进行扩容，新的容量为旧容量的 2 倍。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 必须保持 itabLock。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">itabAdd</span><span class="params">(m *itab)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 正在分配内存的时候调用的话报错</span></span><br><span class="line">	<span class="keyword">if</span> getg().m.mallocing != <span class="number">0</span> &#123;</span><br><span class="line">		throw(<span class="string">&quot;malloc deadlock&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	t := itabTable</span><br><span class="line">	<span class="comment">// 容量已经超过 75% 的负载了，hash 表扩容</span></span><br><span class="line">	<span class="keyword">if</span> t.count &gt;= <span class="number">3</span>*(t.size/<span class="number">4</span>) &#123;</span><br><span class="line">		<span class="comment">// 75% load factor（实际上是：t.size *0.75）</span></span><br><span class="line">		<span class="comment">// 扩展哈希表。原来 2 倍大小。</span></span><br><span class="line">		<span class="comment">// 我们撒谎告诉 malloc 我们需要无指针内存，因为所有指向的值都不在堆中。</span></span><br><span class="line">		<span class="comment">// 2 是 size 和 count 这两个字段需要的空间</span></span><br><span class="line">		t2 := (*itabTableType)(mallocgc((<span class="number">2</span>+<span class="number">2</span>*t.size)*goarch.PtrSize, <span class="literal">nil</span>, <span class="literal">true</span>))</span><br><span class="line">		t2.size = t.size * <span class="number">2</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// 复制条目。</span></span><br><span class="line">		<span class="comment">// 注意：在复制时，其他线程可能会查找itab，但找不到它。</span></span><br><span class="line">		<span class="comment">// 没关系，然后它们会尝试获取itab锁，因此等待复制完成。</span></span><br><span class="line">		iterate_itabs(t2.add)    <span class="comment">// 遍历旧的 hash 表，复制函数指针到 t2 中</span></span><br><span class="line">		<span class="keyword">if</span> t2.count != t.count &#123; <span class="comment">// 复制出错</span></span><br><span class="line">			throw(<span class="string">&quot;mismatched count during itab table copy&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 发布新哈希表。使用原子写入：请参见 getitab 中的注释。</span></span><br><span class="line">		<span class="comment">// 使用 t2 覆盖 itabTable</span></span><br><span class="line">		atomicstorep(unsafe.Pointer(&amp;itabTable), unsafe.Pointer(t2))</span><br><span class="line">		<span class="comment">// 使用新的 hash 表</span></span><br><span class="line">		<span class="comment">// 因为 t 是局部变量，指向旧的地址，</span></span><br><span class="line">		<span class="comment">// 但是扩容之后是新的地址了，所以现在需要将新的地址赋给 t</span></span><br><span class="line">		t = itabTable</span><br><span class="line">		<span class="comment">// 注：旧的哈希表可以在此处进行GC。</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 将 itab 加入到全局哈希表</span></span><br><span class="line">	t.add(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实 <code>itabAdd</code>
+的关键路径比较清晰，只是因为它是一个哈希表，所以里面在判断到当前
+<code>itab</code> 的数量超过 <code>itabTable</code> 容量的
+<code>75%</code> 的时候，会对 <code>itabTable</code> 进行 2 倍扩容。</p>
+<h2 id="根据-interfacetype-和-_type-初始化-itab">根据 interfacetype 和
+_type 初始化 itab</h2>
+<p>上面那个图我们说过，<code>itab</code> 本质上是
+<code>interfacetype</code> 和 <code>_type</code>
+方法的交集，这一节我们就来看看，<code>itab</code>
+是怎么根据这两个类型来进行初始化的。</p>
+<p><code>itab</code> 的 <code>init</code> 方法实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// init 用 m.inter/m._type 对的所有代码指针填充 m.fun 数组。</span></span><br><span class="line"><span class="comment">// 如果该类型不实现接口，它将 m.fun[0] 设置为 0 ，并返回缺少的接口函数的名称。</span></span><br><span class="line"><span class="comment">// 可以在同一个m上多次调用，甚至同时调用。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *itab)</span></span> init() <span class="type">string</span> &#123;</span><br><span class="line">	inter := m.inter    <span class="comment">// 接口</span></span><br><span class="line">	typ := m._type      <span class="comment">// 实际的类型</span></span><br><span class="line">	x := typ.uncommon()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// inter 和 typ 都具有按名称排序的方法，并且接口名称是唯一的，因此可以在锁定步骤中迭代这两个；</span></span><br><span class="line">	<span class="comment">// 循环时间复杂度是 O(ni+nt)，不是 O(ni*nt)</span></span><br><span class="line">	ni := <span class="built_in">len</span>(inter.mhdr) <span class="comment">// 接口的方法数量</span></span><br><span class="line">	nt := <span class="type">int</span>(x.mcount)   <span class="comment">// 实际类型的方法数量</span></span><br><span class="line">	<span class="comment">// 实际类型的方法数组，数组元素为 method</span></span><br><span class="line">	xmhdr := (*[<span class="number">1</span> &lt;&lt; <span class="number">16</span>]method)(add(unsafe.Pointer(x), <span class="type">uintptr</span>(x.moff)))[:nt:nt] <span class="comment">// 大小无关紧要，因为下面的指针访问不会超出范围</span></span><br><span class="line">	j := <span class="number">0</span></span><br><span class="line">	<span class="comment">// 用来保存 inter/_type 对方法列表的数组，数组元素为 unsafe.Pointer（是实际类型方法的指针）</span></span><br><span class="line">	methods := (*[<span class="number">1</span> &lt;&lt; <span class="number">16</span>]unsafe.Pointer)(unsafe.Pointer(&amp;m.fun[<span class="number">0</span>]))[:ni:ni] <span class="comment">// 保存 itab 方法的数组</span></span><br><span class="line">	<span class="comment">// 第一个方法的指针</span></span><br><span class="line">	<span class="keyword">var</span> fun0 unsafe.Pointer</span><br><span class="line">imethods:</span><br><span class="line">	<span class="keyword">for</span> k := <span class="number">0</span>; k &lt; ni; k++ &#123; <span class="comment">// 接口方法遍历</span></span><br><span class="line">		i := &amp;inter.mhdr[k]                <span class="comment">// i 是接口方法， imethod 类型</span></span><br><span class="line">		itype := inter.typ.typeOff(i.ityp) <span class="comment">// 接口的方法类型</span></span><br><span class="line">		name := inter.typ.nameOff(i.name)  <span class="comment">// 接口的方法名称</span></span><br><span class="line">		iname := name.name()               <span class="comment">// 接口的方法名</span></span><br><span class="line">		ipkg := name.pkgPath()             <span class="comment">// 接口的包路径</span></span><br><span class="line">		<span class="keyword">if</span> ipkg == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			ipkg = inter.pkgpath.name()</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 根据接口方法查找实际类型的方法</span></span><br><span class="line">		<span class="keyword">for</span> ; j &lt; nt; j++ &#123; <span class="comment">// 实际类型的方法遍历</span></span><br><span class="line">			t := &amp;xmhdr[j]               <span class="comment">// t 是实际类型的方法，method 类型</span></span><br><span class="line">			tname := typ.nameOff(t.name) <span class="comment">// 实际类型的方法名</span></span><br><span class="line">			<span class="comment">// 比较接口的方法跟实际类型的方法是否一致</span></span><br><span class="line">			<span class="keyword">if</span> typ.typeOff(t.mtyp) == itype &amp;&amp; tname.name() == iname &#123;</span><br><span class="line">				<span class="comment">// 实际类型的包路径</span></span><br><span class="line">				pkgPath := tname.pkgPath()</span><br><span class="line">				<span class="keyword">if</span> pkgPath == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">					pkgPath = typ.nameOff(x.pkgpath).name()</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">				<span class="comment">// 如果是导出的方法</span></span><br><span class="line">				<span class="comment">// 则保存到 itab 中</span></span><br><span class="line">				<span class="keyword">if</span> tname.isExported() || pkgPath == ipkg &#123;</span><br><span class="line">					<span class="keyword">if</span> m != <span class="literal">nil</span> &#123;</span><br><span class="line">						ifn := typ.textOff(t.ifn) <span class="comment">// 实际类型的方法指针（通过这个指针可以调用实际类型的方法）</span></span><br><span class="line">						<span class="keyword">if</span> k == <span class="number">0</span> &#123;</span><br><span class="line">							<span class="comment">// 第一个方法</span></span><br><span class="line">							fun0 = ifn <span class="comment">// we&#x27;ll set m.fun[0] at the end</span></span><br><span class="line">						&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">							methods[k] = ifn</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="comment">// 比较下一个方法</span></span><br><span class="line">					<span class="keyword">continue</span> imethods</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 没有实现接口（实际类型没有实现 interface 中的任何一个方法）</span></span><br><span class="line">		m.fun[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">		<span class="keyword">return</span> iname <span class="comment">// 返回缺失的方法名，返回值在类型断言失败的时候会需要提示用户</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 实现了接口</span></span><br><span class="line">	m.fun[<span class="number">0</span>] = <span class="type">uintptr</span>(fun0)</span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2
+id="接口断言过程总览类型转换的关键">接口断言过程总览（类型转换的关键）</h2>
+<p>具体来说有四种情况，对应上面提到的 <code>runtime.assert*</code>
+方法：</p>
+<ul>
+<li>实际类型转换到 <code>iface</code></li>
+<li><code>iface</code> 转换到另一个 <code>iface</code></li>
+<li>实际类型转换到 <code>eface</code></li>
+<li><code>eface</code> 转换到 <code>iface</code></li>
+</ul>
+<blockquote>
+<p>这其中的关键是 <code>interfacetype</code> + <code>_type</code>
+可以生成一个 <code>itab</code>。</p>
+</blockquote>
+<p>上面的内容可能有点混乱，让人摸不着头脑，但是我们通过上面的讲述，相信已经了解了
+go 接口中底层的一些实现细节，现在，就让我们重新来捋一下，看看 go
+接口到底是怎么实现的：</p>
+<p>首先，希望我们可以达成的一个共识就是，<strong>go
+的接口断言本质上是类型转换，<code>switch...case</code> 里面或
+<code>v, ok := i.(T)</code> 允许转换失败，而 <code>i.(T).xx()</code>
+这种不允许转换失败，转换失败的时候会 <code>panic</code></strong>。</p>
+<p>接着，我们就可以通过下图来了解 go
+里面的接口整体的实现原理了（还是以上面的代码作为例子）：</p>
+<ol type="1">
+<li>将结构体赋值给接口类型：<code>var f Flyable = Bird&#123;&#125;</code></li>
+</ol>
+<p><img src="/images/go/interface/interface_12.png" /></p>
+<p>在这个赋值过程中，创建了一个 <code>iface</code>
+类型的变量，这个变量中的 <code>itab</code> 的方法表只包含了
+<code>Flyable</code> 定义的方法。</p>
+<ol start="2" type="1">
+<li><code>iface</code> 转另一个 <code>iface</code>:</li>
+</ol>
+<ul>
+<li><code>f.(Runnable)</code></li>
+<li><code>_, ok := f.(Runnable)</code></li>
+<li><code>switch f.(type)</code> 里面的 <code>case</code> 是
+<code>Runnable</code></li>
+</ul>
+<p><img src="/images/go/interface/interface_13.png" /></p>
+<p>在这个断言过程中，会将 <code>Flyable</code> 转换为
+<code>Runnable</code>，本质上是一个 <code>iface</code> 转换到另一个
+<code>iface</code>。但是有个不同之处在于， 两个 <code>iface</code>
+里面的方法列表是不一样的，只包含了当前 <code>interfacetype</code>
+里面定义的方法。</p>
+<ol start="3" type="1">
+<li>将结构体赋值给空接口：<code>var i interface&#123;&#125; = Bird&#123;&#125;</code></li>
+</ol>
+<p>在这个过程中，创建了一个 <code>eface</code> 类型的变量，这个
+<code>eface</code> 里面只包含了类型信息以及实际的 <code>Bird</code>
+结构体实例。</p>
+<p><img src="/images/go/interface/interface_14.png" /></p>
+<ol start="4" type="1">
+<li><code>eface</code> 转换到 <code>iface</code></li>
+</ol>
+<ul>
+<li><code>i.(Flyable)</code></li>
+<li><code>_, ok := i.(Runnable)</code></li>
+<li><code>switch i.(type)</code> 里面的 <code>case</code> 是
+<code>Flyable</code></li>
+</ul>
+<p>因为 <code>_type</code> 包含了 <code>Bird</code> 类型的所有信息，而
+<code>data</code> 包含了 <code>Bird</code>
+实例的值，所以这个转换是可行的。</p>
+<p><img src="/images/go/interface/interface_15.png" /></p>
+<h2 id="panicdottypei-与-panicdottypee">panicdottypeI 与
+panicdottypeE</h2>
+<p>从前面的几个小节，我们知道，go 的 <code>iface</code> 类型转换使用的是
+<code>runtime.assert*</code> 几个方法，还有另外一种情况就是，
+在编译期间编译器就已经知道了无法转换成功的情况，比如下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Flyable <span class="keyword">interface</span> &#123;</span><br><span class="line">	Fly()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Cat <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Cat)</span></span> Fly() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Cat)</span></span> test() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOS=linux GOARCH=amd64 go tool compile -N -S -l main.go &gt; main.s</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">var</span> _ = b.(<span class="type">int</span>) <span class="comment">// CALL	runtime.panicdottypeE(SB)</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> c Flyable = &amp;Cat&#123;&#125;</span><br><span class="line">	c.(Cat).test() <span class="comment">// CALL	runtime.panicdottypeI(SB)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的两个转换都是错误的，第一个 <code>b.(int)</code> 尝试将
+<code>nil</code> 转换为 <code>int</code> 类型，第二个尝试将
+<code>*Cat</code> 类型转换为 <code>Cat</code> 类型，
+这两个错误的类型转换都在编译期可以发现，因此它们生成的汇编代码调用的是
+<code>runtime.panicdottypeE</code> 和 <code>runtime.panicdottypeI</code>
+方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在执行 e.(T) 转换时如果转换失败，则调用 panicdottypeE</span></span><br><span class="line"><span class="comment">// have：我们的动态类型。</span></span><br><span class="line"><span class="comment">// want：我们试图转换为的静态类型。</span></span><br><span class="line"><span class="comment">// iface：我们正在转换的静态类型。</span></span><br><span class="line"><span class="comment">// 转换的过程：尝试将 iface 的 have 转换为 want 失败了。</span></span><br><span class="line"><span class="comment">// 不是调用方法的时候的失败。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">panicdottypeE</span><span class="params">(have, want, iface *_type)</span></span> &#123;</span><br><span class="line">	<span class="built_in">panic</span>(&amp;TypeAssertionError&#123;iface, have, want, <span class="string">&quot;&quot;</span>&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当执行 i.(T) 转换并且转换失败时，调用 panicdottypeI</span></span><br><span class="line"><span class="comment">// 跟 panicdottypeE 参数相同，但是 hava 是动态的 itab 类型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">panicdottypeI</span><span class="params">(have *itab, want, iface *_type)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> t *_type</span><br><span class="line">	<span class="keyword">if</span> have != <span class="literal">nil</span> &#123;</span><br><span class="line">		t = have._type</span><br><span class="line">	&#125;</span><br><span class="line">	panicdottypeE(t, want, iface)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个方法都是引发一个
+<code>panic</code>，因为我们的类型转换失败了：</p>
+<p><img src="/images/go/interface/interface_16.png" /></p>
+<h2 id="iface-和-eface-里面的-data-是怎么来的">iface 和 eface 里面的
+data 是怎么来的？</h2>
+<p>我们先看看下面的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Bird <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b Bird)</span></span> Fly() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Flyable <span class="keyword">interface</span> &#123;</span><br><span class="line">	Fly()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// GOOS=linux GOARCH=amd64 go tool compile -N -S -l main.go &gt; main.s</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bird := Bird&#123;&#125;</span><br><span class="line">	<span class="keyword">var</span> efc <span class="keyword">interface</span>&#123;&#125; = bird <span class="comment">// CALL	runtime.convT(SB)</span></span><br><span class="line">	<span class="keyword">var</span> ifc Flyable = bird     <span class="comment">// CALL	runtime.convT(SB)</span></span><br><span class="line">	<span class="built_in">println</span>(efc, ifc)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>我们生成伪汇编代码发现，里面将结构体变量赋值给接口类型变量的时候，实际上是调用了
+<code>convT</code> 方法。</p>
+<h2 id="convt-方法">convT* 方法</h2>
+<p><code>iface</code> 里面还包含了几个 <code>conv*</code>
+前缀的函数，在我们将某一具体类型的值赋值给接口类型的时候，go
+底层会将具体类型的值通过 <code>conv*</code> 函数转换为
+<code>iface</code> 里面的 <code>data</code> 指针：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// convT 将 v 指向的 t 类型的值转换为可以用作接口值的第二个字的指针（接口的第二个字是指向 data 的指针）。</span></span><br><span class="line"><span class="comment">// data(Pointer) =&gt; 指向 interface 第 2 个字的 Pointer</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">convT</span><span class="params">(t *_type, v unsafe.Pointer)</span></span> unsafe.Pointer &#123;</span><br><span class="line">	<span class="comment">// ... 其他代码</span></span><br><span class="line">	<span class="comment">// 分配 _type 类型所需要的内存</span></span><br><span class="line">	x := mallocgc(t.size, t, <span class="literal">true</span>)</span><br><span class="line">	<span class="comment">// 将 v 指向的值复制到刚刚分配的内存上</span></span><br><span class="line">	typedmemmove(t, x, v)</span><br><span class="line">	<span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们发现，在这个过程，实际上是将值复制了一份：</p>
+<p><img src="/images/go/interface/interface_17.png" /></p>
+<p><code>iface.go</code> 里面还有将无符号值转换为 <code>data</code>
+指针的函数，但是还不知道在什么地方会用到这些方法，如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 转换 uint16 类型值为 interface 里面 data 的指针。</span></span><br><span class="line"><span class="comment">// 如果是 0～255 的整数，返回指向 staticuint64s 数组里面对应下标的指针。</span></span><br><span class="line"><span class="comment">// 否则，分配新的内存地址。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">convT16</span><span class="params">(val <span class="type">uint16</span>)</span></span> (x unsafe.Pointer) &#123;</span><br><span class="line">	<span class="comment">// 如果小于 256，则使用共享的内存地址</span></span><br><span class="line">	<span class="keyword">if</span> val &lt; <span class="type">uint16</span>(<span class="built_in">len</span>(staticuint64s)) &#123;</span><br><span class="line">		x = unsafe.Pointer(&amp;staticuint64s[val])</span><br><span class="line">		<span class="keyword">if</span> goarch.BigEndian &#123;</span><br><span class="line">			x = add(x, <span class="number">6</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// 否则，分配新的内存</span></span><br><span class="line">		x = mallocgc(<span class="number">2</span>, uint16Type, <span class="literal">false</span>)</span><br><span class="line">		*(*<span class="type">uint16</span>)(x) = val</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>个人猜测，仅仅代表个人猜测，在整数赋值给 <code>iface</code> 或者
+<code>eface</code>
+的时候会调用这类方法。不管调不调用，我们依然可以看看它的设计，因为有些值得学习的地方：</p>
+<p><code>staticuint64s</code> 是一个全局整型数组，里面存储的是
+<code>0~255</code> 的整数。上面的代码可以表示为下图：</p>
+<p><img src="/images/go/interface/interface_18.png" /></p>
+<p>这个函数跟上面的 <code>convT</code>
+的不同之处在于，它在判断整数如果小于 <code>256</code> 的时候，则使用的是
+<code>staticuint64s</code> 数组里面对应下标的地址。
+为什么这样做呢？本质上是为了节省内存，因为对于数字来说，其实除了值本身，没有包含其他的信息了，所以如果对于每一个整数都分配新的内存来保存，
+无疑会造成浪费。按 <code>convT16</code> 里面的实现方式，对于
+<code>0~255</code>
+之间的整数，如果需要给它们分配内存，就可以使用同一个指针（指向
+<code>staticuint64s[]</code> 数组中元素的地址）。</p>
+<blockquote>
+<p>这实际上是享元模式。</p>
+</blockquote>
+<h3 id="java-里面的小整数享元模式">Java 里面的小整数享元模式</h3>
+<p>go 里使用 <code>staticuint64s</code> 的方式，其实在 Java
+里面也有类似的实现，Java 中对于小整数也是使用了享元模式，
+这样在装箱的时候，就不用分配新的内存了，就可以使用共享的一块内存了，当然，某一个整数能节省的内存非常有限，如果需要分配内存的小整数非常大，那么节省下来的内存就非常客观了。
+当然，也不只是能节省内存这唯一的优点，从另一方面说，它也节省了垃圾回收器回收内存的开销，因为不需要管理那么多内存。</p>
+<p>我们来看看 Java 中的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">k1</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">k2</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">        System.out.println(k1 == k2); <span class="comment">// true</span></span><br><span class="line">        System.out.println(k1.equals(k2)); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">        <span class="type">Integer</span> <span class="variable">k10</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">k20</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">        System.out.println(k10 == k20); <span class="comment">// false</span></span><br><span class="line">        System.out.println(k10.equals(k20)); <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Java 里面有点不一样，它是对 <code>-128~127</code>
+范围内的整数做了享元模式的处理，而 go 里面是 <code>0~255</code>。</p>
+<p>上面的代码中，当我们使用 <code>==</code> 来比较 <code>Integer</code>
+的时候，值相等的两个数，在 <code>-128~127</code> 的范围的时候，返回的是
+<code>true</code>，超出这个范围的时候比较返回的是 <code>false</code>。
+这是因为在 <code>-128~127</code>
+的时候，值相等的两个数字指向了相同的内存地址，超出这个范围的时候，值相等的两个数指向了不同的地址。</p>
+<p>Java 的详细实现可以看
+<code>java.lang.Integer.IntegerCache</code>。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>go 的的接口（<code>interface</code>）本质上是一种结构体，底册实现是
+<code>iface</code> 和 <code>eface</code>，<code>iface</code>
+表示我们通过 <code>type i interface&#123;&#125;</code> 定义的接口，而
+<code>eface</code> 表示
+<code>interface&#123;&#125;/any</code>，也就是空接口。</li>
+<li><code>iface</code> 里面保存的 <code>itab</code>
+中保存了具体类型的方法指针列表，<code>data</code>
+保存了具体类型值的内存地址。</li>
+<li><code>eface</code> 里面保存的 <code>_type</code>
+包含了具体类型的所有信息，<code>data</code>
+保存了具体类型值的内存地址。</li>
+<li><code>itab</code>
+是底层保存接口类型跟具体类型方法交集的结构体，如果具体类型实现了接口的所有方法，那么这个
+<code>itab</code>
+里面的保存有指向具体类型方法的指针。如果具体类型没有实现接口的全部方法，那么
+<code>itab</code> 中的不会保存任何方法的指针（从 <code>itab</code>
+的作用上看，我们可以看作是一个空的 <code>itab</code>）。</li>
+<li>不管 <code>itab</code>
+的方法列表是否为空，<code>interfacetype</code> 和 <code>_type</code>
+比较之后生成的 <code>itab</code>
+会缓存下来，在后续比较的时候可以直接使用缓存。</li>
+<li><code>_type</code> 是 go
+底层用来表示某一个类型的结构体，包含了类型所需空间大小等信息。</li>
+<li>类型断言 <code>i.(T)</code> 本质上是 <code>iface</code> 到
+<code>iface</code> 的转换，或者是 <code>eface</code> 到
+<code>iface</code>
+的转换，如果没有第二个返回值，那么转换失败的时候会引发
+<code>panic</code>。</li>
+<li><code>switch i.(type) &#123; case ...&#125;</code> 本质上也是
+<code>iface</code> 或 <code>eface</code> 到 <code>iface</code>
+的转换，但是转换失败的时候不会引发 <code>panic</code>。</li>
+<li>全局的保存 <code>itab</code>
+的缓存结构体，底层是使用了一个哈希表来保存 <code>itab</code>
+的，在哈希表使用超过 <code>75%</code>
+的时候，会触发扩容，新的哈希表容量为旧的 <code>2</code> 倍。</li>
+<li><code>staticuint64s</code> 使用了享元模式，Java
+中也有类似的实现。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/02/golang/go%20interface%20%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" rel="prev" title="go interface 基本用法">
+                  <i class="fa fa-angle-left"></i> go interface 基本用法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/12/16/golang/go%20map%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" rel="next" title="go map 设计与实现">
+                  go map 设计与实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

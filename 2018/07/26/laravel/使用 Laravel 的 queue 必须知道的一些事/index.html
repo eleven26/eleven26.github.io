@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在修改 queue 相关代码后，必须要使用 php artisan queue:restart 来重启队列服务，否则所做的修改可能不会生效(没法重现了，按理说应该和使用 queue:listen 或 queue:work 有关，不过最好还是重启；可能和 supervisor 开启多个 queue:work 进程也有关系，本地测试的时候只有一个进程)。  文档：  2、开发环境下以同步的方式执行队">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Laravel 的 queue 必须知道的一些事">
+<meta property="og:url" content="https://eleven26.github.io/2018/07/26/laravel/%E4%BD%BF%E7%94%A8%20Laravel%20%E7%9A%84%20queue%20%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="在修改 queue 相关代码后，必须要使用 php artisan queue:restart 来重启队列服务，否则所做的修改可能不会生效(没法重现了，按理说应该和使用 queue:listen 或 queue:work 有关，不过最好还是重启；可能和 supervisor 开启多个 queue:work 进程也有关系，本地测试的时候只有一个进程)。  文档：  2、开发环境下以同步的方式执行队">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/queue/1.png">
+<meta property="og:image" content="https://eleven26.github.io/images/queue/2.png">
+<meta property="og:image" content="https://eleven26.github.io/images/queue/4.png">
+<meta property="og:image" content="https://eleven26.github.io/images/queue/5.png">
+<meta property="og:image" content="https://eleven26.github.io/images/queue/6.png">
+<meta property="article:published_time" content="2018-07-25T23:53:00.000Z">
+<meta property="article:modified_time" content="2022-06-15T09:19:00.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/queue/1.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2018/07/26/laravel/%E4%BD%BF%E7%94%A8%20Laravel%20%E7%9A%84%20queue%20%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2018/07/26/laravel/%E4%BD%BF%E7%94%A8%20Laravel%20%E7%9A%84%20queue%20%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/","path":"2018/07/26/laravel/使用 Laravel 的 queue 必须知道的一些事/","title":"使用 Laravel 的 queue 必须知道的一些事"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 Laravel 的 queue 必须知道的一些事 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">1.</span> <span class="nav-text">扩展：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2018/07/26/laravel/%E4%BD%BF%E7%94%A8%20Laravel%20%E7%9A%84%20queue%20%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 Laravel 的 queue 必须知道的一些事 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Laravel 的 queue 必须知道的一些事
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-07-26 07:53:00" itemprop="dateCreated datePublished" datetime="2018-07-26T07:53:00+08:00">2018-07-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><ol type="1">
+<li>在修改 <code>queue</code> 相关代码后，必须要使用
+<code>php artisan queue:restart</code>
+来重启队列服务，否则所做的修改可能不会生效(没法重现了，按理说应该和使用
+<code>queue:listen</code> 或 <code>queue:work</code>
+有关，不过最好还是重启；可能和 <code>supervisor</code> 开启多个
+<code>queue:work</code> 进程也有关系，本地测试的时候只有一个进程)。</li>
+</ol>
+<p>文档： <img src="/images/queue/1.png" alt="x" /></p>
+<p>2、开发环境下以同步的方式执行队列，将 <code>queue driver</code>
+的值改为 <code>sync</code>，注意，如果 <code>queue</code>
+有输出的话，可能会导致一些问题，如：本来应该只返回 <code>json</code>
+串的，然后 <code>queue</code> 里面有输出，导致前端 <code>json</code>
+解析失败。</p>
+<p>3、什么时候使用 <code>queue:listen</code> ？什么时候使用
+<code>queue:work</code> ？</p>
+<p>官网文档有一段描述是：</p>
+<p>在 <code>queue:work</code> Artisan 命令里包含了 <code>--daemon</code>
+选项，强制队列服务器持续处理任务，而不需要重新启动整个框架。比起
+<code>queue:listen</code> 命令，这将明显的减少 CPU 的用量。</p>
+<p>使用 <code>queue:work</code> 的时候不需要重现启动整个框架，这可能是 1
+中可能修改 Job 后不生效的问题。</p>
+<p>4、多个项目同时部署时候的冲突</p>
+<p>Laravel 中队列任务使用 redis 驱动情况下保存的时候的缓存 key
+是不带前缀的，比如 A 项目 <code>dispatch</code> 了一个 a job，保存在了
+<code>queues:default</code>，然后我们去 B 项目 <code>dispatch</code>
+另一个 job，我们发现它们保存在了相同的 <code>redis key</code> 中</p>
+<p><img src="/images/queue/2.png" alt="x" /> <img
+src="/images/queue/3.png" alt="x" /></p>
+<p>这样会导致的问题是：在一个项目中跑
+<code>php artisan queue:work</code> 会拿到另外一个项目的
+job，这样就会导致一些不必要的异常，因为在反序列化的过程中会找不到对应的类。</p>
+<p>原因：<code>config/queue.php</code> 中配置的默认 <code>queue</code>
+都是 <code>default</code>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;redis&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;redis&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;connection&#x27;</span> =&gt; <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;queue&#x27;</span> =&gt; <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;expire&#x27;</span> =&gt; <span class="number">60</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>解决办法：</p>
+<p>a、自己用的是 5.1 版本，网上有说可以修改 <code>cache prefix</code>
+解决，但是 <code>laravel 5.1</code> 行不通，可能新版本可以</p>
+<p>b、为 job 指定不同的 queue，如 <code>dispatch job</code> 的时候可以
+<code>dispatch((new xxJob())-&gt;onQueue('xxQueue'))</code>，这样一来，job
+就保存在了 <code>queues:xxQueue</code> 中，
+但是还是得注意，如果还有其他项目，不要取相同名字。同时，这样一来，我们的
+<code>queue:work</code> 或者 <code>queue:listen</code> 命令也要加上
+<code>--queue</code> 参数了， 如
+<code>php artisan queue:work --queue=testQueue</code>，否则还是会去
+<code>queues:default</code> 里面找。如下：</p>
+<figure>
+<img src="/images/queue/4.png" alt="x" />
+<figcaption aria-hidden="true">x</figcaption>
+</figure>
+<p>c、直接修改 <code>config/queue.php</code>，修改
+<code>redis.queue</code> 为一个唯一的名字。如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;redis&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;redis&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;connection&#x27;</span> =&gt; <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;queue&#x27;</span> =&gt; <span class="string">&#x27;peper&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;expire&#x27;</span> =&gt; <span class="number">60</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="/images/queue/5.png" alt="x" />
+<figcaption aria-hidden="true">x</figcaption>
+</figure>
+<p>这样一来，我们的 job 就不会和其他项目的混在一起了。</p>
+<p>个人看法：最好的实践应该还是，不同的队列使用不同的名字（即使是同一个项目），这样会更便于管理。</p>
+<ol start="5" type="1">
+<li>给队列的 Job
+对象设置模型对象属性的时候，最后处理队列的时候会重新查询这个模型的数据。</li>
+</ol>
+<p>详细见：<code>\Illuminate\Queue\SerializesModels</code></p>
+<p>也就是说，我们如果想在新建 Job 实例的时候，通过
+<code>setAttribute</code> 设置了一个模型实例的属性，想在
+<code>handle</code>
+里面获取这个属性的话，是获取不到的。因为序列化队列任务的时候只会保存模型实例的几个关键属性，详细见：<code>\Illuminate\Contracts\Database\ModelIdentifier</code></p>
+<h4 id="扩展">扩展：</h4>
+<p>1、监控 redis：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli &gt; monitor</span><br></pre></td></tr></table></figure>
+<figure>
+<img src="/images/queue/6.png" alt="x" />
+<figcaption aria-hidden="true">x</figcaption>
+</figure>
+<p>2、关于 <code>Laravel</code> 队列基本工作方式：<code>dispatch</code>
+一个 job 的时候，<code>Laravel</code> 把 job 序列化保存到相应的
+<code>driver</code> 中（redis、database、file...），然后
+<code>queue:listen</code> 或 <code>queue:work</code> 的时候会从对应的
+<code>driver</code> 里面取出这个 job，对 payload 反序列化，然后调用 job
+里面的 handle 方法进行 job 的处理。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Laravel/" rel="tag"><i class="fa fa-tag"></i> Laravel</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/07/05/laravel/Laravel%20Model%20-%20Indirect%20modification%20of%20overloaded%20property/" rel="prev" title="Laravel Model - Indirect modification of overloaded property">
+                  <i class="fa fa-angle-left"></i> Laravel Model - Indirect modification of overloaded property
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/07/26/laravel/Laravel%20%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E8%A1%A8%E5%90%8D/" rel="next" title="Laravel 获取所有表名">
+                  Laravel 获取所有表名 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

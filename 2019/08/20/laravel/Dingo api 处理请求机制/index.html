@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Lumen 使用 dingo&#x2F;api 的第一步便是 $app-&gt;register(Dingo\Api\Provider\LumenServiceProvider::class);，所以就从这个文件说起吧。 这个文件的父类是 \Dingo\Api\Provider\DingoServiceProvider，我们可以在这个文件中发现其注册了很多的东西到 App 容器里面，其中也有很多单例的对象等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dingo api 处理请求机制">
+<meta property="og:url" content="https://eleven26.github.io/2019/08/20/laravel/Dingo%20api%20%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="Lumen 使用 dingo&#x2F;api 的第一步便是 $app-&gt;register(Dingo\Api\Provider\LumenServiceProvider::class);，所以就从这个文件说起吧。 这个文件的父类是 \Dingo\Api\Provider\DingoServiceProvider，我们可以在这个文件中发现其注册了很多的东西到 App 容器里面，其中也有很多单例的对象等">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-08-20T05:53:00.000Z">
+<meta property="article:modified_time" content="2020-12-08T15:20:59.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="dingo">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2019/08/20/laravel/Dingo%20api%20%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2019/08/20/laravel/Dingo%20api%20%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6/","path":"2019/08/20/laravel/Dingo api 处理请求机制/","title":"Dingo api 处理请求机制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Dingo api 处理请求机制 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2019/08/20/laravel/Dingo%20api%20%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Dingo api 处理请求机制 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dingo api 处理请求机制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-08-20 13:53:00" itemprop="dateCreated datePublished" datetime="2019-08-20T13:53:00+08:00">2019-08-20</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Lumen 使用 dingo/api 的第一步便是
+<code>$app-&gt;register(Dingo\Api\Provider\LumenServiceProvider::class);</code>，所以就从这个文件说起吧。</p>
+<p>这个文件的父类是
+<code>\Dingo\Api\Provider\DingoServiceProvider</code>，我们可以在这个文件中发现其注册了很多的东西到
+App 容器里面，其中也有很多单例的对象等等等等，</p>
+<p>但是，这些都不重要，重要的是 <strong>::boot</strong>
+方法里面的处理:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Boot the service provider.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">parent</span>::<span class="title function_ invoke__">boot</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 加载 dingo/api 配置</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">configure</span>(<span class="string">&#x27;api&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 获取 app 容器反射对象</span></span><br><span class="line">    <span class="variable">$reflection</span> = <span class="keyword">new</span> <span class="title class_">ReflectionClass</span>(<span class="variable language_">$this</span>-&gt;app);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 拿出 app 容器中定义的中间件, 传递进 \Dingo\Api\Http\Middleware\Request 中间件中</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;app[<span class="title class_">Request</span>::<span class="variable language_">class</span>]-&gt;<span class="title function_ invoke__">mergeMiddlewares</span>(</span><br><span class="line">        <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">gatherAppMiddleware</span>(<span class="variable">$reflection</span>)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 把 \Dingo\Api\Http\Middleware\Request 中间件加到 app 中间件处理链起始位置，</span></span><br><span class="line">    <span class="comment">//    这样一来，请求会先经过 \Dingo\Api\Http\Middleware\Request 中间件处理，然后才是我们使用 `app()-&gt;middleware` 定义的中间件。</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">addRequestMiddlewareToBeginning</span>(<span class="variable">$reflection</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Because Lumen sets the route resolver at a very weird point we&#x27;re going to</span></span><br><span class="line">    <span class="comment">// have to use reflection whenever the request instance is rebound to</span></span><br><span class="line">    <span class="comment">// set the route resolver to get the current route.</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">rebinding</span>(<span class="title class_">IlluminateRequest</span>::<span class="variable language_">class</span>, function (<span class="variable">$app</span>, <span class="variable">$request</span>) &#123;</span><br><span class="line">        <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">setRouteResolver</span>(function () <span class="keyword">use</span> ($<span class="title">app</span>) &#123;</span><br><span class="line">            $<span class="title">reflection</span> = <span class="title">new</span> <span class="title">ReflectionClass</span>($<span class="title">app</span>);</span><br><span class="line"></span><br><span class="line">            <span class="variable">$property</span> = <span class="variable">$reflection</span>-&gt;<span class="title function_ invoke__">getProperty</span>(<span class="string">&#x27;currentRoute&#x27;</span>);</span><br><span class="line">            <span class="variable">$property</span>-&gt;<span class="title function_ invoke__">setAccessible</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$property</span>-&gt;<span class="title function_ invoke__">getValue</span>(<span class="variable">$app</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">routeMiddleware</span>([</span><br><span class="line">        <span class="string">&#x27;api.auth&#x27;</span> =&gt; <span class="title class_">Auth</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="string">&#x27;api.throttle&#x27;</span> =&gt; <span class="title class_">RateLimit</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="string">&#x27;api.controllers&#x27;</span> =&gt; <span class="title class_">PrepareController</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此为止，我们已经知道，我们的请求会先经过
+<code>\Dingo\Api\Http\Middleware\Request</code>
+中间件处理，这是很关键的一步，接下来，我们看看这个中间件做了什么:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Handle an incoming request.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> \Illuminate\Http\Request $request</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> \Closure                 $next</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 验证是否是 dingo 请求(前缀匹配上了 API_PREFIX 或者域名匹配上 API_DOMAIN)，若不是会直接传递给下一个中间件</span></span><br><span class="line">        <span class="comment">// (详情: \Dingo\Api\Provider\HttpServiceProvider::registerHttpValidation)</span></span><br><span class="line">        <span class="comment">// 若是:</span></span><br><span class="line">        <span class="comment">//    1. dingo 接管异常处理</span></span><br><span class="line">        <span class="comment">//    2. 转换 \Illuminate\Http\Request 为 \Dingo\Api\Http\Request</span></span><br><span class="line">        <span class="comment">//    3. 重新绑定 app 容器的 request 对象为 Dingo Request， 然后把 $request 传递给其他 app 容器中定义的中间件处理</span></span><br><span class="line">        <span class="comment">//    4. 异常的时候返回异常响应对象</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;validator-&gt;<span class="title function_ invoke__">validateRequest</span>(<span class="variable">$request</span>)) &#123;</span><br><span class="line">            <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">singleton</span>(<span class="title class_">LaravelExceptionHandler</span>::<span class="variable language_">class</span>, function (<span class="variable">$app</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="variable">$app</span>[<span class="title class_">ExceptionHandler</span>::<span class="variable language_">class</span>];</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="variable">$request</span> = <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">make</span>(<span class="title class_">RequestContract</span>::<span class="variable language_">class</span>)-&gt;<span class="title function_ invoke__">createFromIlluminate</span>(<span class="variable">$request</span>);</span><br><span class="line"></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;events-&gt;<span class="title function_ invoke__">fire</span>(<span class="keyword">new</span> <span class="title class_">RequestWasMatched</span>(<span class="variable">$request</span>, <span class="variable">$this</span>-&gt;app));</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 这个方法效果是所有中间件处理完之后才会执行控制器里面对应的方法</span></span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">sendRequestThroughRouter</span>(<span class="variable">$request</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$exception</span>) &#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;exception-&gt;<span class="title function_ invoke__">report</span>(<span class="variable">$exception</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;exception-&gt;<span class="title function_ invoke__">handle</span>(<span class="variable">$exception</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后一步，也是很关键的一步:</p>
+<p>在所有中间件处理完之后，会把 $request 传递给
+<code>\Dingo\Api\Routing\Router::dispatch</code> 处理，</p>
+<p>处理完成后，使用
+<code>\Dingo\Api\Routing\Router::prepareResponse</code>
+处理控制器方法返回的响应结果</p>
+<p>这是 dingo/api transformer include 操作实际执行的地方，</p>
+<p>也许我们都曾经有过这样的疑惑：include 到底是在哪里进行数据库查询的？
+其实是在这个方法里面执行的，具体细节有兴趣的执行研究。</p>
+<p>这也算是 dingo 的一个特性了，但是 include 有太多坏处了，例如
+N+1，但是也还是有解决方法的，不用 include... 还有嵌套 include
+导致代码难以维护等等</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dingo/" rel="tag"><i class="fa fa-tag"></i> dingo</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/08/20/laravel-s/Laravel-s%20Dingo%20(Lumen)%20%E6%94%AF%E6%8C%81/" rel="prev" title="Laravel-s Dingo (Lumen) 支持">
+                  <i class="fa fa-angle-left"></i> Laravel-s Dingo (Lumen) 支持
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/08/27/nginx/%E4%B8%BA%E7%8E%B0%E6%9C%89%20nginx%20%E6%B7%BB%E5%8A%A0%20lua%20%E6%A8%A1%E5%9D%97/" rel="next" title="为现有 nginx 添加 lua 模块">
+                  为现有 nginx 添加 lua 模块 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

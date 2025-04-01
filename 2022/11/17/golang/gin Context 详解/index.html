@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="上一篇文章中讲到了 gin 的 Engine 结构体，它代表的是 gin 框架的应用实例，里面包含了应用的一些配置等信息。 既然是应用实例，我们自然有需要用到它的时候，而在 gin 里面，我们是通过 Context 来使用它的，因为在我们的路由处理函数里面， Context 是唯一的一个参数，所以，自然而然的，Engine 就被设置为 Context 的一个属性。 当然，这只是 Context 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gin Context 详解">
+<meta property="og:url" content="https://eleven26.github.io/2022/11/17/golang/gin%20Context%20%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="上一篇文章中讲到了 gin 的 Engine 结构体，它代表的是 gin 框架的应用实例，里面包含了应用的一些配置等信息。 既然是应用实例，我们自然有需要用到它的时候，而在 gin 里面，我们是通过 Context 来使用它的，因为在我们的路由处理函数里面， Context 是唯一的一个参数，所以，自然而然的，Engine 就被设置为 Context 的一个属性。 当然，这只是 Context 的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-11-17T12:08:30.000Z">
+<meta property="article:modified_time" content="2022-11-17T11:40:27.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Gin">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2022/11/17/golang/gin%20Context%20%E8%AF%A6%E8%A7%A3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2022/11/17/golang/gin%20Context%20%E8%AF%A6%E8%A7%A3/","path":"2022/11/17/golang/gin Context 详解/","title":"gin Context 详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>gin Context 详解 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">协程是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#context-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">Context 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#context-%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">Context 的一个实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gin-%E9%87%8C%E9%9D%A2%E7%9A%84-context-%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84"><span class="nav-number">4.</span> <span class="nav-text">gin 里面的 Context
+是怎样的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-gin-%E4%B8%AD%E7%9A%84-context"><span class="nav-number">5.</span> <span class="nav-text">应该如何使用 gin
+中的 Context ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2022/11/17/golang/gin%20Context%20%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="gin Context 详解 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          gin Context 详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-11-17 20:08:30" itemprop="dateCreated datePublished" datetime="2022-11-17T20:08:30+08:00">2022-11-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>上一篇文章中讲到了 <code>gin</code> 的 <code>Engine</code>
+结构体，它代表的是 <code>gin</code>
+框架的应用实例，里面包含了应用的一些配置等信息。
+既然是应用实例，我们自然有需要用到它的时候，而在 <code>gin</code>
+里面，我们是通过 <code>Context</code>
+来使用它的，因为在我们的路由处理函数里面， <code>Context</code>
+是唯一的一个参数，所以，自然而然的，<code>Engine</code> 就被设置为
+<code>Context</code> 的一个属性。 当然，这只是 <code>Context</code>
+的一小部分，也许可以这么说，<code>Engine</code>
+只是搭起了一个骨架，构造起了一个
+<code>请求-&gt;路由-&gt;处理-&gt;响应</code> 的模型，
+但是所有脏活累活其实基本都在 <code>Context</code> 里面，今天就来看看
+<code>Context</code> 具体有哪些功能。</p>
+<h2 id="协程是什么">协程是什么？</h2>
+<p>需要注意的是，我在本文前面提到的 <code>Context</code> 其实是
+<code>gin.Context</code>，而不是 go 标准库的
+<code>context.Context</code>， 当然 <code>gin.Context</code>
+也实现了标准库的 <code>Context</code> 接口，
+但是在这基础上，还提供了非常多的功能。</p>
+<p>回到正题，也许很多人都知道，go
+里面的一个核心功能就是它的协程（<code>goroutine</code>），我有时候会跟别人说
+<code>goroutine</code> 是其精髓所在，其实一点也不为过。
+毕竟再也没有其他任何一门语言，能够像 go
+的协程这样如此简单地实现多线程的功能，这得益于 go
+的设计，它从一开始就遵循
+<strong>通过通信来共享内存，而不是通过共享内存来通信</strong>
+的设计理念。</p>
+<p>我们先来看看 go 的协程模型是怎样的。 <strong>从 go
+进程启动的那一刻开始，它就启动了一个
+<code>goroutine</code></strong>，如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;runtime&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// goroutine nums: 1</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;goroutine nums: %d\n&quot;</span>, runtime.NumGoroutine())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动的时候，<code>main</code> 就是一个协程，所以调用
+<code>runtime.NumGoroutine()</code> 的时候，输出的是
+<code>1</code>。</p>
+<p>然后我们知道，在代码的任何地方，我们都可以通过 <code>go</code>
+关键字来启动一个新的协程，所以我们可以通过以下的方式来在
+<code>main</code> 里面启动一个新的协程：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;runtime&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 用以等待协程执行完成</span></span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Millisecond * <span class="number">20</span>)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// goroutine nums: 2</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;goroutine nums: %d\n&quot;</span>, runtime.NumGoroutine())</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>稍微解释一下这里的几行代码：</p>
+<ul>
+<li><code>var wg sync.WaitGroup</code> 这个 <code>WaitGroup</code> 是 go
+里面用来等待多个协程的机制（如果没有 <code>wg</code>
+控制，有可能会导致主协程在子协程还没执行完毕就退出，比如子协程需要执行个几秒，但是你主协程不等它的话，子协程就会在主协程退出的时候也马上结束，这可能并不是我们想要的结果）</li>
+<li><code>wg.Add(1)</code>
+表示需要等待的协程的数量，<code>wg.Done()</code>
+表示需要等待的协程数量减少 1，在减少到 0 的时候，<code>wg.Wait()</code>
+调用会返回，否则，<code>wg.Wait()</code> 会一直阻塞。</li>
+</ul>
+<p>这里输出了 <code>goroutine nums: 2</code>，这是因为除了
+<code>main</code> 协程之外，我们还用 <code>go</code>
+关键字启动了一个新的协程，所以实际上是有两个协程。</p>
+<p>好了，我们可以看到，在上面的代码里面通过 <code>go</code>
+关键字后面接一个 <code>func</code>
+就可以启动一个新的协程，所以<strong>其实协程本质上就是一个函数调用</strong>。
+但是这跟普通的函数调用有什么区别呢？最关键的区别是，函数调用是顺序执行的，在执行函数的时候，调用函数的地方必须等待函数返回然后再往下执行。
+而协程可以实现并行（当然，前提是有多个 cpu
+可以使用），这样一来，启动协程的时候，go
+关键字后面的代码可以接着执行（跟 <code>go func</code>
+启动的协程同时执行）。</p>
+<p>所以，<code>go</code> 的协程有如下特点：</p>
+<ul>
+<li>最关键的，<code>main</code>
+协程退出的话，所有子协程都直接退出（注意是 <code>main</code>
+协程）。</li>
+<li>首先，不同协程是可以并行执行的，每一个协程都是平等的，所以上面需要通过
+<code>WaitGroup</code>
+来等待子协程，因为主协程跟子协程是并行执行的，如果不等待子协程执行完毕
+<code>main</code> 协程就退出的话，就会导致子协程执行一半就退出。</li>
+</ul>
+<blockquote>
+<p>需要注意的是，上面提到的是 <code>main</code>
+协程退出，所有子协程都会退出，但是如果不是 <code>main</code>
+协程启动的协程的话，比如子协程 A 里面又启动了新的协程 B 的情况下， 如果
+B 执行的时间会比 A 执行时间长，这种情况下，A 协程的退出并不会导致 B
+协程的终止。这样就会出现
+<strong>协程泄漏</strong>，这个问题可大可小，毕竟协程还在的话，资源就会被一直占用而得不到释放。
+轻则导致响应缓慢，严重直接导致服务不可用、OOM 啥的。</p>
+</blockquote>
+<h2 id="context-是什么">Context 是什么？</h2>
+<p>简单来说，<code>Context</code>
+代表了协程的上下文，用以在父子协程之间传递控制信号，共享变量等操作，比如超时的时候告诉子协程超时，父协程取消协程执行的时候传递取消的信号。</p>
+<p>在上面我们提到了使用协程的情况下，有可能会导致协程泄漏，是不是我们对此就完全没有办法了呢？并不是的，毕竟从
+<code>go</code> 设计出来协程就是它最重要的特性， 所以 <code>go</code>
+提供了一种叫 <code>Context</code> 的东西，翻译成中文就是 "上下文"
+的意思，的确是这样，它就是代表了 "上下文"，但是是什么的上下文呢？</p>
+<p>在 http
+请求中，它往往代表的是当前处理的请求的上下文。它可以在请求内来共享数据，这是其中一个关键的功能。另外一个功能就是可以解决上一小节说的
+"协程泄漏" 的问题。</p>
+<p>那 <code>Context</code> 是如何解决 "协程泄漏"
+的问题的呢？我们先来看看 <code>Context</code> 的定义：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// context.Context 接口</span></span><br><span class="line"><span class="keyword">type</span> Context <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// 获取给协程设置的终止时间</span></span><br><span class="line">	Deadline() (deadline time.Time, ok <span class="type">bool</span>)</span><br><span class="line">	<span class="comment">// 用在子协程的 select 语句里面，有三种情况会导致这个函数返回：</span></span><br><span class="line">	<span class="comment">// 1. context 的 cancel 被调用</span></span><br><span class="line">	<span class="comment">// 2. 当前时间到了 context 的 deadline</span></span><br><span class="line">	<span class="comment">// 3. 当前协程执行超时</span></span><br><span class="line">	Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">	<span class="comment">// 有几种情况：</span></span><br><span class="line">	<span class="comment">// 1. 如果 Done 通道尚未关闭，则返回 nil</span></span><br><span class="line">	<span class="comment">// 2. 如果 Done 通道已经关闭，返回一个表示具体原因的错误：被取消了或者超时了</span></span><br><span class="line">	Err() <span class="type">error</span></span><br><span class="line">	<span class="comment">// 返回父协程 context.WithValue 绑定的值</span></span><br><span class="line">	Value(key any) any</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们重点看这里的 <code>Done</code> 方法，它的返回值是一个
+<code>chan</code>，而这个 <code>chan</code>
+是父协程用来给子协程传递信息的关键，在父协程中进行 <code>cancel</code>
+或者 当前的时间已经到了 <code>context</code> 指定的
+<code>Deadline</code>，又或者子协程执行的总时间到达了指定的
+<code>timeout</code> 时间时，<code>Done</code> 返回的那个
+<code>chan</code> 会接收到一个值， 也就是说
+<code>case &lt;-c.Done():</code> 里面的语句会被执行。</p>
+<blockquote>
+<p>select 是 go 里面多路复用的机制，每一个 case 一般是一个 chan，在 chan
+获取到值的时候，case 里面的语句会被执行，而 select 语句也会结束。</p>
+</blockquote>
+<p>关于 <code>Context</code>
+的其他东西，这里不细说了，不是本文的重点，我们需要知道的是，
+<strong>Context
+提供了一种机制，可以让父协程给子协程传递一些信号，这样我们就可以控制子协程的执行耗时，防止某些操作导致协程一直执行下去</strong>。</p>
+<blockquote>
+<p>另外需要注意的是，并不是说我们用了 <code>Context</code>
+就可以控制子协程了，我们还需要在子协程里面监听
+<code>context.Done()</code> 的返回值，在 <code>Done()</code>
+返回的时候，做一些清理工作，然后退出协程。</p>
+</blockquote>
+<p>之所以需要子协程做 <code>Done()</code>
+的监听，是因为父子协程之间并不是一种强的控制关系，而是需要子协程主动来协助父协程做超时等控制的。</p>
+<p>好了，我们在父协程里面设置了一个带有 <code>Timeout</code> 或者
+<code>Deadline</code> 的
+<code>Context</code>，然后我们也在子协程里面通过 <code>select</code>
+来监听 <code>context.Done()</code> 返回的 <code>chan</code>，
+而且也在这个 <code>chan</code>
+返回的时候作出了相应的清理操作，所以我们最终才得以实现父协程控制子协程。也就避免了父协程退出了，一堆子协程还在执行的
+"协程泄漏" 现象。</p>
+<h2 id="context-的一个实例">Context 的一个实例</h2>
+<p>在下面的例子中：</p>
+<ul>
+<li>我们定义了 <code>wg</code>，用以控制等待子协程结束。</li>
+<li>通过 <code>WithCancel</code> 创建了一个
+<code>Context</code>，同时获取了一个可以发送取消信号的函数句柄，我们调用它可以往一个
+<code>chan</code> 写入数据，从而 <code>select</code>
+语句从阻塞状态转变为执行态。</li>
+<li>我们在 1 秒后通过调用 <code>cancel</code> 方法发送了取消的信号</li>
+<li>而 <code>out</code> 这个 <code>chan</code> 要在 2
+秒后才会收到数据，所以 <code>select</code> 匹配上了
+<code>&lt;-ctx.Done()</code> 这一分支</li>
+<li>我们打印输出，发现 <code>ctx.Done()</code> 的原因是
+<code>context canceled</code>（取消了），最后 <code>wg.Done()</code>
+结束 <code>WaitGroup</code> 等待。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟控制超时的情况，</span></span><br><span class="line"><span class="comment">// 我们在 1 秒后主动发送取消信号，</span></span><br><span class="line"><span class="comment">// select 里面的 `case &lt;-ctx.Done()` 会返回，select 语句结束</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义了一个有取消功能的 Context，</span></span><br><span class="line">	<span class="comment">// ctx 里面的 Done() 方法返回的 chan 在我们调用</span></span><br><span class="line">	<span class="comment">// cancel 方法的时候会获取到值。</span></span><br><span class="line">	ctx, cancel := context.WithCancel(context.TODO())</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c context.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 1 秒后发送取消信号</span></span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		cancel()</span><br><span class="line">	&#125;(ctx)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// out 表示接收业务处理结果的 chan</span></span><br><span class="line">	<span class="comment">// 我们在业务处理完毕之后往其中写入数据</span></span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(out <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 模拟耗时 2 秒的业务处理</span></span><br><span class="line">		time.Sleep(time.Second * <span class="number">2</span>)</span><br><span class="line">		out &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;(out)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-ctx.Done(): <span class="comment">// 1 秒后，这里接收到值，执行这一个分支</span></span><br><span class="line">		fmt.Println(ctx.Err()) <span class="comment">// 输出：context canceled</span></span><br><span class="line">		wg.Done()</span><br><span class="line">	<span class="keyword">case</span> &lt;-out:</span><br><span class="line">		fmt.Println(<span class="string">&quot;done!&quot;</span>)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子只是用了 <code>WithCancel</code>，但是
+<code>WithDeadline</code> 和 <code>WithTimeout</code>
+的功能都是类似的，都是通过 <code>ctx.Done()</code> 返回的那个
+<code>chan</code> 来进行父子协程之间的通信的。</p>
+<h2 id="gin-里面的-context-是怎样的">gin 里面的 <code>Context</code>
+是怎样的？</h2>
+<p>在上一小节中，我们提到了，<code>Context</code>
+表示的是协程的上下文。回到本文的主题，我们现在的场景是一个 web
+框架，它的核心功能就是处理 HTTP 请求，
+在我们的请求处理过程中，可能会有各种各样的操作，比如读写文件、发起新的
+HTTP 请求、读写数据库等，而这些操作的耗时可能是不确定的。</p>
+<p>所以 <code>gin</code> 也是需要 <code>Context</code>
+的机制来控制子协程的执行的，但是正如前面所说的，<code>gin</code>
+其实是一个 web 框架，它的核心功能是处理 HTTP 请求， 因此
+<code>gin</code> 里面的 <code>Context</code> 除了 <code>Context</code>
+共有的一些功能外，在其基础上封装了很多跟 HTTP
+请求处理相关的功能，比如：</p>
+<ul>
+<li>表单验证</li>
+<li>错误处理</li>
+<li>获取请求数据</li>
+<li>渲染不同格式的响应</li>
+</ul>
+<blockquote>
+<p>这些功能不在本文的讨论范围之内，本文只探讨 Context 相关的功能。</p>
+</blockquote>
+<p>而且，实际上，在 <code>gin</code> 里面对 <code>Context</code>
+方法的调用只是简单的对 <code>*http.Request</code> 的
+<code>Context</code> 的封装，并没有什么特别的功能，除了
+<code>Value()</code> 方法，它可以从 <code>Context.Keys</code>
+里面获取值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Deadline、Done、Err 方法会调用 http.Request 本身的 context 对应的同名方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Context)</span></span> Deadline() (deadline time.Time, ok <span class="type">bool</span>) &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Context)</span></span> Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125; &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Context)</span></span> Err() <span class="type">error</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// gin.Context.Value 方法</span></span><br><span class="line"><span class="comment">// 根据 key 获取关联的值。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Context)</span></span> Value(key any) any &#123;</span><br><span class="line">	<span class="comment">// 获取当前 Context 关联的请求</span></span><br><span class="line">	<span class="keyword">if</span> key == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> c.Request</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 获取 Context 本身</span></span><br><span class="line">	<span class="keyword">if</span> key == ContextKey &#123;</span><br><span class="line">		<span class="keyword">return</span> c</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 从 c.Keys 里面获取共享的变量</span></span><br><span class="line">	<span class="keyword">if</span> keyAsString, ok := key.(<span class="type">string</span>); ok &#123;</span><br><span class="line">		<span class="keyword">if</span> val, exists := c.Get(keyAsString); exists &#123;</span><br><span class="line">			<span class="keyword">return</span> val</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 都不是上面的情况，从最初的 Context 里面获取 key 对应的值</span></span><br><span class="line">	<span class="keyword">if</span> !c.engine.ContextWithFallback || c.Request == <span class="literal">nil</span> || c.Request.Context() == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> c.Request.Context().Value(key)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="应该如何使用-gin-中的-context">应该如何使用 <code>gin</code>
+中的 <code>Context</code> ？</h2>
+<p>现在我们知道了，在我们开发中其实有很多时候是需要通过启动子协程来进行处理的。为了更好的对子协程进行一些控制，我们往往需要在父协程里面定义一个
+<code>Context</code> 对象，
+然后创建子协程的时候，将其作为参数传递给子协程。</p>
+<p>一来可以在父子协程之间共享数据，另一方面可以让子协程感知父协程的一些控制信号。再次提醒，这个是需要子协程主动去监听
+<code>context.Done()</code> 这个 <code>chan</code>
+的，否则一样会导致协程泄漏，下面是一个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;runtime&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	wg.Add(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// IDE 提示不应该忽略它的第二个返回值，防止 context 泄漏</span></span><br><span class="line">	ctx, _ := context.WithDeadline(context.TODO(), time.Now().Add(time.Second))</span><br><span class="line">	<span class="comment">// 正常退出</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c context.Context)</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;goroutine 1&quot;</span>)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;(ctx)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ctx 到了 deadline 也不会退出</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c context.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			time.Sleep(time.Second)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(<span class="string">&quot;goroutine 2&quot;</span>)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;(ctx)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 输出 3</span></span><br><span class="line">	fmt.Println(runtime.NumGoroutine())</span><br><span class="line"></span><br><span class="line">	time.Sleep(time.Second * <span class="number">2</span>)</span><br><span class="line">	<span class="comment">// 输出 2，还有 main 协程跟上面第二个协程</span></span><br><span class="line">	fmt.Println(runtime.NumGoroutine())</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>为什么会这样呢？这是因为，其实对于子协程来说，你传递的这个 Context
+参数就仅仅是一个参数而已，只是占用了函数调用栈上的一小片内存的变量，一个变量，如果你不去管它、用它，它又能做什么呢？它只是一段内存而已。
+所以才需要去主动监听 context.Done() 返回的 chan。</p>
+</blockquote>
+<p>因此，正确的做法是在一个合适的地方加上
+<code>select</code>，如下面这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c context.Context)</span></span> &#123;</span><br><span class="line">out:</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        time.Sleep(time.Second)</span><br><span class="line">        fmt.Println(<span class="string">&quot;for run...&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-c.Done():</span><br><span class="line">            <span class="comment">// 接收到协程终止信号</span></span><br><span class="line">            fmt.Println(c.Err())</span><br><span class="line">            <span class="keyword">break</span> out</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="comment">// 终止 select，继续下一次 for 循环</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="string">&quot;goroutine 2&quot;</span>)</span><br><span class="line">    wg.Done()</span><br><span class="line">&#125;(ctx)</span><br></pre></td></tr></table></figure>
+<p>这个例子也许不太恰当，但是反映出的一个关键点是，我们在做一些比较耗时的操作时，必须注意监听父协程的终止信号，不加以控制的话，很有可能会导致协程泄漏。</p>
+<p>说了那么多，该回到正题了。正如前面两个例子那样，其实我们在 web
+应用中往往有需要进行网络调用的时候，比如 rpc
+调用、数据库读写，缓存读写，这些库里面往往第一个参数就是接收
+<code>context.Context</code> 参数，
+通过这个参数，我们就可以控制子协程的一些行为了（前提是被调用方遵循
+<code>Context</code> 的约定），比如做超时控制。</p>
+<p>比如，非常流行的 <code>gorm</code> 库，我们在查询的时候也可以传递
+<code>Context</code> 参数进行一些控制：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details</span></span><br><span class="line">	dsn := <span class="string">&quot;gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span></span><br><span class="line">	db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 我们的 context 定义的超时时间是 1 秒</span></span><br><span class="line">	ctx, _ := context.WithTimeout(context.TODO(), time.Second)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 实际上我们的 SQL 需要执行 3 秒</span></span><br><span class="line">	db = db.WithContext(ctx).Exec(<span class="string">&quot;select sleep(3)&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 输出：context deadline exceeded</span></span><br><span class="line">	fmt.Println(db.Error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们定义的 <code>Context</code> 的超时时间是 1
+秒，但实际上我们执行的 SQL 需要的时间是 3 秒，但是我们的
+<code>Exec</code> 调用在 1 秒后马上就返回了，
+这是因为我们传递了一个有超时控制的 <code>Context</code> 作为参数，这样
+<code>gorm</code> 的 <code>mysql</code>
+库就知道需要控制它的执行时间，在超时的时候可以及时响应。</p>
+<p>所以回到 <code>gin</code> 中，因为我们有一个请求相关的
+<code>Context</code>
+所以，我们在进行网络调用这类操作的时候，可以基于这个
+<code>Context</code> 创建一个新的 <code>Context</code>，如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := gin.Default()</span><br><span class="line">	r.GET(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 第一个参数是代表 HTTP 请求上下文的 Context</span></span><br><span class="line">		ctx, _ := context.WithTimeout(c, time.Second)</span><br><span class="line">		<span class="comment">// ... 省略一部分代码</span></span><br><span class="line">		<span class="comment">// 执行 SQL</span></span><br><span class="line">		db := db.WithContext(ctx).Exec(<span class="string">&quot;&quot;</span>)</span><br><span class="line">	&#125;)</span><br><span class="line">	r.Run(<span class="string">&quot;:3000&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样一来，我们就实现了，既可以通过 <code>Context</code>
+来进行父子协程的变量共享，也实现了对子协程的一些控制。</p>
+<blockquote>
+<p>正如我们所看到的那样，我们创建新的 <code>Context</code>
+往往是基于一个父 <code>Context</code>
+来创建的，在实际开发中，会出现一些相对来说比较复杂的情况，比如，父子
+<code>Context</code> 都设置了 <code>Timeout</code> 又或者一个设置了
+<code>Deadline</code> 一个设置了 <code>Timeout</code> 等，
+这种情况下，子 <code>Context</code> 在 <code>ctx.Done()</code>
+的时候，会取父子协程中设置的最小的那个时间，如下面的例子。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	start := time.Now()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 父 context 的超时时间是 1 秒</span></span><br><span class="line">	ctx1, _ := context.WithTimeout(context.TODO(), time.Second)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 子 context 的超时时间是 3 秒</span></span><br><span class="line">	<span class="comment">// 但实际上，在这个调用之后，ctx2 的超时时间实际上是 1 秒</span></span><br><span class="line">	ctx2, _ := context.WithTimeout(ctx1, time.Second*<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c context.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;-c.Done(): <span class="comment">// 1 秒后 chan 会获取到值，执行下面的逻辑</span></span><br><span class="line">			fmt.Println(c.Err())</span><br><span class="line">			ch &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;(ctx2)</span><br><span class="line"></span><br><span class="line">	&lt;-ch</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 输出 1</span></span><br><span class="line">	fmt.Println(time.Now().Sub(start).Seconds())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单来说，在现在很多涉及到网络调用等耗时操作的 golang
+库中，往往需要提供一个 <code>Context</code>
+参数用做超时控制，我们使用的时候将 <code>gin.Context</code>
+作为参数传递给 <code>context.WithTimeout</code> 之类的函数即可。</p>
+<h2 id="总结">总结</h2>
+<p>好了，到此为止吧，关于 <code>Context</code>
+后续有空再写一篇，这里面的东西，如果对 <code>Context</code> 的一些 API
+不太熟悉的话，可能会不太好懂。最后总结一下：</p>
+<ul>
+<li>main 函数本身是一个协程，协程里面可以通过 <code>go</code>
+关键字启动新的协程。
+协程本质上是一个函数调用。父子协程是可以并行执行的（前提是有多个 CPU
+核）。</li>
+<li>在需要等待子协程执行完的时候，可以使用
+<code>sync.WaitGroup</code>，当然除了这个，另外一个方法是使用
+<code>chan</code>。</li>
+<li><code>Context</code>
+代表的是父子协程的一个上下文对象，主要作用是共享数据、以及对子协程做一些超时控制等。</li>
+<li><code>gin</code> 里面的 <code>Context</code> 除了
+<code>context.Context</code> 的基本功能外，还提供了很多 HTTP
+请求处理相关的一些功能，比如获取请求数据、处理响应等。</li>
+<li>子协程有义务通过 <code>select</code>
+来监听父协程发送的取消信号，又或者超时的信号，否则有可能导致协程泄漏。</li>
+<li>我们在调用一些库的时候，比如在 <code>gorm</code> 里面进行
+<code>MySQL</code>，如果需要进行超时控制，则可以通过
+<code>context.WithTimeout</code> 来创建一个新的
+<code>Context</code>，并把这个新的 <code>Context</code> 作为参数传递给
+<code>db.WithContext</code>，这样在网络调用超时的时候，我们的调用会直接返回错误。从而避免了长时间占用资源。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+              <a href="/tags/Gin/" rel="tag"><i class="fa fa-tag"></i> Gin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/16/golang/gin%20%E6%A0%B8%E5%BF%83%E8%AF%A6%E8%A7%A3/" rel="prev" title="gin 核心详解">
+                  <i class="fa fa-angle-left"></i> gin 核心详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/18/golang/go%20Context%20%E6%8C%87%E5%8C%97/" rel="next" title="go Context 指北">
+                  go Context 指北 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Filebeat 和 Logstash 均由 Elastic 开发，是 Elastic Stack 不可或缺的组件，它们都充当日志收集器，具有不同的特性和功能。Logstash 是 ELK Stack（Elasticsearch、Logstash、Kibana）的原始组件，旨在高效地从多个来源收集大量日志并将其分发到不同的目的地。 虽然 Logstash 越来越受欢迎，但由于资源密集型操作，尤其是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Filebeat vs Logstash：日志采集工具对比">
+<meta property="og:url" content="https://eleven26.github.io/2024/03/01/log/Filebeat_vs_Logstash%20%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="Filebeat 和 Logstash 均由 Elastic 开发，是 Elastic Stack 不可或缺的组件，它们都充当日志收集器，具有不同的特性和功能。Logstash 是 ELK Stack（Elasticsearch、Logstash、Kibana）的原始组件，旨在高效地从多个来源收集大量日志并将其分发到不同的目的地。 虽然 Logstash 越来越受欢迎，但由于资源密集型操作，尤其是">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/log/1.png">
+<meta property="og:image" content="https://eleven26.github.io/images/log/2.png">
+<meta property="og:image" content="https://eleven26.github.io/images/log/3.png">
+<meta property="og:image" content="https://eleven26.github.io/images/log/4.png">
+<meta property="og:image" content="https://eleven26.github.io/images/log/5.png">
+<meta property="og:image" content="https://eleven26.github.io/images/log/6.png">
+<meta property="article:published_time" content="2024-03-01T12:28:30.000Z">
+<meta property="article:modified_time" content="2024-03-31T02:22:52.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="ELK">
+<meta property="article:tag" content="Filebeat">
+<meta property="article:tag" content="Logstash">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/log/1.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2024/03/01/log/Filebeat_vs_Logstash%20%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2024/03/01/log/Filebeat_vs_Logstash%20%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/","path":"2024/03/01/log/Filebeat_vs_Logstash 日志采集工具对比/","title":"Filebeat vs Logstash：日志采集工具对比"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Filebeat vs Logstash：日志采集工具对比 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-filebeat"><span class="nav-number">1.</span> <span class="nav-text">什么是 Filebeat？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-logstash"><span class="nav-number">2.</span> <span class="nav-text">什么是 Logstash？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E5%B9%B3%E5%8F%B0"><span class="nav-number">3.</span> <span class="nav-text">1. 支持的平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87%E6%80%A7%E8%83%BDfilebeat-%E8%8E%B7%E8%83%9C"><span class="nav-number">4.</span> <span class="nav-text">2. 内存使用率&#x2F;性能：Filebeat
+获胜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E5%92%8C%E6%8F%92%E4%BB%B6logstash-%E8%8E%B7%E8%83%9C"><span class="nav-number">5.</span> <span class="nav-text">3. 生态系统和插件：Logstash
+获胜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E8%A7%A3%E6%9E%90logstash-%E8%8E%B7%E8%83%9C"><span class="nav-number">6.</span> <span class="nav-text">4. 日志解析：Logstash 获胜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E8%B7%AF%E7%94%B1logstash-%E8%8E%B7%E8%83%9C"><span class="nav-number">7.</span> <span class="nav-text">5. 事件路由：Logstash 获胜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93"><span class="nav-number">8.</span> <span class="nav-text">6. 传输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5%E4%BD%BF%E7%94%A8-filebeat-%E6%88%96-logstash"><span class="nav-number">9.</span> <span class="nav-text">什么时候应该使用 Filebeat
+或 Logstash ？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">9.1.</span> <span class="nav-text">实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">10.</span> <span class="nav-text">结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2024/03/01/log/Filebeat_vs_Logstash%20%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Filebeat vs Logstash：日志采集工具对比 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Filebeat vs Logstash：日志采集工具对比
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-03-01 20:28:30" itemprop="dateCreated datePublished" datetime="2024-03-01T20:28:30+08:00">2024-03-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Filebeat 和 Logstash 均由 Elastic 开发，是 Elastic Stack
+不可或缺的组件，它们都充当日志收集器，具有不同的特性和功能。Logstash 是
+ELK
+Stack（Elasticsearch、Logstash、Kibana）的原始组件，旨在高效地从多个来源收集大量日志并将其分发到不同的目的地。</p>
+<p>虽然 Logstash
+越来越受欢迎，但由于资源密集型操作，尤其是在资源有限的系统上，它面临着挑战。为了解决这个问题，Elastic
+推出了 Filebeat 作为 Beats 系列的一部分，为 Logstash
+提供了轻量级的替代品。这一新增导致 ELK Stack 更名为 Elastic
+Stack，以更好地涵盖包括 Beats 在内的不断增长的工具套件。Filebeat
+旨在补充 Logstash，但随着时间的推移演变成一个独立的日志收集器。</p>
+<p>因此，鉴于这两个日志收集器的独特优势和功能，在这两个日志收集器之间做出决定可能是一项艰巨的任务。本文将比较
+Filebeat 和
+Logstash，探讨它们的优缺点，并提供有关何时选择其中一种的见解。</p>
+<h2 id="什么是-filebeat">什么是 Filebeat？</h2>
+<p>Filebeat 是由 Elastic 开发的免费开源日志收集器，是 Elastic Stack 中
+beats
+系列的一部分。这套工具对于收集和传送各种类型的数据（如日志、指标和网络信息）至关重要。Filebeat
+最初主要设计用于 Logstash，但随着时间的推移，随着 Elastic
+对其日志处理能力的不断更新，Filebeat 已经超越了这一点。</p>
+<p>此外，Filebeat
+具有各种内置输入和输出，可满足不同的来源和目标。如果这些内置选项不符合特定要求，它还允许创建自定义插件。Filebeat
+还包括内部模块，用于从广泛使用的工具（如 NGINX、Apache、系统日志和
+MySQL）收集和解析日志。</p>
+<p>Filebeat
+因其轻量级设计、可靠性和稳健性而受到重视。它支持加密数据传输，并使用背压敏感协议，这在处理大量数据时很有用。此功能使其能够调整其数据传输速率，防止目的地过载。</p>
+<p><img src="/images/log/1.png" /></p>
+<h2 id="什么是-logstash">什么是 Logstash？</h2>
+<p>Logstash 是由 Elastic
+创建的免费开源数据管道工具。它旨在有效地收集、处理日志并将其发送到各种目标。Logstash
+以其灵活性而闻名，提供多个输入、过滤器和输出，使其能够适应不同的日志处理需求。它擅长过滤、解析和转换日志，提供高级日志处理能力。</p>
+<p>作为 Elastic Stack 的关键组件，Logstash 可与 Beats、Elasticsearch 和
+Kibana 等其他工具无缝协作。它从各种来源提取数据并将其推送到
+Elasticsearch，然后转发到 Kibana 进行分析和可视化。</p>
+<p>Logstash 拥有超过 200 个插件，并提供了一个
+API，用于创建满足特定用户需求的自定义插件。Logstash
+的一个显著特点是其可靠性，它由一个持久队列支撑，该队列在传输日志事件时保存日志事件。在事件发送失败的情况下，Logstash
+可以将其重新路由到另一个队列进行进一步检查和重新处理。</p>
+<p><img src="/images/log/2.png" /></p>
+<p>现在我们已经对 Filebeat 和 Logstash
+有了基本的了解，让我们来比较一下这两个工具。我们的比较将重点关注以下关键标准：</p>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 37%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">特征</th>
+<th style="text-align: center;">Filebeat</th>
+<th style="text-align: center;">Logstash</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">支持的平台</td>
+<td style="text-align: center;">跨平台</td>
+<td style="text-align: center;">跨平台</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">内存使用率/性能</td>
+<td style="text-align: center;">轻量级</td>
+<td style="text-align: center;">利用大量内存</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">生态系统和插件</td>
+<td style="text-align: center;">少于 60 个插件</td>
+<td style="text-align: center;">超过 200 个插件</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">日志解析</td>
+<td style="text-align: center;">具有内置解析器和模块</td>
+<td style="text-align: center;">具有更强大的解析器</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">事件路由</td>
+<td style="text-align: center;">不支持</td>
+<td style="text-align: center;">使用条件语句路由日志</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">传输</td>
+<td style="text-align: center;">缓冲日志事件并具有持久性队列</td>
+<td style="text-align: center;">缓冲日志事件并具有持久性队列</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">UI &amp; UX</td>
+<td style="text-align: center;">没有 UI，但可以与 Kibana 集成</td>
+<td style="text-align: center;">没有 UI，但可以与 Kibana 集成</td>
+</tr>
+</tbody>
+</table>
+<h2 id="支持的平台">1. 支持的平台</h2>
+<p>Filebeat 是使用 Go 开发的，Go
+是一种以创建高性能网络和基础设施程序而闻名的现代语言。其设计允许
+Filebeat
+以较低的内存占用量收集、处理和转发日志。此外，它的兼容性跨越各种平台，包括
+Linux、Windows、MacOS，甚至容器化环境。</p>
+<p>另一方面，Logstash 是使用 JRuby 构建的，JRuby 是 Java 中 Ruby
+编程语言的高性能实现。要运行 Logstash，需要 Java 虚拟机 （JVM）。JVM
+的跨平台兼容性确保 Logstash 可以在各种系统上运行，包括 Linux、Windows 和
+MacOS。这使得 Logstash 在平台支持方面同样通用。</p>
+<p>考虑到支持的平台，Filebeat 和 Logstash
+都表现出很强的适应性，使其成为跨平台支持的绝佳选择。</p>
+<h2 id="内存使用率性能filebeat-获胜">2. 内存使用率/性能：Filebeat
+获胜</h2>
+<p>Filebeat
+旨在专注于轻量级效率，使其能够处理大量数据，同时保持最小的内存消耗。Filebeat
+的单个实例通常使用不到 2MB 的内存，并使用不到 30% 的
+CPU。如前所述，这种非凡的效率主要归功于它在 Go 中的发展。</p>
+<p>此外，Filebeat
+还具有负载平衡和故障转移功能，这对于确保一致的日志数据检索和转发至关重要，尤其是在高流量场景中。</p>
+<p>相比之下，Logstash
+需要的内存占用要高得多。根据官方文档，为了有效运行，它需要一个至少具有
+2GB 内存的主机，建议的内存分配约为 4GB。这种需求的增加源于 Logstash 对
+Java 虚拟机 （JVM）
+及其复杂的日志处理功能的依赖，这自然会消耗更多的资源。虽然 Logstash
+确实包含负载平衡和故障转移功能以实现可靠的日志处理，但其较高的资源要求使其不太适合内存和
+CPU 使用率是关键限制的环境。</p>
+<p>总之，对于性能和可扩展性至关重要且内存使用率至关重要的环境，Filebeat
+是更有利的选择，因为它具有更低的内存占用和高效的资源利用率。</p>
+<h2 id="生态系统和插件logstash-获胜">3. 生态系统和插件：Logstash
+获胜</h2>
+<p>Filebeat 专注于轻量级和高效，仍然提供包含 60
+多个插件的大量库。这些插件涵盖了各种输入和输出，包括 AWS
+S3、Kafka、Redis 和
+File。这些插件的全面详细信息可以在文档中的详细输入和输出页面上找到。对于那些熟练使用
+Go 的人来说，Filebeat
+还允许创建自定义插件，为特定用例提供灵活性。此外，Filebeat
+的模块简化了从 MySQL 或 Nginx
+等流行工具读取日志的过程，增强了其易用性。</p>
+<p>另一方面，Logstash 拥有丰富的插件生态系统，数量超过 200
+个，分为输入、输出、过滤器和编解码器。这些插件大多是内置的，构成了
+Logstash 高级日志处理能力的基础。广泛使用的插件包括 Grok
+过滤器插件，它使用正则表达式解析日志，以及 GeoIP 过滤器，它为 IP
+地址生成地理信息。</p>
+<p>为 Logstash 创建自定义插件非常简单，官方文档提供了全面的指导。</p>
+<p>由于其广泛的插件生态系统，Logstash
+在需要高级数据处理的场景中成为明显的赢家。</p>
+<h2 id="日志解析logstash-获胜">4. 日志解析：Logstash 获胜</h2>
+<p>在日志解析方面，Filebeat 和 Logstash
+都展示了高级日志解析功能，集成了能够处理结构化和非结构化日志的内置插件。</p>
+<p>Filebeat 通过使用可用的处理器增强了其解析功能，能够解析 JSON 和 CSV
+等标准格式。此外，内部模块使 Filebeat 能够解析来自 Nginx、MySQL 或
+Apache 等来源的流行格式。</p>
+<p>同样，Logstash 提供了强大的解析器和内置功能。Logstash
+的与众不同之处在于包含
+Grok，它使用正则表达式将日志事件与特定模式进行匹配。Grok 具有 200
+多种预定义模式，能够解析来自不同来源（如 MongoDB、Postgres 和
+AWS）的结构化和非结构化日志，并灵活地定义用于解析自定义日志格式的模式。</p>
+<p>在日志解析方面，Filebeat 适合处理标准日志格式，而 Logstash
+则凭借强大的解析功能脱颖而出。</p>
+<h2 id="事件路由logstash-获胜">5. 事件路由：Logstash 获胜</h2>
+<p>事件路由是一个过程，其中日志事件根据条件或每个日志事件中的内容定向到特定目标。这意味着您可以设置规则，根据每个日志包含的数据确定应将每个日志发送到何处。例如，您可以将日志收集器配置为将
+HTTP 状态代码为 200 的所有日志事件发送到远程位置，而将状态代码为 400
+的日志事件写入特定文件。</p>
+<p>Filebeat
+虽然在日志收集方面很高效，但并非设计为事件路由。它通常会将所有收集的日志转发到单个端点（通常是
+Logstash），这与其原始设计目的一致。因此，在需要将日志从多个来源分发到不同目标的场景中，Filebeat
+的功能会受到限制。</p>
+<p>另一方面，Logstash
+在事件路由方面表现出卓越的熟练程度。它支持使用条件语句（如
+<code>if-then-else</code> ）将日志事件路由到多个目标。这些条件允许
+Logstash 根据特定条件评估日志事件并相应地指导它们。</p>
+<p>鉴于事件路由在根据特定需求定制日志分发方面的重要性，Logstash
+在这方面的表现优于 Filebeat。</p>
+<h2 id="传输">6. 传输</h2>
+<p>在传输数据方面，Filebeat 和 Logstash
+不相上下，它们都提供有效的输出插件，用于从各种来源收集日志并将其传送到多个目的地，包括云存储、Kafka、AWS
+和本地文件。</p>
+<p>这两种工具的一个关键特性是它们使用内存中队列来缓冲日志事件。此功能对于管理日志数据中的峰值和临时存储日志以防止数据输出过载至关重要。内存中队列在重新发送可能由于输出目标问题而无法传输的日志事件方面也发挥着作用。</p>
+<p>在意外中断或过早退出时，存在丢失存储在这些内存中队列中的日志事件的风险。但是，Filebeat
+和 Logstash
+通过提供为持久性数据存储配置磁盘队列的选项来降低这种风险。这种额外的弹性层确保了工具可以无缝地恢复其操作，在突然关闭时从中断的地方继续运行。</p>
+<p>需要注意的是，尽管 Logstash 和 Filebeat
+具有持久队列，但偶尔会发生故障，尤其是在处理大量数据时。为了缓解这种情况，建议使用专用工具（如
+Kafka）从日志收集器中卸载负载。该工具充当临时数据持久层，为日志管理基础结构增加了额外的弹性和稳定性。</p>
+<p>考虑到它们在数据传输方面的能力，Filebeat 和 Logstash
+都比对方具有明显的优势。两者都可以可靠地传输和持久化数据。</p>
+<h2 id="什么时候应该使用-filebeat-或-logstash">什么时候应该使用 Filebeat
+或 Logstash ？</h2>
+<p>在 Filebeat 和 Logstash 之间做出决定取决于您的特定日志管理需求。</p>
+<p>当您的主要需求是从各种来源收集日志并将其定向到 Elasticsearch
+或云存储等单一目标时，Filebeat
+是一个理想的选择。其他理想的情况是，您的日志需要基本解析，例如处理 Nginx
+日志或管理不需要复杂处理的 syslog 输入。</p>
+<p><img src="/images/log/3.png" /></p>
+<p>另一方面，如果您正在处理需要复杂操作、扩充或过滤的半结构化或非结构化日志，那么
+Logstash
+更合适。当您的目标是将日志事件路由到多个目标时，它也是首选工具。</p>
+<p><img src="/images/log/4.png" /></p>
+<p>更有效的策略是结合使用 Filebeat 和
+Logstash，特别是用于管理来自不同来源的日志。通常，由于 Filebeat
+的效率，您可以使用 Filebeat 来收集日志。然后，收集的日志将转发到
+Logstash 进行更复杂的处理。Logstash
+可以配置为将日志分发到不同的目的地，或者将它们转发到 Elasticsearch
+进行索引，然后转发到 Kibana 进行可视化。这种组合方法有效地利用了
+Filebeat 和 Logstash 的优势。</p>
+<p><img src="/images/log/5.png" /></p>
+<p>有关更具可伸缩性的设置，请参阅下图：</p>
+<p><img src="/images/log/6.png" /></p>
+<h3 id="实例">实例</h3>
+<p>让我们看一个使用 Elastic Stack 的实际示例，并考虑 Filebeat 和
+Logstash 如何协同工作来管理和处理日志。</p>
+<p>假设您有以下格式的 Nginx 日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">203.0.113.1 - - [14/Jan/2022:08:30:45 +0000] &quot;GET /example-page HTTP/1.1&quot; 200 1024 &quot;-&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36&quot;</span><br></pre></td></tr></table></figure>
+<p>以下是使用 Filebeat 和 Logstash 处理这些日志的方法：</p>
+<ol type="1">
+<li>使用 Filebeat：首先，使用 Filebeat 从 Nginx 收集日志。Filebeat
+可以配置 Nginx 模块，该模块旨在解析 Nginx 日志。</li>
+<li>转发到 Logstash：收集和初始解析后，配置 Filebeat 将这些日志发送到
+Logstash。</li>
+<li>在 Logstash 中处理：在 Logstash
+中，您可以对日志进行高级操作。这包括提取特定字段、设置日期格式、编辑 IP
+地址、重命名字段和其他所需的转换。</li>
+<li>发送到 Elasticsearch 和 Kibana：处理完成后，Logstash 会将日志转发到
+Elasticsearch 进行索引。索引后，可以在 Kibana
+中对数据进行可视化和分析。</li>
+</ol>
+<p>此工作流程演示了 Filebeat 和 Logstash
+如何无缝协作。此设置对于处理需要简单和复杂处理和可视化过程的日志非常方便。</p>
+<h2 id="结论">结论</h2>
+<p>在本文中，我们比较了 Filebeat 和
+Logstash，展示了每种工具如何满足不同的需求。</p>
+<p>Filebeat
+是一个轻量级选项，非常适合资源有限且需要基本日志解析的环境。相反，Logstash
+是为需要高级日志处理的场景量身定制的。</p>
+<p>同时使用这两种工具也可以具有战略意义，以获得两全其美的优势。使用
+Filebeat 收集日志并将其转发到 Logstash
+进行高级转换提供了一种平衡的方法。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ELK/" rel="tag"><i class="fa fa-tag"></i> ELK</a>
+              <a href="/tags/Filebeat/" rel="tag"><i class="fa fa-tag"></i> Filebeat</a>
+              <a href="/tags/Logstash/" rel="tag"><i class="fa fa-tag"></i> Logstash</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/20/golang/Golang%20%E4%BD%BF%E7%94%A8%20Zookeeper%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="prev" title="Golang 使用 Zookeeper 实现分布式锁">
+                  <i class="fa fa-angle-left"></i> Golang 使用 Zookeeper 实现分布式锁
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/03/01/log/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%20Filebeat%20%E6%94%B6%E9%9B%86%E6%97%A5%E5%BF%97/" rel="next" title="如何使用 Filebeat 收集日志">
+                  如何使用 Filebeat 收集日志 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

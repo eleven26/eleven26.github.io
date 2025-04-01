@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在工作中，往往有一些需要对大批量数据进行分析的场景，依赖于传统关系型数据库（如 MySQL）的话，效率往往及其低下。 相比之下，一些 OLAP 数据库在统计分析等场景下表现优异，比如 ClickHouse。 比如：  扫描数据量：ClickHouse 采用列式存储，同一列的数据物理上连续存储，查询时只需读取目标列，而 MySQL 查询一列需要扫描 20 列数据（假设表有 20 列） 数据压缩：Cl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用阿里云 DTS 同步 RDS 数据到 ClickHouse">
+<meta property="og:url" content="https://eleven26.github.io/2025/04/01/clickhouse/%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%20RDS%20DTS%20%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%88%B0%20Clickhouse/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="在工作中，往往有一些需要对大批量数据进行分析的场景，依赖于传统关系型数据库（如 MySQL）的话，效率往往及其低下。 相比之下，一些 OLAP 数据库在统计分析等场景下表现优异，比如 ClickHouse。 比如：  扫描数据量：ClickHouse 采用列式存储，同一列的数据物理上连续存储，查询时只需读取目标列，而 MySQL 查询一列需要扫描 20 列数据（假设表有 20 列） 数据压缩：Cl">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/clickhouse/dts/1.png">
+<meta property="article:published_time" content="2025-04-01T13:12:00.000Z">
+<meta property="article:modified_time" content="2025-04-01T08:06:58.618Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="ClickHouse">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/clickhouse/dts/1.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2025/04/01/clickhouse/%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%20RDS%20DTS%20%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%88%B0%20Clickhouse/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2025/04/01/clickhouse/%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%20RDS%20DTS%20%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%88%B0%20Clickhouse/","path":"2025/04/01/clickhouse/使用阿里云 RDS DTS 同步数据到 Clickhouse/","title":"使用阿里云 DTS 同步 RDS 数据到 ClickHouse"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用阿里云 DTS 同步 RDS 数据到 ClickHouse | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%B0%86%E6%95%B0%E6%8D%AE%E4%BB%8E-mysql-%E5%90%8C%E6%AD%A5%E5%88%B0-clickhouse"><span class="nav-number">1.</span> <span class="nav-text">如何将数据从 MySQL 同步到
+ClickHouse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91-dts-%E6%95%B0%E6%8D%AE%E8%AE%A2%E9%98%85%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">阿里云 DTS
+数据订阅的工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91-dts-%E5%90%8C%E6%AD%A5-mysql-%E5%88%B0-clickhouse"><span class="nav-number">3.</span> <span class="nav-text">如何使用阿里云 DTS
+同步 MySQL 到 ClickHouse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clickhouse-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEcentos"><span class="nav-number">4.</span> <span class="nav-text">ClickHouse 安装配置（CentOS）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%B0-clickhouse"><span class="nav-number">4.1.</span> <span class="nav-text">连接到 ClickHouse</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%AF%B9%E5%BA%94%E7%9A%84-clickhouse-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%A1%A8"><span class="nav-number">5.</span> <span class="nav-text">创建对应的 ClickHouse
+数据库和表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E6%AC%A1%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%88%B0-clickhouse"><span class="nav-number">6.</span> <span class="nav-text">初次同步数据到 ClickHouse</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-%E8%B7%9F-clickhouse-%E7%9A%84%E5%AD%97%E6%AE%B5%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB"><span class="nav-number">6.1.</span> <span class="nav-text">MySQL 跟 ClickHouse
+的字段对应关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E6%95%B0%E6%8D%AE%E8%AE%A2%E9%98%85%E7%9A%84%E4%BB%A3%E7%A0%81python"><span class="nav-number">7.</span> <span class="nav-text">编写数据订阅的代码（Python）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2centos"><span class="nav-number">8.</span> <span class="nav-text">部署（CentOS）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#python-%E7%8E%AF%E5%A2%83conda"><span class="nav-number">8.1.</span> <span class="nav-text">Python 环境（conda）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#supervisor"><span class="nav-number">8.2.</span> <span class="nav-text">supervisor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">9.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2025/04/01/clickhouse/%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91%20RDS%20DTS%20%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%88%B0%20Clickhouse/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用阿里云 DTS 同步 RDS 数据到 ClickHouse | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用阿里云 DTS 同步 RDS 数据到 ClickHouse
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-04-01 21:12:00" itemprop="dateCreated datePublished" datetime="2025-04-01T21:12:00+08:00">2025-04-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在工作中，往往有一些需要对大批量数据进行分析的场景，依赖于传统关系型数据库（如
+MySQL）的话，效率往往及其低下。 相比之下，一些 OLAP
+数据库在统计分析等场景下表现优异，比如 ClickHouse。</p>
+<p>比如：</p>
+<ol type="1">
+<li>扫描数据量：ClickHouse
+采用列式存储，同一列的数据物理上连续存储，查询时只需读取目标列，而 MySQL
+查询一列需要扫描 20 列数据（假设表有 20 列）</li>
+<li>数据压缩：ClickHouse 存储的数据是经过压缩的，读取的时候可以减少 IO
+的开销。</li>
+<li>多核计算：ClickHouse 的查询任务可以自动拆分到多个 CPU
+核心执行，充分利用现代硬件并行能力。</li>
+</ol>
+<p>也就是说，不管是存储、读取还是计算，专门的 OLAP 数据库都比 OLTP
+关系型数据库要高效。 正因如此，我们会选择使用一些 OLAP
+数据库来处理一些数据分析的业务，比如 ClickHouse，这个时候如何将数据从
+MySQL 同步到 ClickHouse 就成了一个亟需解决的问题。</p>
+<h2 id="如何将数据从-mysql-同步到-clickhouse">如何将数据从 MySQL 同步到
+ClickHouse</h2>
+<p>目前比较有效的在 MySQL 和 ClickHouse 之间同步数据的方式都是通过
+binlog 捕获数据库变更，然后写入到 ClickHouse。比如有如下的一些方案：</p>
+<ol type="1">
+<li>Debezium + Kafka：通过 Debezium 捕获 MySQL 的 Binlog 变更事件，经
+Kafka 中转后写入 ClickHouse。</li>
+<li>Canal + Kafka：通过 Canal 捕获 MySQL 的 Binlog 变更事件，经 Kafka
+中转后写入 ClickHouse。</li>
+<li>使用阿里云 DTS（数据传输服务）：DTS 支持 MySQL 到 ClickHouse
+的实时同步。</li>
+</ol>
+<p>但是直接通过捕获 MySQL 的 binlog 写入
+ClickHouse，在运维层面复杂度还是偏高，如果使用的是阿里云的 RDS，
+可以直接使用阿里云的 DTS 来进行 MySQL 到 ClickHouse
+的同步，好处是我们不需要处理底层同步的一些细节问题。</p>
+<blockquote>
+<p>DTS 里面包含了几种服务，本文只是使用它提供的数据订阅服务。</p>
+</blockquote>
+<h2 id="阿里云-dts-数据订阅的工作原理">阿里云 DTS
+数据订阅的工作原理</h2>
+<p><img src="/images/clickhouse/dts/1.png" /></p>
+<p>数据订阅支持实时拉取 RDS 实例的增量日志，用户可以通过 DTS 提供的 SDK
+数据订阅服务端来订阅增量日志，同时可以根据业务需求，实现数据定制化消费。</p>
+<p>在这个过程中，我们需要处理的就是 <strong>业务逻辑</strong>
+部分，也就是获取到 RDS 的数据库变更之后，如何将这些变更写入到
+ClickHouse。我们可以选择处理全部字段，或者只处理自己需要的某些字段。</p>
+<h2 id="如何使用阿里云-dts-同步-mysql-到-clickhouse">如何使用阿里云 DTS
+同步 MySQL 到 ClickHouse</h2>
+<p>具体文档可在阿里云文档查看：<strong>数据传输服务 - 快速入门 -
+数据订阅操作指导</strong>。</p>
+<h2 id="clickhouse-安装配置centos">ClickHouse 安装配置（CentOS）</h2>
+<p>我们可以通过如下命令来安装 ClickHouse：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y yum-utils</span><br><span class="line">sudo yum-config-manager --add-repo https://packages.clickhouse.com/rpm/clickhouse.repo</span><br><span class="line">sudo yum install -y clickhouse-server clickhouse-client</span><br></pre></td></tr></table></figure>
+<p>安装完毕后，通过下面的命令来启动 ClickHouse 服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable clickhouse-server</span><br><span class="line">sudo systemctl start clickhouse-server</span><br><span class="line">sudo systemctl status clickhouse-server</span><br></pre></td></tr></table></figure>
+<p>如果一切顺利，我们会看到如下输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">● clickhouse-server.service - ClickHouse Server (analytic DBMS for big data)</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/clickhouse-server.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since Mon 2025-03-17 09:19:03 CST; 2 weeks 1 days ago</span><br><span class="line"> Main PID: 2865 (clickhouse-serv)</span><br><span class="line">    Tasks: 822</span><br><span class="line">   Memory: 1.3G</span><br><span class="line">   CGroup: /system.slice/clickhouse-server.service</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果不是绿色的 <code>active</code>，则可以通过
+<code>journalctl -xe -u clickhouse-server</code> 查看一下具体错误。</p>
+</blockquote>
+<p>下面是通过 <code>yum install</code> 安装的 ClickHouse
+的一些目录：</p>
+<ul>
+<li><code>/var/log/clickhouse-server</code> 日志</li>
+<li><code>/var/run/clickhouse-server</code> 运行时的一些文件</li>
+<li><code>/etc/clickhouse-server</code> 配置目录</li>
+<li><code>/var/lib/clickhouse</code></li>
+</ul>
+<p>配置文件位置：<code>/etc/clickhouse-server/config.xml</code>，我们可以通过修改这个配置文件来调整
+ClickHouse 服务的相关参数。如：</p>
+<ul>
+<li><code>listen_host</code> 修改绑定的 ip
+地址，如果需要给本机以外的人访问，可以修改为 <code>0.0.0.0</code></li>
+</ul>
+<h3 id="连接到-clickhouse">连接到 ClickHouse</h3>
+<p>我们可以通过下面的命令来连接到 ClickHouse：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clickhouse-client --host 127.0.0.1 --port 9011</span><br></pre></td></tr></table></figure>
+<p>这跟 MySQL 的命令行类似，除了样子长得像以外，很多的 SQL 语句都是跟
+MySQL 一样的。比如，进入交互式的命令行之后，我们可以通过
+<code>show databases;</code> 来查看有哪些数据库：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ clickhouse-client --host 127.0.0.1 --port 9011</span><br><span class="line">ClickHouse client version 25.2.1.3085 (official build).</span><br><span class="line">Connecting to 127.0.0.1:9011 as user default.</span><br><span class="line">Connected to ClickHouse server version 25.2.1.</span><br><span class="line"></span><br><span class="line">Warnings:</span><br><span class="line"> * Linux transparent hugepages are set to &quot;always&quot;. Check /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line"></span><br><span class="line">example.com :) show databases;</span><br><span class="line"></span><br><span class="line">SHOW DATABASES</span><br><span class="line"></span><br><span class="line">Query id: 27bcb695-878d-4f0d-8a6a-f3b07fa0d498</span><br><span class="line"></span><br><span class="line">   ┌─name───────────────┐</span><br><span class="line">1. │ INFORMATION_SCHEMA │</span><br><span class="line">2. │ default            │</span><br><span class="line">3. │ information_schema │</span><br><span class="line">4. │ system             │</span><br><span class="line">   └────────────────────┘</span><br><span class="line"></span><br><span class="line">4 rows in set. Elapsed: 0.005 sec.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：这里的 9011 端口是我本地的端口，不是默认的端口。</p>
+</blockquote>
+<h2 id="创建对应的-clickhouse-数据库和表">创建对应的 ClickHouse
+数据库和表</h2>
+<p>现在，假设我们的 MySQL 中有一个名字为 <code>order</code>
+的数据库，里面有一个 <code>orders</code>
+的表。然后我们需要将其中的一些字段同步到 ClickHouse
+中，首先我们需要创建对应的数据库和表。</p>
+<ol type="1">
+<li>创建数据库</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> database <span class="keyword">order</span>;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>创建表</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> `orders`(</span><br><span class="line">	id UInt64,</span><br><span class="line">	company_id UInt64,</span><br><span class="line">	supplier_id UInt64,</span><br><span class="line">	order_total_fee <span class="type">Decimal</span>(<span class="number">20</span>, <span class="number">4</span>),</span><br><span class="line">	coupon_id Nullable(UInt64),</span><br><span class="line">	coupon_price Nullable(<span class="type">Decimal</span>(<span class="number">20</span>, <span class="number">4</span>)),</span><br><span class="line">	deleted_at Nullable(Datetime),</span><br><span class="line">	created_at Datetime,</span><br><span class="line">	<span class="keyword">PRIMARY</span> KEY (created_at, id)</span><br><span class="line">) ENGINE <span class="operator">=</span> MergeTree()</span><br><span class="line"><span class="keyword">PARTITION</span> <span class="keyword">BY</span> toStartOfMonth(created_at)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> (created_at, id);</span><br></pre></td></tr></table></figure>
+<h2 id="初次同步数据到-clickhouse">初次同步数据到 ClickHouse</h2>
+<p>因为 DTS 只能捕获增量数据，初次同步的时候我们需要手动将 MySQL
+中的全量数据导入到
+ClickHouse。如果表的数据写入频繁的话，可能需要停服之后再进行此操作。</p>
+<p>我们可以通过下面的命令来从 MySQL 直接导数据到 ClickHouse：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> orders <span class="keyword">SELECT</span></span><br><span class="line">id,</span><br><span class="line">company_id,</span><br><span class="line">supplier_id,</span><br><span class="line">order_total_fee,</span><br><span class="line">coupon_id,</span><br><span class="line">coupon_price,</span><br><span class="line">deleted_at,</span><br><span class="line">created_at </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	mysql (</span><br><span class="line">		<span class="string">&#x27;127.0.0.1:3306&#x27;</span>,</span><br><span class="line">		<span class="string">&#x27;order&#x27;</span>,</span><br><span class="line">		<span class="string">&#x27;orders&#x27;</span>,</span><br><span class="line">	    <span class="string">&#x27;账号&#x27;</span>,</span><br><span class="line">	    <span class="string">&#x27;密码&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>在实际执行中，将 MySQL 里面的信息替换为你自己的 MySQL
+配置即可。在导入数据完成后，可以通过下面的命令来查看导入是否成功：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">example.com :) select count(*) from orders;</span><br><span class="line"></span><br><span class="line">SELECT count(*)</span><br><span class="line">FROM orders</span><br><span class="line"></span><br><span class="line">Query id: 227ce057-5949-4d33-b5ae-2f2ce7e96e38</span><br><span class="line"></span><br><span class="line">   ┌─count()─┐</span><br><span class="line">1. │   25781 │</span><br><span class="line">   └─────────┘</span><br><span class="line"></span><br><span class="line">1 row in set. Elapsed: 0.039 sec. Processed 25.78 thousand rows, 103.13 KB (668.04 thousand rows/s., 2.67 MB/s.)</span><br><span class="line">Peak memory usage: 401.44 KiB.</span><br></pre></td></tr></table></figure>
+<p>如果 <code>count</code> 的值跟 MySQL
+中的数据一致，则说明导入成功。</p>
+<blockquote>
+<p>在这一步执行完成之后，就可以启动 DTS
+的数据订阅服务了。后续的数据库变动会被捕获到，直到我们 ack 为止。</p>
+</blockquote>
+<h3 id="mysql-跟-clickhouse-的字段对应关系">MySQL 跟 ClickHouse
+的字段对应关系</h3>
+<p>太长了，自己复制到浏览器打开：</p>
+<p>https://help.aliyun.com/zh/dts/user-guide/use-a-kafka-client-to-consume-tracked-data-2#section-woc-4pq-mes</p>
+<h2 id="编写数据订阅的代码python">编写数据订阅的代码（Python）</h2>
+<p>官方 demo
+在：https://github.com/aliyun/aliyun-dts-subscribe-demo/tree/master/python</p>
+<p>核心代码如下（比较标准的 Kafka 消费者代码）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">dts_record_schema = schema.load_schema(</span><br><span class="line">    <span class="string">&quot;dts_record_avsc/com.alibaba.dts.formats.avro.Record.avsc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">msg_value</span>):</span><br><span class="line">    message_bytes = io.BytesIO(msg_value)</span><br><span class="line">    data = schemaless_reader(message_bytes, dts_record_schema)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Kafka Consumer 配置参数</span></span><br><span class="line">        topic_name = <span class="string">&quot;cn_hangzhou_vpc_rm_bp1907x8zbo20z60u_dts_upgrade_from_old_version2&quot;</span></span><br><span class="line">        auto_commit = <span class="literal">False</span></span><br><span class="line">        <span class="comment"># 消费组 ID</span></span><br><span class="line">        group_id = <span class="string">&quot;dtse9gh4883283o991&quot;</span></span><br><span class="line">        sasl_mechanism = <span class="string">&quot;PLAIN&quot;</span></span><br><span class="line">        security_protocol = <span class="string">&quot;SASL_PLAINTEXT&quot;</span></span><br><span class="line">        username = <span class="string">&quot;xiaqiutest&quot;</span></span><br><span class="line">        password = <span class="string">&quot;DTStest1234&quot;</span></span><br><span class="line">        bootstrap_servers = [<span class="string">&quot;dts-cn-hangzhou.aliyuncs.com:18001&quot;</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果username不含有group_id，则更新username为username-group_id</span></span><br><span class="line">        <span class="keyword">if</span> group_id <span class="keyword">not</span> <span class="keyword">in</span> username:</span><br><span class="line">            username = username + <span class="string">&quot;-&quot;</span> + group_id</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 创建 KafkaConsumer 实例</span></span><br><span class="line">        consumerGroupHandler = KafkaConsumer(</span><br><span class="line">            topic_name,</span><br><span class="line">            enable_auto_commit=auto_commit,</span><br><span class="line">            group_id=group_id,</span><br><span class="line">            sasl_mechanism=sasl_mechanism,</span><br><span class="line">            security_protocol=security_protocol,</span><br><span class="line">            sasl_plain_username=username,</span><br><span class="line">            sasl_plain_password=password,</span><br><span class="line">            bootstrap_servers=bootstrap_servers,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;start&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> msg <span class="keyword">in</span> consumerGroupHandler:</span><br><span class="line">            record = decode(msg.value)</span><br><span class="line">            <span class="comment"># import datetime</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># sourceTimestamp = record.get(&quot;sourceTimestamp&quot;)</span></span><br><span class="line">            <span class="comment"># formatted_date = datetime.datetime.fromtimestamp(sourceTimestamp).strftime(</span></span><br><span class="line">            <span class="comment">#     &quot;%Y-%m-%d %H:%M:%S&quot;</span></span><br><span class="line">            <span class="comment"># )</span></span><br><span class="line">            <span class="comment"># print(formatted_date)</span></span><br><span class="line">            <span class="built_in">print</span>(record)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;end&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(e)</span><br><span class="line">        traceback.print_exc()</span><br></pre></td></tr></table></figure>
+<p>但是官方的 demo
+实在是过于简陋，所以这里会针对里面一些比较关键的地方说明一下：</p>
+<ul>
+<li><code>schema.load_schema</code> 和
+<code>schemaless_reader</code>，<code>python</code> 版本的 SDK 使用了
+<code>fastavro</code> 来解析 Avro 格式的数据，所以需要用到
+<code>fastavro.schemaless_reader</code> 来读取数据。</li>
+<li>Kafka Consumer 配置参数在 DTS 订阅任务那里都可以看到，其中 username
+和 password 是新建订阅任务的时候自己填写的。</li>
+<li><code>record = decode(msg.value)</code> 这一行会将 Kafka
+中的数据解码成字典格式，这样就可以直接使用了。</li>
+<li><code>record</code> 里面包含的字段可以看
+<code>dts_record_avsc/com.alibaba.dts.formats.avro.Record.avsc</code>
+这里面的定义。</li>
+<li><code>operation</code> 字段表示的是操作类型，比如
+<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>
+等。我们可以根据这个字段来决定在 ClickHouse 中执行什么样的操作。</li>
+<li><code>record</code> 的 <code>beforeImages</code>
+是数据变更前的字段值，<code>afterImages</code>
+是数据变更后的字段值。在执行 <code>insert</code> 操作的时候
+<code>beforeImages</code> 是空的，在执行 <code>delete</code> 操作的时候
+<code>afterImages</code> 是空的。<code>update</code>
+的时候，两个都有值，分别是变动前后的字段变动。</li>
+</ul>
+<p>官方 demo
+的代码只是给出了基本的消费的代码，在实际开发中，我们还需要根据
+<code>operation</code> 字段来决定在 ClickHouse
+中执行什么样的操作。如，我们可以像下面这样做一些插入、删除的操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> op == <span class="string">&#x27;INSERT&#x27;</span>:</span><br><span class="line">    self.insert(...)</span><br><span class="line"><span class="keyword">if</span> op == <span class="string">&#x27;DELETE&#x27;</span>:</span><br><span class="line">    self.clickhouse_client.delete(...)</span><br><span class="line"><span class="keyword">if</span> op == <span class="string">&#x27;UPDATE&#x27;</span>:</span><br><span class="line">    self.clickhouse_client.delete(...)</span><br><span class="line">    self.insert(...)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>更具体代码自行实现了。需要注意的是，在插入之前，可能需要做一些数据类型转换的操作，否则可能在插入到
+ClickHouse 的时候出现类型不匹配的问题。</p>
+</blockquote>
+<h2 id="部署centos">部署（CentOS）</h2>
+<p>本文以 <code>conda</code> 和 <code>supervisor</code>
+来作为示例部署。</p>
+<h3 id="python-环境conda">Python 环境（conda）</h3>
+<p>由于 Python 各版本的差异，所以更推荐使用 <code>conda</code> 来管理
+Python 环境，我们可以通过以下命令来安装一下 <code>miniconda</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh</span><br><span class="line">bash ~/Miniconda3-latest-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>安装到默认的 <code>~/miniconda3</code> 目录即可。</p>
+<p><code>conda</code> 的常用命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/root/miniconda3/bin/conda env list # 列出所有环境</span><br><span class="line">/root/miniconda3/bin/conda create --name dts python=3.11 # 创建 py 环境</span><br></pre></td></tr></table></figure>
+<p>更详细的内容可参考官方文档：https://www.anaconda.com/docs/getting-started/miniconda/install#macos-linux-installation</p>
+<h3 id="supervisor">supervisor</h3>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[program:dts_consumer]</span></span><br><span class="line"><span class="attr">command</span>=/root/miniconda3/envs/dts/bin/python main.py</span><br><span class="line"><span class="attr">numprocs</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">autostart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">autorestart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">startretries</span>=<span class="number">3</span></span><br><span class="line"><span class="attr">user</span>=root</span><br><span class="line"><span class="attr">redirect_stderr</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">directory</span>=/home/www/dts-consumer</span><br><span class="line"><span class="attr">stdout_logfile</span>=/var/log/dts_consumer.log</span><br></pre></td></tr></table></figure>
+<p>保存到服务器的 <code>/etc/supervisord.d</code> 目录，然后执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl update</span><br></pre></td></tr></table></figure>
+<p>即可启动。</p>
+<h2 id="参考文档">参考文档</h2>
+<ul>
+<li>DTS 常见问题
+https://help.aliyun.com/zh/dts/support/faq#section-fle-1lu-lla</li>
+<li>Kafka https://kafka.apache.org/intro</li>
+<li>fastavro https://fastavro.readthedocs.io/en/latest/</li>
+<li>排查订阅任务问题
+https://help.aliyun.com/zh/dts/user-guide/troubleshoot-issues-in-change-tracking-tasks</li>
+<li>MySQL 字段类型与 dataTypeNumber 数值的对应关系
+https://help.aliyun.com/zh/dts/user-guide/use-a-kafka-client-to-consume-tracked-data-2#section-woc-4pq-mes</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ClickHouse/" rel="tag"><i class="fa fa-tag"></i> ClickHouse</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/03/06/laravel/Laravel%20Jenssegers%20MongoDB%20%E6%89%B9%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/" rel="prev" title="Laravel Jenssegers MongoDB 批量更新实现">
+                  <i class="fa fa-angle-left"></i> Laravel Jenssegers MongoDB 批量更新实现
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

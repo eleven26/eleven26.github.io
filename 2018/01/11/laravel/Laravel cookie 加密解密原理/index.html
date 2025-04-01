@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="通过控制台的 cookie 信息我们会发现，每次请求之后，关键的 cookie，如PHPSESSID、XSRF-TOKEN 都会发生变化，并且都是很长的一串字符串。 其实这是一个 json 数组，其中包含了 iv，value，mac 三个字段：   cookie  这些字段都是在框架加密解密的时候使用的，加密方法是 openssl_encrypt：   openssl_encrypt  对 ope">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel cookie加密解密原理">
+<meta property="og:url" content="https://eleven26.github.io/2018/01/11/laravel/Laravel%20cookie%20%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="通过控制台的 cookie 信息我们会发现，每次请求之后，关键的 cookie，如PHPSESSID、XSRF-TOKEN 都会发生变化，并且都是很长的一串字符串。 其实这是一个 json 数组，其中包含了 iv，value，mac 三个字段：   cookie  这些字段都是在框架加密解密的时候使用的，加密方法是 openssl_encrypt：   openssl_encrypt  对 ope">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/5.png">
+<meta property="og:image" content="https://eleven26.github.io/images/6.png">
+<meta property="og:image" content="https://eleven26.github.io/images/7.png">
+<meta property="article:published_time" content="2018-01-11T10:37:00.000Z">
+<meta property="article:modified_time" content="2022-06-15T09:19:00.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/5.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2018/01/11/laravel/Laravel%20cookie%20%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86%E5%8E%9F%E7%90%86/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2018/01/11/laravel/Laravel%20cookie%20%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86%E5%8E%9F%E7%90%86/","path":"2018/01/11/laravel/Laravel cookie 加密解密原理/","title":"Laravel cookie加密解密原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Laravel cookie加密解密原理 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2018/01/11/laravel/Laravel%20cookie%20%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Laravel cookie加密解密原理 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Laravel cookie加密解密原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-01-11 18:37:00" itemprop="dateCreated datePublished" datetime="2018-01-11T18:37:00+08:00">2018-01-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>通过控制台的 <code>cookie</code> 信息我们会发现，每次请求之后，关键的
+<code>cookie</code>，如<code>PHPSESSID</code>、<code>XSRF-TOKEN</code>
+都会发生变化，并且都是很长的一串字符串。</p>
+<p>其实这是一个 <code>json</code> 数组，其中包含了
+<code>iv</code>，<code>value</code>，<code>mac</code> 三个字段：</p>
+<figure>
+<img src="/images/5.png" alt="cookie" />
+<figcaption aria-hidden="true">cookie</figcaption>
+</figure>
+<p>这些字段都是在框架加密解密的时候使用的，加密方法是 <a
+target="_blank" rel="noopener" href="https://php.net/manual/zh/function.openssl-encrypt.php">openssl_encrypt</a>：</p>
+<figure>
+<img src="/images/6.png" alt="openssl_encrypt" />
+<figcaption aria-hidden="true">openssl_encrypt</figcaption>
+</figure>
+<p>对 <code>openssl</code> 不太了解的可以看下下面的例子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$data</span> = <span class="string">&#x27;laravel&#x27;</span>;</span><br><span class="line"><span class="variable">$iv</span> = <span class="title function_ invoke__">random_bytes</span>(<span class="number">16</span>);</span><br><span class="line"><span class="variable">$key</span> = <span class="string">&#x27;this is key&#x27;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="variable">$encrypt</span> = <span class="title function_ invoke__">openssl_encrypt</span>(<span class="variable">$data</span>, <span class="string">&#x27;AES-256-CBC&#x27;</span>, <span class="variable">$key</span>, <span class="number">0</span>, <span class="variable">$iv</span>);</span><br><span class="line"> </span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$encrypt</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">openssl_decrypt</span>(<span class="variable">$encrypt</span>, <span class="string">&#x27;AES-256-CBC&#x27;</span>, <span class="variable">$key</span>, <span class="number">0</span>, <span class="variable">$iv</span>));</span><br></pre></td></tr></table></figure>
+<p><code>Laravel</code> 中的话，<code>key</code> 就是 <code>.env</code>
+配置文件里面的 <code>APP_KEY</code>，除了 <code>key</code>
+还有两个变化的参数就是 加密、解密的数据以及 <code>iv</code>。</p>
+<p>也就是说，如果我们需要加密 <code>cookie</code> 的话，我们至少得保存下
+加密后的数据以及 <code>iv</code>。</p>
+<p>这样看来，<code>mac</code>
+字段似乎有点多余，但是我们可以使用该字段来验证数据的合法性：</p>
+<figure>
+<img src="/images/7.png" alt="x" />
+<figcaption aria-hidden="true">x</figcaption>
+</figure>
+<p>如果验证不通过，<code>Laravel</code> 也就不会对 <code>data</code>
+进行解密操作。</p>
+<p>虽然每次请求 <code>cookie</code>
+都会发生变化，但是实际数据是没有变的，发生变化只是因为用来加密的
+<code>iv</code> 变了(使用 <code>random_bytes</code> 方法生成)。</p>
+<p>由于 <code>iv</code> 每次都变化，所以需要把 <code>iv</code>
+也一同返回给浏览器，加上验证数据合法性的
+<code>mac</code>，最后返回的就是下面的数组的 <code>json</code> 编码后在
+<code>base64</code> 编码的数据：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">   <span class="string">&#x27;iv&#x27;</span> =&gt; <span class="title function_ invoke__">random_bytes</span>(<span class="number">16</span>), <span class="comment">// 16位随机字节串</span></span><br><span class="line">   <span class="string">&#x27;value&#x27;</span> =&gt; <span class="string">&#x27;xxxx...&#x27;</span>,    <span class="comment">// 加密后的数据</span></span><br><span class="line">   <span class="string">&#x27;mac&#x27;</span> =&gt; <span class="string">&#x27;xxx...&#x27;</span>   <span class="comment">// 后续请求验证数据合法性的字符串</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Laravel/" rel="tag"><i class="fa fa-tag"></i> Laravel</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/01/06/laravel/Laravel%205.1%20Eloquent%20with%20%E9%80%9A%E8%BF%87%E9%97%AD%E5%8C%85%E7%AD%9B%E9%80%89%E7%89%B9%E5%AE%9A%20field%20%E5%BE%97%E4%B8%8D%E5%88%B0%E7%BB%93%E6%9E%9C%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="Laravel5.1 eloquent with 通过闭包筛选特定 field 得不到结果的问题">
+                  <i class="fa fa-angle-left"></i> Laravel5.1 eloquent with 通过闭包筛选特定 field 得不到结果的问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/16/laravel/Laravel%20%E8%B0%83%E8%AF%95%E7%A5%9E%E5%99%A8%20tinker/" rel="next" title="Laravel 调试神器 tinker">
+                  Laravel 调试神器 tinker <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

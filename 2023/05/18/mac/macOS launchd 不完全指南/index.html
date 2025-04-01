@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="launchd 是什么？ launchd 是 macOS 下一个服务管理工具，用于启动、停止和管理守护进程、应用程序、进程和脚本。 我们可以将 launchd 看作是 mac 下的 systemd 或者是 supervisor，如果我们想要在 mac 下启动守护进程，用 launchd 就可以了。 守护进程是在后台运行的不需要用户输入的程序。比如我们常用的 MySQL，往往是以守护进程的方式启动的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macOS launchd 不完全指南">
+<meta property="og:url" content="https://eleven26.github.io/2023/05/18/mac/macOS%20launchd%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="launchd 是什么？ launchd 是 macOS 下一个服务管理工具，用于启动、停止和管理守护进程、应用程序、进程和脚本。 我们可以将 launchd 看作是 mac 下的 systemd 或者是 supervisor，如果我们想要在 mac 下启动守护进程，用 launchd 就可以了。 守护进程是在后台运行的不需要用户输入的程序。比如我们常用的 MySQL，往往是以守护进程的方式启动的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-05-18T02:01:00.000Z">
+<meta property="article:modified_time" content="2023-05-18T09:29:32.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="mac">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2023/05/18/mac/macOS%20launchd%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2023/05/18/mac/macOS%20launchd%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/","path":"2023/05/18/mac/macOS launchd 不完全指南/","title":"macOS launchd 不完全指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>macOS launchd 不完全指南 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#launchd-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">launchd 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%86%99-launchd-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">如何写 launchd 配置文件？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#launchd-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%94%BE%E5%93%AA%E9%87%8C"><span class="nav-number">3.</span> <span class="nav-text">launchd 配置文件放哪里？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AE%A9-launchd-%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%88%91%E4%BB%AC%E9%85%8D%E7%BD%AE%E7%9A%84%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">如何让 launchd
+开机启动我们配置的守护进程？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E5%91%A2"><span class="nav-number">5.</span> <span class="nav-text">如何移除守护进程呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E8%A6%81%E6%89%A7%E8%A1%8C%E7%9A%84%E5%91%BD%E4%BB%A4%E6%9C%89%E5%8F%82%E6%95%B0%E6%80%8E%E4%B9%88%E9%85%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">如果要执行的命令有参数怎么配置？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#launchd-%E9%85%8D%E7%BD%AE%E9%A1%B9%E8%AF%B4%E6%98%8E"><span class="nav-number">7.</span> <span class="nav-text">launchd 配置项说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#label---%E6%8C%87%E5%AE%9A%E5%90%8D%E5%AD%97"><span class="nav-number">7.1.</span> <span class="nav-text">Label - 指定名字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#programprogramarguments---%E6%8C%87%E5%AE%9A%E8%A6%81%E6%89%A7%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="nav-number">7.2.</span> <span class="nav-text">Program、ProgramArguments
+- 指定要执行的程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#environmentvariables---%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">7.3.</span> <span class="nav-text">EnvironmentVariables -
+环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#standardinpathstandardoutpathstandarderrorpath---%E9%87%8D%E5%AE%9A%E5%90%91%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="nav-number">7.4.</span> <span class="nav-text">StandardInPath、StandardOutPath、StandardErrorPath
+- 重定向输入输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#workingdirectory---%E6%8C%87%E5%AE%9A%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95"><span class="nav-number">7.5.</span> <span class="nav-text">WorkingDirectory -
+指定工作目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runatloadstartintervalstartcalendarinterval---%E6%8C%87%E5%AE%9A%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%90%AF%E5%8A%A8"><span class="nav-number">7.6.</span> <span class="nav-text">RunAtLoad、StartInterval、StartCalendarInterval
+- 指定什么时候启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalive---%E6%8C%87%E5%AE%9A%E6%98%AF%E5%90%A6%E4%BF%9D%E6%8C%81%E8%BF%90%E8%A1%8C"><span class="nav-number">7.7.</span> <span class="nav-text">KeepAlive - 指定是否保持运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usernamegroupname---%E6%8C%87%E5%AE%9A%E8%BF%90%E8%A1%8C%E7%9A%84%E7%94%A8%E6%88%B7%E5%92%8C%E7%94%A8%E6%88%B7%E7%BB%84"><span class="nav-number">7.8.</span> <span class="nav-text">UserName、GroupName
+- 指定运行的用户和用户组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rootdirectory---%E6%8C%87%E5%AE%9A%E6%A0%B9%E7%9B%AE%E5%BD%95"><span class="nav-number">7.9.</span> <span class="nav-text">RootDirectory - 指定根目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#abandonprocessgroup---%E8%BF%9B%E7%A8%8B%E8%A2%AB%E7%BB%88%E6%AD%A2%E7%9A%84%E6%97%B6%E5%80%99%E6%98%AF%E5%90%A6%E7%BB%88%E6%AD%A2%E5%85%B6%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="nav-number">7.10.</span> <span class="nav-text">AbandonProcessGroup
+- 进程被终止的时候是否终止其子进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exittimeout---%E4%BC%98%E9%9B%85%E7%BB%88%E6%AD%A2"><span class="nav-number">7.11.</span> <span class="nav-text">ExitTimeOut - 优雅终止</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#throttleinterval---%E5%91%BD%E4%BB%A4%E8%B0%83%E7%94%A8%E7%9A%84%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94"><span class="nav-number">7.12.</span> <span class="nav-text">ThrottleInterval -
+命令调用的时间间隔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#launchd-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">8.</span> <span class="nav-text">launchd 常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#launchctl-list---%E5%88%97%E5%87%BA%E6%89%80%E6%9C%89-launchd-%E7%AE%A1%E7%90%86%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="nav-number">8.1.</span> <span class="nav-text">launchctl list -
+列出所有 launchd 管理的服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AA-plist%E6%9C%8D%E5%8A%A1job"><span class="nav-number">8.2.</span> <span class="nav-text">加载一个 plist（服务&#x2F;job）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E9%99%A4%E4%B8%80%E4%B8%AA-plist%E6%9C%8D%E5%8A%A1job"><span class="nav-number">8.3.</span> <span class="nav-text">移除一个 plist（服务&#x2F;job）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AA-job"><span class="nav-number">8.4.</span> <span class="nav-text">启动一个 job</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2%E4%B8%80%E4%B8%AA-job"><span class="nav-number">8.5.</span> <span class="nav-text">停止一个 job</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%AE%9E%E4%BE%8B"><span class="nav-number">9.</span> <span class="nav-text">一些实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#frpc"><span class="nav-number">9.1.</span> <span class="nav-text">frpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ss-local"><span class="nav-number">9.2.</span> <span class="nav-text">ss-local</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#homebrew-%E7%9A%84-service---mysql"><span class="nav-number">9.3.</span> <span class="nav-text">homebrew 的 service - MySQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2023/05/18/mac/macOS%20launchd%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="macOS launchd 不完全指南 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          macOS launchd 不完全指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-05-18 10:01:00" itemprop="dateCreated datePublished" datetime="2023-05-18T10:01:00+08:00">2023-05-18</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="launchd-是什么">launchd 是什么？</h2>
+<p><code>launchd</code> 是 macOS
+下一个服务管理工具，用于启动、停止和管理守护进程、应用程序、进程和脚本。
+我们可以将 <code>launchd</code> 看作是 mac 下的 <code>systemd</code>
+或者是 <code>supervisor</code>，如果我们想要在 mac 下启动守护进程，用
+<code>launchd</code> 就可以了。</p>
+<p>守护进程是在后台运行的不需要用户输入的程序。比如我们常用的
+MySQL，往往是以守护进程的方式启动的。 需要注意的是：虽然本文多次提到了
+<strong>守护进程</strong>，但是准确来说，<code>launchd</code>
+可以启动的不仅仅是守护进程，还可以启动应用程序、进程和脚本。</p>
+<h2 id="如何写-launchd-配置文件">如何写 launchd 配置文件？</h2>
+<p><code>launchd</code> 的配置文件是通过一个 <code>plist</code>
+文件来定义的（<code>plist</code> 是 <code>property list</code>
+的缩写），一个典型的格式如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Label 可以看作是守护进程的名称，key 是配置的名称，key 的下一行就是它的值，string 标签表示值的类型是字符串 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>com.example.app<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">key</span>&gt;</span>Program<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/Me/Scripts/cleanup.sh<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">key</span>&gt;</span>RunAtLoad<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li>配置文件中，除了 <code>dict</code>
+里面的那一部分，其他的都是固定的，不需要修改。</li>
+<li>三个字段说明：
+<ul>
+<li><code>Label</code>：也就是服务的名字，可以随便取，但是不能重复。我们通过
+<code>launchctl list</code> 来查看的时候，列出的就是这个名字。上述例子是
+<code>com.example.app</code>。</li>
+<li><code>Program</code>：要启动的程序的路径，需要填写绝对路径。上述例子是
+<code>/Users/Me/Scripts/cleanup.sh</code>。<strong>如果需要加参数的话，需要使用
+<code>ProgramArguments</code> 来代替
+<code>Program</code>，详情参考下文。</strong></li>
+<li><code>RunAtLoad</code>：是否在配置被加载的时候就运行，默认是
+<code>false</code>，如果需要在启动的时候就运行，需要设置为
+<code>true</code>。上述例子是 <code>true</code>。</li>
+</ul></li>
+<li>标签说明：<code>key</code> 就是属性的名称，紧跟着 <code>key</code>
+的下一行就是属性的值，属性的值的类型通过其标签反映出来，比如上面的
+<code>&lt;string&gt;</code> 表示包裹的是一个字符串类型，而
+<code>&lt;true/&gt;</code> 表示是一个布尔类型，而且它的值是
+<code>true</code>。</li>
+</ul>
+<blockquote>
+<p>mac 中很多配置都是通过 <code>plist</code> 来定义的，</p>
+</blockquote>
+<h2 id="launchd-配置文件放哪里">launchd 配置文件放哪里？</h2>
+<p>macOS
+中有两种类型的守护进程，一种是系统级别的（<code>Daemons</code>），一种是用户级别的（<code>Agents</code>），它们的配置文件放的位置是不一样的。
+系统级别的守护进程就是不管你用户是谁，都会启动的，而用户级别的守护进程就是只有在对应的用户登录的时候才会启动的（所以会保存在用户主目录下）。</p>
+<blockquote>
+<p>简单来说，就是如果没有用户登录进系统中，那么用户级别的守护进程（<code>Agents</code>）就不会启动。mac
+其实跟 linux
+一样，都是多用户系统，没有任何用户登录的时候，它依然是在运行的。</p>
+</blockquote>
+<p>下面是 <code>launchd</code> 配置文件的路径：</p>
+<ul>
+<li><code>~/Library/LaunchAgents</code>：用户级别的守护进程配置文件路径。这里保存特定用户的
+<code>Agents</code> 配置。（<strong>一般情况都是放这里</strong>）</li>
+<li><code>/Library/LaunchAgents</code>：用户级别的守护进程配置文件路径。这里保存所有用户共用的
+<code>Agents</code> 配置。</li>
+<li><code>/Library/LaunchDaemons</code>：全局的 <code>Daemons</code>
+配置。</li>
+<li><code>/System/Library/LaunchAgents</code>：所有登录用户共用的
+<code>Agents</code> 配置。</li>
+<li><code>/System/Library/LaunchDaemons</code>：全局的
+<code>Daemons</code> 配置。</li>
+</ul>
+<p>可能大家看得有点迷，会有一种想法就是，那我的配置文件应该放哪里？这个问题的答案很简单：如果你的电脑只有你一个人用，那么你就把配置文件放在
+<code>~/Library/LaunchAgents</code> 下面就行了。</p>
+<h2 id="如何让-launchd-开机启动我们配置的守护进程">如何让 launchd
+开机启动我们配置的守护进程？</h2>
+<p>在我们添加了配置文件之后，还有一件事需要做的就是，修改配置文件的权限，我们可以参考一下上面几个文件夹中文件的权限，然后修改成相同的就可以了。
+比如 <code>~/Library/LaunchAgents</code> 文件夹中的配置文件权限都是
+<code>xx:staff</code>（<code>xx</code>
+是当前登录的用户），那么我们也把我们的配置文件权限修改成
+<code>xx:staff</code> 就可以了。</p>
+<p>接下来，我们只需要执行
+<code>launchctl load ~/Library/LaunchAgents/com.example.app.plist</code>
+就可以了。</p>
+<h2 id="如何移除守护进程呢">如何移除守护进程呢？</h2>
+<p>如果我们想要移除守护进程，只需要执行
+<code>launchctl unload ~/Library/LaunchAgents/com.example.app.plist</code>
+就可以了。</p>
+<h2
+id="如果要执行的命令有参数怎么配置">如果要执行的命令有参数怎么配置？</h2>
+<p>在很多时候，我们都是需要加上某些参数来启动我们的命令的，要实现这种效果可以使用
+<code>ProgramArguments</code> 配置，下面是另外一个例子：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>my-privoxy<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Code/proxy/privoxy<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>--no-daemon<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>privoxy.config<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Library/Logs/my-privoxy.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Library/Logs/my-privoxy.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>WorkingDirectory<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Code/proxy/<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个例子中，我们添加了更多的元素进去，比如日志、工作目录等。</p>
+</blockquote>
+<p>说明：</p>
+<ul>
+<li><code>ProgramArguments</code>
+属性的作用是指定要执行的命令以及其参数，它的值是数组类型。</li>
+<li><code>StandardErrorPath</code> 配置了错误输出的日志路径。</li>
+<li><code>StandardOutPath</code> 配置了标准输出的日志路径。</li>
+<li><code>WorkingDirectory</code>
+设置了我们程序运行时候所在的工作目录。</li>
+</ul>
+<h2 id="launchd-配置项说明">launchd 配置项说明</h2>
+<h3 id="label---指定名字">Label - 指定名字</h3>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>com.example.app<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3
+id="programprogramarguments---指定要执行的程序">Program、ProgramArguments
+- 指定要执行的程序</h3>
+<p>这两个二选一，如果不需要指定参数，用
+<code>Program</code>。如果需要指定参数，那么使用
+<code>ProgramArguments</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>Program<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>/path/to/program<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/usr/bin/rsync<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>--archive<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>--compress-level=9<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Volumes/Macintosh HD<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Volumes/Backup<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="environmentvariables---环境变量">EnvironmentVariables -
+环境变量</h3>
+<p>我们可以为 <code>Program</code> 设置环境变量，比如下面这个例子：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>EnvironmentVariables<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>PATH<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/bin:/usr/bin:/usr/local/bin<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这样我们就可以在程序运行的时候读取到这些环境变量。</p>
+</blockquote>
+<h3
+id="standardinpathstandardoutpathstandarderrorpath---重定向输入输出">StandardInPath、StandardOutPath、StandardErrorPath
+- 重定向输入输出</h3>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardInPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/test.stdin<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/test.stdout<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/test.stderr<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>具体含义：</p>
+<ul>
+<li><code>StandardInPath</code> 标准输入的路径。</li>
+<li><code>StandardOutPath</code> 标准输出的路径。</li>
+<li><code>StandardErrorPath</code> 标准错误输出的路径。</li>
+</ul>
+<p><strong>大多时候我们可能不需要，但是如果我们的服务跑不起来，加上
+<code>StandardErrorPath</code> 和 <code>StandardOutPath</code>
+我们就可以看到错误信息了。</strong></p>
+<h3 id="workingdirectory---指定工作目录">WorkingDirectory -
+指定工作目录</h3>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>WorkingDirectory<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样我们可以在程序运行的时候，直接使用相对路径。</p>
+<h3
+id="runatloadstartintervalstartcalendarinterval---指定什么时候启动">RunAtLoad、StartInterval、StartCalendarInterval
+- 指定什么时候启动</h3>
+<p>这三个属性我们可以在配置中选择一个来配置：</p>
+<ul>
+<li><code>RunAtLoad</code>：如果设置为 <code>true</code>，那么
+<code>Program</code> 会在系统启动的时候执行。(对于 <code>Daemons</code>
+来说就是系统启动的时候启动，对于 <code>Agents</code>
+来说就是用户登录的时候启动)</li>
+<li><code>StartInterval</code>：指定启动的时间间隔，单位是秒。也就是每隔多少秒执行一次。</li>
+<li><code>StartCalendarInterval</code>：指定启动的时间，可以指定每天的某个时间启动。（类似定时任务），可以指定多个时间。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>RunAtLoad<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面两行的作用是，在系统启动或者用户登进的时候执行命令。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>StartInterval<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">integer</span>&gt;</span>3600<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面两行的作用是，每隔 3600 秒执行一次。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>StartCalendarInterval<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>Hour<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">integer</span>&gt;</span>3<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>Minute<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的例子中，我们指定了每天的 3 点执行一次。</p>
+<blockquote>
+<p>还有些不太常用的选项：<code>StartOnMount</code>、<code>WatchPaths</code>、<code>QueueDirectories</code>，通过这几个配置也可以指定命令执行的时机，本文不做介绍。</p>
+</blockquote>
+<h3 id="keepalive---指定是否保持运行">KeepAlive - 指定是否保持运行</h3>
+<p>这个默认其实是 <code>true</code>，我们可以测试一下：<code>kill</code>
+掉我们 <code>launchd</code>
+启动的进程，我们会发现那个进程马上又会被启动。</p>
+<p>这个选项中，我们可以配置一些额外的条件来让 <code>launchd</code>
+知道什么时候需要重启进程：</p>
+<ul>
+<li><code>SuccessfulExit</code>
+如果上一次退出是正常退出，那么就在进程退出的时候启动它。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>SuccessfulExit<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Crashed</code>
+如果上一次退出是异常退出，那么就在进程退出的时候启动它。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>Crashed<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>NetworkState</code>
+如果网络连接断开，那么就在网络连接恢复的时候启动它。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>Crashed<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>KeepAlive</code>
+的其他不常用选项：<code>PathState</code>、<code>OtherJobEnabled</code>、<code>AfterInitialDemand</code>，本文不做介绍。</p>
+</blockquote>
+<h3 id="usernamegroupname---指定运行的用户和用户组">UserName、GroupName
+- 指定运行的用户和用户组</h3>
+<p>我们可以指定以什么用户、用户组来运行这个命令：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>UserName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>nobody<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>GroupName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>nobody<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>InitGroups<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="rootdirectory---指定根目录">RootDirectory - 指定根目录</h3>
+<p>这允许我们在一个 <code>jail root</code> 中执行我们的命令。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>RootDirectory<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">string</span>&gt;</span>/var/jail<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3
+id="abandonprocessgroup---进程被终止的时候是否终止其子进程">AbandonProcessGroup
+- 进程被终止的时候是否终止其子进程</h3>
+<p>当我们给 <code>launchd</code> 启动的进程发送 <code>SIGTERM</code>
+信号的时候，这个 <code>SIGTERM</code> 信号也会同时被发送给它的子进程。
+我们可以将 <code>AbandonProcessGroup</code> 设置为 <code>true</code>
+来禁止这种行为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>AbandonProcessGroup<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="exittimeout---优雅终止">ExitTimeOut - 优雅终止</h3>
+<p>在我们停止 <code>launchd</code> 启动的进程的时候，会先发送一个
+<code>SIGTERM</code>
+信号，我们的进程可以在接收到这个信号后做一些清理操作。 直到
+<code>ExitTimeOut</code> 秒后，如果进程还没退出，那么就会发送一个
+<code>SIGKILL</code> 信号来强行终止进程的运行：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>ExitTimeOut<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">integer</span>&gt;</span>30<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="throttleinterval---命令调用的时间间隔">ThrottleInterval -
+命令调用的时间间隔</h3>
+<p>可与 <code>KeepAlive</code> 配合使用，在进程异常退出之后，间隔
+<code>ThrottleInterval</code> 秒后再尝试启动。</p>
+<h2 id="launchd-常用操作">launchd 常用操作</h2>
+<h3 id="launchctl-list---列出所有-launchd-管理的服务">launchctl list -
+列出所有 launchd 管理的服务</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ launchctl list | grep my-ss-local</span><br><span class="line">89201	0	my-ss-local</span><br></pre></td></tr></table></figure>
+<p>输出的第一列是进程 <code>id</code>，如果是 <code>0</code>
+说明没有在运行状态。第二列的 <code>0</code>
+表示的是进程上一次的退出状态码，<code>0</code>
+一般表示成功。第三列表示的是我们在 <code>plist</code> 配置文件中配置的
+<code>Label</code> 的值。</p>
+<h3 id="加载一个-plist服务job">加载一个 plist（服务/job）</h3>
+<p>我们可以通过下面的命令加载一个 <code>plist</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl load ~/Library/LaunchAgents/com.example.app.plist</span><br></pre></td></tr></table></figure>
+<h3 id="移除一个-plist服务job">移除一个 plist（服务/job）</h3>
+<p>我们可以通过下面的命令来移除 <code>launchd</code> 配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl unload ~/Library/LaunchAgents/com.example.app.plist</span><br></pre></td></tr></table></figure>
+<h3 id="启动一个-job">启动一个 job</h3>
+<p>下面的 <code>com.example.app</code> 是我们在 <code>plist</code>
+中配置的 <code>Label</code> 的值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl start com.example.app</span><br></pre></td></tr></table></figure>
+<h3 id="停止一个-job">停止一个 job</h3>
+<p>下面的 <code>com.example.app</code> 是我们在 <code>plist</code>
+中配置的 <code>Label</code> 的值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl stop com.example.app</span><br></pre></td></tr></table></figure>
+<h2 id="一些实例">一些实例</h2>
+<p>下面是个人使用中的一些配置文件，供大家参考。下面的例子涵盖了常用的一些配置，我们复制改改就可以用了。</p>
+<h3 id="frpc">frpc</h3>
+<p>文件 <code>~/Library/LaunchAgents/frp.plist</code>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>frpc<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>/usr/local/bin/frpc<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>-c<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>/etc/frpc.ini<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个配置文件的作用是，以守护进程的方式来启动
+<code>/usr/local/bin/frpc -c /etc/frpc.ini</code>
+这个命令。启用方式为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl load ~/Library/LaunchAgents/frp.plist</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我们可以通过 <code>ps</code> 来查看进程是否成功启动。</p>
+</blockquote>
+<h3 id="ss-local">ss-local</h3>
+<p>文件 <code>~/Library/LaunchAgents/ss-local.plist</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>my-ss-local<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Code/proxy/ss-local<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>-c<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>ss-local-config.json<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Library/Logs/my-ss-local.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Library/Logs/my-ss-local.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>WorkingDirectory<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/ruby/Code/proxy/<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个配置文件的作用是，以守护进程的方式来启动
+<code>/Users/ruby/Code/proxy/ss-local -c ss-local-config.json</code>
+这个命令， 并且将标准错误输出和标准输出都重定向到
+<code>/Users/ruby/Library/Logs/my-ss-local.log</code> 文件中。
+<code>ss-local</code> 进程的工作目录是
+<code>/Users/ruby/Code/proxy/</code>。</p>
+<p>启用方式为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl load ~/Library/LaunchAgents/ss-local.plist</span><br></pre></td></tr></table></figure>
+<h3 id="homebrew-的-service---mysql">homebrew 的 service - MySQL</h3>
+<p>文件
+<code>~/Library/LaunchAgents/homebrew.mxcl.mysql@5.7.plist</code>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>homebrew.mxcl.mysql@5.7<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>/usr/local/opt/mysql@5.7/bin/mysqld_safe<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">string</span>&gt;</span>--datadir=/usr/local/var/mysql<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>RunAtLoad<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>WorkingDirectory<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>/usr/local/var/mysql<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我们在使用 mac 的时候最常用的 <code>homebrew</code> 也是通过
+<code>launchd</code> 来管理服务的。我们可以通过
+<code>brew services list</code> 来查看当前启动的服务。 <code>brew</code>
+管理的服务的配置文件也会被放在 <code>~/Library/LaunchAgents</code>
+目录中。</p>
+<p>上面的配置文件中，做了以下配置：</p>
+<ul>
+<li><code>KeepAlive</code> - 设置为
+<code>true</code>，那么当进程退出的时候，<code>launchd</code>
+会自动重启这个进程。</li>
+<li><code>Label</code> - 这个配置文件的唯一标识。我们除了通过
+<code>brew services list</code> 查看到 <code>MySQL</code>
+服务，还可以通过 <code>launchctl list | grep mysql</code>
+来看到这个进程的状态。</li>
+<li><code>ProgramArguments</code> - 指定要执行的命令。这里的完整命令是
+<code>/usr/local/opt/mysql@5.7/bin/mysqld_safe --datadir=/usr/local/var/mysql</code>。</li>
+<li><code>RunAtLoad</code> - 设置为
+<code>true</code>，那么当用户进入系统的时候，会自动启动这个进程。</li>
+<li><code>WorkingDirectory</code> - 指定 <code>MySQL</code>
+进程的工作目录。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<ul>
+<li>mac 下可以使用 <code>launchd</code>
+来配置一些守护进程、定时任务等。类似的工具有 <code>systemd</code> 和
+<code>supervisor</code> 等，但是 <code>launchd</code> 是 mac
+自带的，不用安装其他依赖就能使用。</li>
+<li><code>launchd</code> 配置文件类型为 <code>plist</code>，也就是
+<code>property list</code>，用户级别的配置文件一般存放在
+<code>~/Library/LaunchAgents</code> 目录中。</li>
+<li><code>launchd</code> 配置的几个关键属性：
+<ul>
+<li><code>Label</code> - 用来标识这个 <code>job</code>
+的唯一标识符。</li>
+<li><code>Program</code> - 指定要执行的命令。（如果有参数，我们需要使用
+<code>ProgramArguments</code> 来代替 <code>Program</code>）</li>
+<li><code>StandardErrorPath</code>、<code>StandardOutPath</code> -
+指定标准错误输出和标准输出的路径。</li>
+<li><code>WorkingDirectory</code> - 指定命令执行的工作目录。</li>
+</ul></li>
+<li><code>launchd</code> 可以通过 <code>launchctl</code> 命令来管理：
+<ul>
+<li><code>launchctl list</code> - 列出所有 <code>launchd</code>
+管理的服务。</li>
+<li><code>launchctl load</code> - 加载一个 <code>plist</code>。</li>
+<li><code>launchctl unload</code> - 移除一个 <code>plist</code>。</li>
+<li><code>launchctl start</code> - 启动一个 <code>job</code>。</li>
+<li><code>launchctl stop</code> - 停止一个 <code>job</code>。</li>
+</ul></li>
+</ul>
+<p><code>launchd</code>
+的使用还是挺简单的，命令也就那么几个，所以如果想在你的 mac
+中启动一些守护进程的话，可以尝试一下。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mac/" rel="tag"><i class="fa fa-tag"></i> mac</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/16/gitlab/gitlab%20ci%20cd%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" rel="prev" title="gitlab ci cd 不完全指南">
+                  <i class="fa fa-angle-left"></i> gitlab ci cd 不完全指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/08/15/test/%E8%81%8A%E8%81%8A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="next" title="聊聊单元测试">
+                  聊聊单元测试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

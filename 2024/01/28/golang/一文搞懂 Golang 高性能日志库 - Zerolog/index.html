@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言 Zerolog 是一个高性能、零内存分配的 Go 日志库。它为不需要垃圾回收的延迟敏感型应用程序提供结构化日志记录功能。您可以以完全零分配的方式使用，这样在初始化记录器对象后，堆上不会再分配其他对象，从而防止触发垃圾回收。 本教程将解释如何在 Go 应用程序中安装、设置和使用 Zerolog 记录器。我们将首先介绍它的 API 和它提供的所有选项，并展示如何以各种方式自定义它们。最后，我们将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一文搞懂 Golang 高性能日志库 - Zerolog">
+<meta property="og:url" content="https://eleven26.github.io/2024/01/28/golang/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%20Golang%20%E9%AB%98%E6%80%A7%E8%83%BD%E6%97%A5%E5%BF%97%E5%BA%93%20-%20Zerolog/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="前言 Zerolog 是一个高性能、零内存分配的 Go 日志库。它为不需要垃圾回收的延迟敏感型应用程序提供结构化日志记录功能。您可以以完全零分配的方式使用，这样在初始化记录器对象后，堆上不会再分配其他对象，从而防止触发垃圾回收。 本教程将解释如何在 Go 应用程序中安装、设置和使用 Zerolog 记录器。我们将首先介绍它的 API 和它提供的所有选项，并展示如何以各种方式自定义它们。最后，我们将">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/go/logging/zerolog_1.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/logging/zerolog_2.png">
+<meta property="article:published_time" content="2024-01-28T12:28:30.000Z">
+<meta property="article:modified_time" content="2024-01-29T08:29:59.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/go/logging/zerolog_1.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2024/01/28/golang/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%20Golang%20%E9%AB%98%E6%80%A7%E8%83%BD%E6%97%A5%E5%BF%97%E5%BA%93%20-%20Zerolog/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2024/01/28/golang/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%20Golang%20%E9%AB%98%E6%80%A7%E8%83%BD%E6%97%A5%E5%BF%97%E5%BA%93%20-%20Zerolog/","path":"2024/01/28/golang/一文搞懂 Golang 高性能日志库 - Zerolog/","title":"一文搞懂 Golang 高性能日志库 - Zerolog"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>一文搞懂 Golang 高性能日志库 - Zerolog | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8-zerolog"><span class="nav-number">2.</span> <span class="nav-text">开始使用 Zerolog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A2%E7%B4%A2-zerolog-api"><span class="nav-number">3.</span> <span class="nav-text">探索 Zerolog API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="nav-number">3.1.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E4%B8%8A%E4%B8%8B%E6%96%87%E6%95%B0%E6%8D%AE%E6%B7%BB%E5%8A%A0%E5%88%B0%E6%97%A5%E5%BF%97%E4%B8%AD"><span class="nav-number">3.2.</span> <span class="nav-text">将上下文数据添加到日志中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91-logger-%E6%B7%BB%E5%8A%A0%E5%85%A8%E5%B1%80%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">3.3.</span> <span class="nav-text">向 logger 添加全局上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%BC%80%E5%8F%91%E4%B8%AD%E7%BE%8E%E5%8C%96%E6%97%A5%E5%BF%97"><span class="nav-number">3.4.</span> <span class="nav-text">在开发中美化日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-zerolog-%E8%BF%9B%E8%A1%8C%E6%97%A5%E5%BF%97%E9%87%87%E6%A0%B7"><span class="nav-number">3.5.</span> <span class="nav-text">使用 Zerolog 进行日志采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zerolog-%E4%B8%AD%E7%9A%84%E9%92%A9%E5%AD%90"><span class="nav-number">3.6.</span> <span class="nav-text">Zerolog 中的钩子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-zerolog-%E8%AE%B0%E5%BD%95%E9%94%99%E8%AF%AF"><span class="nav-number">4.</span> <span class="nav-text">使用 Zerolog 记录错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E5%88%B0%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">记录到文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-web-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E4%BD%BF%E7%94%A8-zerolog"><span class="nav-number">6.</span> <span class="nav-text">在 Web 应用程序中使用
+Zerolog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">创建日志记录中间件</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2024/01/28/golang/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%20Golang%20%E9%AB%98%E6%80%A7%E8%83%BD%E6%97%A5%E5%BF%97%E5%BA%93%20-%20Zerolog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="一文搞懂 Golang 高性能日志库 - Zerolog | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一文搞懂 Golang 高性能日志库 - Zerolog
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-01-28 20:28:30" itemprop="dateCreated datePublished" datetime="2024-01-28T20:28:30+08:00">2024-01-28</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="前言">前言</h2>
+<p><code>Zerolog</code> 是一个高性能、零内存分配的 Go
+日志库。它为不需要垃圾回收的延迟敏感型应用程序提供结构化日志记录功能。您可以以完全零分配的方式使用，这样在初始化记录器对象后，堆上不会再分配其他对象，从而防止触发垃圾回收。</p>
+<p>本教程将解释如何在 Go 应用程序中安装、设置和使用 Zerolog
+记录器。我们将首先介绍它的 API
+和它提供的所有选项，并展示如何以各种方式自定义它们。最后，我们将描述如何在典型的
+Web 应用程序中使用它，以便您可以很好地了解如何在您的项目中采用它。</p>
+<h2 id="开始使用-zerolog">开始使用 Zerolog</h2>
+<p>我们可以通过下面的命令安装 Zerolog 到我们的 Go 项目中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/rs/zerolog/log</span><br></pre></td></tr></table></figure>
+<p>该库提供了一个预配置且全局可用的 <code>logger</code>，您可以通过
+<code>zerolog/log</code> 软件包在任何文件中导入和使用该
+<code>logger</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog/log&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    log.Info().Msg(<span class="string">&quot;Hello from Zerolog global logger&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述程序将 JSON 格式的日志条目输出到控制台：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-08-18T13:45:51+01:00&quot;,&quot;message&quot;:&quot;Hello from global logger&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>默认情况下，全局 <code>logger</code>
+打印为标准错误，并且它还配置为在级别 <code>TRACE</code>
+上记录，尽管您可以通过调用主 <code>zerolog</code> 包提供的
+<code>SetGlobalLevel()</code> 函数来设置不同的最小级别：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog/log&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    zerolog.SetGlobalLevel(zerolog.ErrorLevel)</span><br><span class="line">    log.Info().Msg(<span class="string">&quot;Info message&quot;</span>)</span><br><span class="line">    log.Error().Msg(<span class="string">&quot;Error message&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-08-18T13:51:44+01:00&quot;,&quot;message&quot;:&quot;Error message&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>除了 JSON 日志记录外，您还可以配置 <code>Zerolog</code> 以输出以
+<code>CBOR</code> 格式编码的二进制日志。您可以在编译应用程序时使用
+<code>binary_log</code> <code>build</code> 标记来启用它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go build -tags binary_log .</span><br></pre></td></tr></table></figure>
+<p>执行生成的二进制文件时，您将看到如下所示的输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">�eleveleerrordtime��A�lׂ�p�gmessagemError message�% </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：不是我的文章乱码，而是执行生成的二进制文件输出的就是这样的乱码。这是因为它是二进制的格式的，不是
+ASCII 格式的。</p>
+</blockquote>
+<p>您可以使用任何 <code>CBOR</code> 解码器（例如
+<code>csd</code>）将此二进制日志条目解码为 JSON：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./main 2&gt; &gt;(csd)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-08-31T11:57:18.764748096-07:00&quot;,&quot;message&quot;:&quot;Error message&quot;&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我们的系统可能还没有安装 <code>csd</code>，我们可以通过
+<code>go install github.com/toravir/csd@0.1.0</code>
+命令来进行安装。</p>
+</blockquote>
+<p>如果您的日志条目很大，并且您希望压缩它们以进行长期存储，您可能会发现以
+<code>CBOR</code> 格式输出日志很有用，并且在需要时可以毫不费力地转换回
+JSON。</p>
+<h2 id="探索-zerolog-api">探索 Zerolog API</h2>
+<p><code>Zerolog</code> 提供了一个简单易懂的结构化日志记录 API。其
+<code>Logger</code> 类型表示写入某个 <code>io.Writer</code>
+接口的任何活动记录器，对于全局记录器
+（<code>zerolog/log</code>），该接口为 <code>os.Stderr</code>
+。您可以使用以下 <code>zerolog.New()</code> 方法创建新的自定义
+<code>Logger</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    logger := zerolog.New(os.Stdout)</span><br><span class="line">    logger.Trace().Msg(<span class="string">&quot;Trace message&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;trace&quot;,&quot;message&quot;:&quot;Trace message&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="日志级别">日志级别</h3>
+<p>每个记录器都提供了一个对应于 <code>Zerolog</code>
+提供的七个日志级别的方法，下面列出了这些级别及其整数优先级值：</p>
+<ul>
+<li><code>TRACE(-1)</code>：用于跟踪代码执行路径</li>
+<li><code>DEBUG(0)</code>: 对故障排除有用的信息</li>
+<li><code>INFO(1)</code>: 描述应用程序正常运行的信息</li>
+<li><code>WARNING(2)</code>: 对于需要的记录事件，以后可能需要检查</li>
+<li><code>ERROR(3)</code>: 特定操作的错误信息</li>
+<li><code>FATAL(4)</code>:
+应用程序无法恢复的严重错误。<code>os.Exit(1)</code>
+在记录消息后调用</li>
+<li><code>PANIC(5)</code>: 与 <code>FATAL</code> 类似，但只是名字改成了
+<code>PANIC()</code></li>
+</ul>
+<p>您可以通过 <code>Level()</code> 方法将上述任何级别设置为自定义
+<code>Logger</code>
+的最低级别。您可以传递上面所示的整数优先级数，也可以使用
+<code>zerolog</code>
+包上提供的级别常量（<code>TraceLevel</code>，<code>DebugLevel</code>，等）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger := zerolog.New(os.Stdout).Level(zerolog.InfoLevel)</span><br></pre></td></tr></table></figure>
+<p>上述代码片段仅输出比 <code>INFO</code>
+更高级别的日志。您还可以通过环境变量设置最小级别（在本教程后面部分演示）。</p>
+<h3 id="将上下文数据添加到日志中">将上下文数据添加到日志中</h3>
+<p>当你调用与所选日志级别相对应的方法（<code>Info()</code>、<code>Debug()</code>等）时，将返回一个
+<code>zerolog.Event</code> 类型，该类型代表一个日志事件。这个
+<code>Event</code>
+类型提供了几个方法，允许你向其上下文添加属性（以键值对的形式），以便日志条目包含足够的上下文数据，帮助你理解事件。例如，当记录在服务器上创建资源时，你可以在日志中包含用户
+ID 或客户端信息（如 IP 地址），这样以后通过这些属性轻松过滤日志。</p>
+<p><code>Event</code> 类型上的大多数方法都返回一个指向
+<code>Event</code>
+的指针，因此你可以在日志点上根据需要链式调用它们。一旦向
+<code>Event</code> 添加了所有必要的上下文，你必须调用其中一个
+<code>Msg()</code>、<code>Msgf()</code>、<code>MsgFunc()</code> 或
+<code>Send()</code> 方法来完成 <code>Event</code>
+的记录。通常，<code>Msg()</code>
+方法将用于通过向日志条目添加消息字段来关闭 <code>Event</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">logger.Info().</span><br><span class="line">  Str(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;john&quot;</span>).</span><br><span class="line">  Int(<span class="string">&quot;age&quot;</span>, <span class="number">22</span>).</span><br><span class="line">  Bool(<span class="string">&quot;registered&quot;</span>, <span class="literal">true</span>).</span><br><span class="line">  Msg(<span class="string">&quot;new signup!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;name&quot;:&quot;john&quot;,&quot;age&quot;:22,&quot;registered&quot;:true,&quot;message&quot;:&quot;new signup!&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>如果要省略该 <code>message</code> 字段，可以调用 <code>Msg()</code>
+或改用 <code>Send()</code> 来代替（不传参数）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">logger.Info().</span><br><span class="line">  Str(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;john&quot;</span>).</span><br><span class="line">  Int(<span class="string">&quot;age&quot;</span>, <span class="number">22</span>).</span><br><span class="line">  Bool(<span class="string">&quot;registered&quot;</span>, <span class="literal">true</span>).</span><br><span class="line">  Send()</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;name&quot;:&quot;john&quot;,&quot;age&quot;:22,&quot;registered&quot;:true&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意，必须始终在 <code>zerolog.Event</code>
+上最后调用一个事件关闭方法，以便记录相应的条目。如果未使用这些方法，则不会记录日志条目。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">logger.Info().</span><br><span class="line">  Str(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;john&quot;</span>).</span><br><span class="line">  Int(<span class="string">&quot;age&quot;</span>, <span class="number">22</span>).</span><br><span class="line">  Bool(<span class="string">&quot;registered&quot;</span>, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p><em>这不会有任何日志记录。</em></p>
+<p>此外，除了要记得调用事件关闭方法外，<strong>也不要在一个
+<code>event</code> 对象上调用多次事件关闭方法。</strong></p>
+<h3 id="向-logger-添加全局上下文">向 logger 添加全局上下文</h3>
+<p>在上一节中，您了解了如何使用 <code>zerolog.Event</code>
+类型上的方法将相关上下文添加到日志条目。本节将更进一步，向您展示如何将上下文数据添加到
+Logger 其本身，以确保此类数据包含在记录器生成的所有后续记录中。</p>
+<p>有两种主要方法可以向 <code>Zerolog Logger</code>
+添加上下文。第一种涉及使用返回 <code>zerolog With()</code>
+的方法。上下文实例，允许您通过与 <code>zerolog.Event</code>
+类型类似的字段方法向键值对中的记录器添加其他属性。然后，在将必要的数据添加到上下文后，必须调用该
+<code>Logger()</code> 方法以返回具有更新上下文的新 <code>Logger</code>
+对象。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    logger := zerolog.New(os.Stdout).With().Timestamp().Logger()</span><br><span class="line"></span><br><span class="line">    logger.Info().Msg(<span class="string">&quot;info message&quot;</span>)</span><br><span class="line">    logger.Debug().Str(<span class="string">&quot;username&quot;</span>, <span class="string">&quot;joshua&quot;</span>).Send()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-08-31T21:00:29+01:00&quot;,&quot;message&quot;:&quot;info message&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;debug&quot;,&quot;username&quot;:&quot;joshua&quot;,&quot;time&quot;:&quot;2023-08-31T21:00:29+01:00&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码片段将该 <code>time</code> 字段添加到
+生成的所有记录中，这很有意义，因为所有日志记录都应包含时间戳。您还可以将文件和行号添加到所有日志条目中，如下所示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    logger := zerolog.New(os.Stdout).With().Timestamp().Caller().Logger()</span><br><span class="line"></span><br><span class="line">    logger.Info().Msg(<span class="string">&quot;info message&quot;</span>)</span><br><span class="line">    logger.Debug().Str(<span class="string">&quot;username&quot;</span>, <span class="string">&quot;joshua&quot;</span>).Send()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-08-31T21:20:04+01:00&quot;,&quot;caller&quot;:&quot;/home/user/dev/main.go:12&quot;,&quot;message&quot;:&quot;info message&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;debug&quot;,&quot;username&quot;:&quot;joshua&quot;,&quot;time&quot;:&quot;2023-08-31T21:20:04+01:00&quot;,&quot;caller&quot;:&quot;/home/user/dev/main.go:13&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>由于该方法返回一个全新的 <code>Logger</code>，您可以使用该
+<code>Logger()</code> <code>With()</code>
+方法实现子记录器，这些子记录器使用相关元数据注释特定范围内的所有日志
+<code>Logger</code>，以将它们与其他记录区分开来。下面是一个人为的例子，演示了这是如何工作的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> logger = zerolog.New(os.Stdout).With().Timestamp().Logger()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    mainLogger := logger.With().Str(<span class="string">&quot;service&quot;</span>, <span class="string">&quot;main&quot;</span>).Logger()</span><br><span class="line">    mainLogger.Info().Msg(<span class="string">&quot;main logger message&quot;</span>)</span><br><span class="line"></span><br><span class="line">    auth()</span><br><span class="line">    admin()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">auth</span><span class="params">()</span></span> &#123;</span><br><span class="line">    authLogger := logger.With().Str(<span class="string">&quot;service&quot;</span>, <span class="string">&quot;auth&quot;</span>).Logger()</span><br><span class="line">    authLogger.Info().Msg(<span class="string">&quot;auth logger message&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">admin</span><span class="params">()</span></span> &#123;</span><br><span class="line">    adminLogger := logger.With().Str(<span class="string">&quot;service&quot;</span>, <span class="string">&quot;admin&quot;</span>).Logger()</span><br><span class="line">    adminLogger.Info().Msg(<span class="string">&quot;admin logger message&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;service&quot;:&quot;main&quot;,&quot;time&quot;:&quot;2023-08-31T21:13:51+01:00&quot;,&quot;message&quot;:&quot;main logger message&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;service&quot;:&quot;auth&quot;,&quot;time&quot;:&quot;2023-08-31T21:13:51+01:00&quot;,&quot;message&quot;:&quot;auth logger message&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;service&quot;:&quot;admin&quot;,&quot;time&quot;:&quot;2023-08-31T21:13:51+01:00&quot;,&quot;message&quot;:&quot;admin logger message&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>将元数据全局化为 <code>Logger</code> 的第二种方法是使用
+<code>UpdateContext()</code> 方法。此方法就地更新 <code>Logger</code>
+的内部上下文（无需创建副本），您可以像这样使用它：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    logger := zerolog.New(os.Stdout).With().Timestamp().Logger()</span><br><span class="line"></span><br><span class="line">    logger.UpdateContext(<span class="function"><span class="keyword">func</span><span class="params">(c zerolog.Context)</span></span> zerolog.Context &#123;</span><br><span class="line">        <span class="keyword">return</span> c.Str(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;john&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    logger.Info().Msg(<span class="string">&quot;info message&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;name&quot;:&quot;john&quot;,&quot;time&quot;:&quot;2023-09-01T09:25:20+01:00&quot;,&quot;message&quot;:&quot;info message&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在开发中美化日志">在开发中美化日志</h3>
+<p>在开发环境中，您可能会发现以更易于阅读的格式从应用程序输出日志条目会很有帮助，这样就可以轻松发现各种事件，而不会被不相关的符号和字段分散注意力。<code>Zerolog</code>
+提供了一个 <code>ConsoleWriter</code> 类型，用于解析原始 JSON
+条目，并将其以彩色格式输出到控制台。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">    <span class="string">&quot;runtime/debug&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    buildInfo, _ := debug.ReadBuildInfo()</span><br><span class="line"></span><br><span class="line">    logger := zerolog.New(zerolog.ConsoleWriter&#123;Out: os.Stderr, TimeFormat: time.RFC3339&#125;).</span><br><span class="line">        Level(zerolog.TraceLevel).</span><br><span class="line">        With().</span><br><span class="line">        Timestamp().</span><br><span class="line">        Caller().</span><br><span class="line">        Int(<span class="string">&quot;pid&quot;</span>, os.Getpid()).</span><br><span class="line">        Str(<span class="string">&quot;go_version&quot;</span>, buildInfo.GoVersion).</span><br><span class="line">        Logger()</span><br><span class="line"></span><br><span class="line">    logger.Trace().Msg(<span class="string">&quot;trace message&quot;</span>)</span><br><span class="line">    logger.Debug().Msg(<span class="string">&quot;debug message&quot;</span>)</span><br><span class="line">    logger.Info().Msg(<span class="string">&quot;info message&quot;</span>)</span><br><span class="line">    logger.Warn().Msg(<span class="string">&quot;warn message&quot;</span>)</span><br><span class="line">    logger.Error().Msg(<span class="string">&quot;error message&quot;</span>)</span><br><span class="line">    logger.WithLevel(zerolog.FatalLevel).Msg(<span class="string">&quot;fatal message&quot;</span>)</span><br><span class="line">    logger.WithLevel(zerolog.PanicLevel).Msg(<span class="string">&quot;panic message&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2024-01-26T16:12:09+08:00 TRC main.go:23 &gt; trace message go_version=go1.20.2 pid=41079</span><br><span class="line">2024-01-26T16:12:09+08:00 DBG main.go:24 &gt; debug message go_version=go1.20.2 pid=41079</span><br><span class="line">2024-01-26T16:12:09+08:00 INF main.go:25 &gt; info message go_version=go1.20.2 pid=41079</span><br><span class="line">2024-01-26T16:12:09+08:00 WRN main.go:26 &gt; warn message go_version=go1.20.2 pid=41079</span><br><span class="line">2024-01-26T16:12:09+08:00 ERR main.go:27 &gt; error message go_version=go1.20.2 pid=41079</span><br><span class="line">2024-01-26T16:12:09+08:00 FTL main.go:28 &gt; fatal message go_version=go1.20.2 pid=41079</span><br><span class="line">2024-01-26T16:12:09+08:00 PNC main.go:29 &gt; panic message go_version=go1.20.2 pid=41079</span><br></pre></td></tr></table></figure>
+<p>上面这个不够直观，下面这个才是实际效果：</p>
+<p><img src="/images/go/logging/zerolog_1.png" /></p>
+<p>您可以使用 <code>ConsoleWriter</code>
+类型上提供的选项来自定义输出的外观和格式：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">zerolog.ConsoleWriter&#123;</span><br><span class="line">    Out:        os.Stderr,</span><br><span class="line">    TimeFormat: time.RFC3339,</span><br><span class="line">    FormatLevel: <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> strings.ToUpper(fmt.Sprintf(<span class="string">&quot;[%s]&quot;</span>, i))</span><br><span class="line">    &#125;,</span><br><span class="line">    FormatMessage: <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;| %s |&quot;</span>, i)</span><br><span class="line">    &#125;,</span><br><span class="line">    FormatCaller: <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> filepath.Base(fmt.Sprintf(<span class="string">&quot;%s&quot;</span>, i))</span><br><span class="line">    &#125;,</span><br><span class="line">    PartsExclude: []<span class="type">string</span>&#123;</span><br><span class="line">        zerolog.TimestampFieldName,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[TRACE] main.go:41 | trace message | go_version=go1.20.2 pid=41171</span><br><span class="line">[DEBUG] main.go:42 | debug message | go_version=go1.20.2 pid=41171</span><br><span class="line">[INFO] main.go:43 | info message | go_version=go1.20.2 pid=41171</span><br><span class="line">[WARN] main.go:44 | warn message | go_version=go1.20.2 pid=41171</span><br><span class="line">[ERROR] main.go:45 | error message | go_version=go1.20.2 pid=41171</span><br><span class="line">[FATAL] main.go:46 | fatal message | go_version=go1.20.2 pid=41171</span><br><span class="line">[PANIC] main.go:47 | panic message | go_version=go1.20.2 pid=41171</span><br></pre></td></tr></table></figure>
+<p>实际效果如下：</p>
+<p><img src="/images/go/logging/zerolog_2.png" /></p>
+<p>请注意，时间戳现在是如何从输出中排除的，以及日志级别、调用方信息和日志消息的格式有何不同。格式化的字段也不再着色，但您可以使用
+<code>pterm</code> 或 <code>gookit/color</code> 等库来着色输出。</p>
+<p>注意不要在生产环境中使用 ， <code>ConsoleWriter</code>
+因为它会大大减慢日志记录的速度。它只是为了帮助在开发应用程序时使日志更易于阅读。您可以使用环境变量仅在开发中启用
+ConsoleWriter 输出：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> output io.Writer = zerolog.ConsoleWriter&#123;...&#125;</span><br><span class="line"><span class="keyword">if</span> os.Getenv(<span class="string">&quot;GO_ENV&quot;</span>) != <span class="string">&quot;development&quot;</span> &#123;</span><br><span class="line">  output = os.Stderr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用-zerolog-进行日志采样">使用 Zerolog 进行日志采样</h3>
+<p>采样是一种用于有意删除重复日志条目的技术，以便只保留和处理其中的一部分。当您的高流量应用程序生成大量记录时，这很有帮助，并且存储每一条记录将导致过高的存储和处理成本，这可能是不可取的。采样通过防止每秒记录数百或数千次相同的日志来解决此问题，从而防止资源浪费。</p>
+<p>以下是使用 <code>Zerolog</code> 对日志进行采样的最基本方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    log := zerolog.New(os.Stdout).</span><br><span class="line">        With().</span><br><span class="line">        Timestamp().</span><br><span class="line">        Logger().</span><br><span class="line">        Sample(&amp;zerolog.BasicSampler&#123;N: <span class="number">5</span>&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++ &#123;</span><br><span class="line">        log.Info().Msgf(<span class="string">&quot;a message from the gods: %d&quot;</span>, i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此示例中，配置为每条日志在五次中仅记录一次。这在 for
+循环中进行了演示，其中 INFO
+消息通常被记录十次，但由于采样，它只被记录两次：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot;level&quot;</span>:<span class="string">&quot;info&quot;</span>,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2023-09-02T08:05:48+01:00&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;a message from the gods: 1&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;level&quot;</span>:<span class="string">&quot;info&quot;</span>,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2023-09-02T08:05:48+01:00&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;a message from the gods: 6&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Zerolog</code>
+提供了其他更复杂的采样器，可能更适合您的应用。例如，
+<code>BurstSampler</code> 可用于限制在一段时间内记录的日志数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    l := zerolog.New(os.Stdout).</span><br><span class="line">        With().</span><br><span class="line">        Timestamp().</span><br><span class="line">        Logger().</span><br><span class="line">        Sample(&amp;zerolog.BurstSampler&#123;</span><br><span class="line">            Burst:  <span class="number">3</span>,</span><br><span class="line">            Period: <span class="number">1</span> * time.Second,</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++ &#123;</span><br><span class="line">        l.Info().Msgf(<span class="string">&quot;a message from the gods: %d&quot;</span>, i)</span><br><span class="line">        l.Warn().Msgf(<span class="string">&quot;warn message: %d&quot;</span>, i)</span><br><span class="line">        l.Error().Msgf(<span class="string">&quot;error message: %d&quot;</span>, i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里， <code>BurstSampler</code> 配置限制每 <code>Logger</code>
+秒生成三个以上的日志条目。本来应该在指定范围内记录的所有其他记录都将被丢弃。上面的循环应该记录
+30 条消息而不进行采样，但由于上面的 for 配置，它只记录了 3 条：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot;level&quot;</span>:<span class="string">&quot;info&quot;</span>,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2023-09-02T08:20:47+01:00&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;a message from the gods: 1&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;level&quot;</span>:<span class="string">&quot;warn&quot;</span>,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2023-09-02T08:20:47+01:00&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;warn message: 1&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;level&quot;</span>:<span class="string">&quot;error&quot;</span>,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2023-09-02T08:20:47+01:00&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;error message: 1&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>您只能对特定级别进行抽样，如下所示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">burstSampler := &amp;zerolog.BurstSampler&#123;</span><br><span class="line">    Burst:       <span class="number">3</span>,</span><br><span class="line">    Period:      <span class="number">1</span> * time.Second,</span><br><span class="line">    NextSampler: &amp;zerolog.BasicSampler&#123;N: <span class="number">5</span>&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">l := zerolog.New(os.Stdout).</span><br><span class="line">    With().</span><br><span class="line">    Timestamp().</span><br><span class="line">    Logger().</span><br><span class="line">    Sample(zerolog.LevelSampler&#123;</span><br><span class="line">        WarnSampler: burstSampler,</span><br><span class="line">        InfoSampler: burstSampler,</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<p>在这里，将仅对 <code>INFO</code> 和 <code>WARN</code>
+日志进行采样，而其他日志将照常记录，从而产生以下输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;a message from the gods: 1&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;warn&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;warn message: 1&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 1&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;a message from the gods: 2&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 2&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 3&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 4&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 5&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 6&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 7&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 8&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 9&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:26:42+01:00&quot;,&quot;message&quot;:&quot;error message: 10&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>如您所见， <code>INFO</code> 该消息被记录两次， <code>WARN</code>
+记录一次（总共 3 个日志），而所有 10 个 <code>ERROR</code>
+日志都被记录下来，因为它没有被采样。如果希望对每个级别进行不同的采样，则必须为每个级别创建不同的采样策略，例如
+<code>infoSampler</code> <code>warnSampler</code> 等 。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    infoSampler := &amp;zerolog.BurstSampler&#123;</span><br><span class="line">        Burst:  <span class="number">3</span>,</span><br><span class="line">        Period: <span class="number">1</span> * time.Second,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    warnSampler := &amp;zerolog.BurstSampler&#123;</span><br><span class="line">        Burst:  <span class="number">3</span>,</span><br><span class="line">        Period: <span class="number">1</span> * time.Second,</span><br><span class="line">        <span class="comment">// Log every 5th message after exceeding the burst rate of 3 messages per</span></span><br><span class="line">        <span class="comment">// second</span></span><br><span class="line">        NextSampler: &amp;zerolog.BasicSampler&#123;N: <span class="number">5</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    errorSampler := &amp;zerolog.BasicSampler&#123;N: <span class="number">2</span>&#125;</span><br><span class="line"></span><br><span class="line">    l := zerolog.New(os.Stdout).</span><br><span class="line">        With().</span><br><span class="line">        Timestamp().</span><br><span class="line">        Logger().</span><br><span class="line">        Sample(zerolog.LevelSampler&#123;</span><br><span class="line">            WarnSampler:  warnSampler,</span><br><span class="line">            InfoSampler:  infoSampler,</span><br><span class="line">            ErrorSampler: errorSampler,</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++ &#123;</span><br><span class="line">        l.Info().Msgf(<span class="string">&quot;a message from the gods: %d&quot;</span>, i)</span><br><span class="line">        l.Warn().Msgf(<span class="string">&quot;warn message: %d&quot;</span>, i)</span><br><span class="line">        l.Error().Msgf(<span class="string">&quot;error message: %d&quot;</span>, i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此方案中，为 <code>INFO</code>、 <code>WARN</code> 和
+<code>ERROR</code>
+级别定义了不同的采样策略，而其他级别则正常记录。<code>infoSampler</code>
+是我们在上一个代码片段中使用的示例配置（每秒记录 3
+条消息并丢弃所有其他消息），而 <code>warnSampler</code> 使用该
+<code>NextSampler</code> 属性在超过突发速率后记录每 5
+条消息。<code>errorSampler</code> 使用 <code>BasicSampler</code>
+策略，并记录每秒一条日志消息。此配置产生以下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;a message from the gods: 1&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;warn&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;warn message: 1&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;error message: 1&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;a message from the gods: 2&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;warn&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;warn message: 2&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;a message from the gods: 3&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;warn&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;warn message: 3&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;error message: 3&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;warn&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;warn message: 4&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;error message: 5&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;error message: 7&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;warn&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;warn message: 9&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;time&quot;:&quot;2023-09-02T08:40:58+01:00&quot;,&quot;message&quot;:&quot;error message: 9&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意消息的记录方式 （在一秒内生成的所有其他 <code>INFO</code>
+消息将被丢弃）， <code>WARN</code> 消息在突发速率之后记录三次， 并根据
+<code>NextSampler</code>
+属性中定义的策略再记录两次。最后，<code>ERROR</code>
+消息被记录五次，而不是十次（1/2）。</p>
+<p><code>Zerolog</code> 还提供了全局 <code>DisableSampling()</code>
+方法，用于在所有 <code>Logger</code>
+中启用或禁用所有形式的采样。它采用一个布尔参数来控制是启用还是禁用日志采样，当您需要动态更新配置以响应某些事件时，这可能很有帮助。</p>
+<h3 id="zerolog-中的钩子">Zerolog 中的钩子</h3>
+<p><code>Zerolog</code> 提供了一种通过 <code>Hook</code>
+接口挂接到日志记录过程的方法，定义如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Hook <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="comment">// Run runs the hook with the event.</span></span><br><span class="line">    Run(e *zerolog.Event, level zerolog.Level, message <span class="type">string</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在具体类型上实现 <code>Hook</code> 接口时，可以使用
+<code>Logger.Hook()</code> 方法将其应用于
+<code>Logger</code>，以便在每次记录日志时执行其 <code>Run()</code>
+方法。然后，您可以根据事件的日志级别或一些其他条件运行不同的操作。</p>
+<p>下面是一个示例，该示例将记录在 <code>ERROR</code>
+级别或更高级别的消息发送到 Telegram 频道：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/nikoksr/notify&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/nikoksr/notify/service/telegram&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> TelegramHook <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *TelegramHook)</span></span> Run(</span><br><span class="line">    e *zerolog.Event,</span><br><span class="line">    level zerolog.Level,</span><br><span class="line">    message <span class="type">string</span>,</span><br><span class="line">) &#123;</span><br><span class="line">    <span class="keyword">if</span> level &gt; zerolog.WarnLevel &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            _ = notifyTelegram(<span class="string">&quot;&quot;</span>, message)</span><br><span class="line">            wg.Done()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyTelegram</span><span class="params">(title, msg <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">    telegramService, err := telegram.New(</span><br><span class="line">        <span class="string">&quot;&lt;telegram bot token&gt;&quot;</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> err</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    telegramService.AddReceivers(<span class="string">&quot;&lt;chat id&gt;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    notifier := notify.New()</span><br><span class="line"></span><br><span class="line">    notifier.UseServices(telegramService)</span><br><span class="line"></span><br><span class="line">    ctx, cancel := context.WithTimeout(</span><br><span class="line">        context.Background(),</span><br><span class="line">        <span class="number">30</span>*time.Second,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> notifier.Send(ctx, title, msg)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    logger := zerolog.New(os.Stdout).</span><br><span class="line">        Level(zerolog.TraceLevel).</span><br><span class="line">        With().</span><br><span class="line">        Timestamp().</span><br><span class="line">        Logger()</span><br><span class="line"></span><br><span class="line">    logger = logger.Hook(&amp;TelegramHook&#123;&#125;)</span><br><span class="line"></span><br><span class="line">    logger.Trace().Msg(<span class="string">&quot;trace message&quot;</span>)</span><br><span class="line">    logger.Debug().Msg(<span class="string">&quot;debug message&quot;</span>)</span><br><span class="line">    logger.Info().Msg(<span class="string">&quot;info message&quot;</span>)</span><br><span class="line">    logger.Warn().Msg(<span class="string">&quot;warn message&quot;</span>)</span><br><span class="line">    logger.Error().Msg(<span class="string">&quot;error message&quot;</span>)</span><br><span class="line">    logger.WithLevel(zerolog.FatalLevel).Msg(<span class="string">&quot;fatal message&quot;</span>)</span><br><span class="line">    logger.WithLevel(zerolog.PanicLevel).Msg(<span class="string">&quot;panic message&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的程序创建了一个 <code>TelegramHook</code> 实现接口的
+<code>zerolog.Hook</code> 类型。它的 <code>Run()</code>
+方法检查所记录消息的级别，如果它比 <code>WARN</code>
+级别更严重，则将其发送到 Telegram
+频道。如果运行该程序（在替换上面突出显示的占位符之后），您将观察到每条日志消息都打印到控制台，并且
+<code>ERROR</code> 、<code>FATAL</code> 和 <code>PANIC</code>
+日志也会发送到配置的 Telegram 通道。</p>
+<h2 id="使用-zerolog-记录错误">使用 Zerolog 记录错误</h2>
+<p>使用 <code>Zerolog</code> 记录错误的最简单方法是在 <code>ERROR</code>
+级别进行记录，并在 <code>Err()</code> 生成的
+<code>zerolog.Event</code>。这会将一个 <code>error</code>
+属性添加到日志条目中，其中包含相关错误的详细信息：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">logger.Error().</span><br><span class="line">  Err(errors.New(<span class="string">&quot;file open failed&quot;</span>)).</span><br><span class="line">  Msg(<span class="string">&quot;something happened!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;error&quot;:&quot;file open failed&quot;,&quot;time&quot;:&quot;2023-08-31T22:59:07+01:00&quot;,&quot;message&quot;:&quot;something happened!&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>您可以通过更改以下 <code>zerolog.ErrorFieldName</code>
+的值将错误的字段名称更改为其他值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zerolog.ErrorFieldName = <span class="string">&quot;err&quot;</span></span><br><span class="line"></span><br><span class="line">logger.Error().</span><br><span class="line">  Err(errors.New(<span class="string">&quot;file open failed&quot;</span>)).</span><br><span class="line">  Msg(<span class="string">&quot;something happened!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;err&quot;:&quot;file open failed&quot;,&quot;time&quot;:&quot;2023-08-31T22:59:07+01:00&quot;,&quot;message&quot;:&quot;something happened!&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然上面的输出提供了有关所发生错误的详细信息，但它不显示导致错误的代码执行路径，这对于调试问题至关重要。您可以通过
+<code>Event</code> 上的 <code>Stack()</code>
+方法在错误日志中包含堆栈跟踪来解决此问题，但在它生效之前，必须分配给
+<code>zerolog.ErrorStackMarshaler</code>
+可以从错误中提取堆栈跟踪的函数。您可以将 <code>pkg/errors</code> 与
+<code>zerolog/pkgerrors</code>
+帮助程序结合使用，以将堆栈跟踪添加到错误日志中，如下所示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/pkg/errors&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog/pkgerrors&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack</span><br><span class="line"></span><br><span class="line">    logger := zerolog.New(os.Stdout).With().Timestamp().Logger()</span><br><span class="line">    logger.Error().</span><br><span class="line">        Stack().</span><br><span class="line">        Err(errors.New(<span class="string">&quot;file open failed!&quot;</span>)).</span><br><span class="line">        Msg(<span class="string">&quot;something happened!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;error&quot;,&quot;stack&quot;:[&#123;&quot;func&quot;:&quot;main&quot;,&quot;line&quot;:&quot;19&quot;,&quot;source&quot;:&quot;main.go&quot;&#125;,&#123;&quot;func&quot;:&quot;main&quot;,&quot;line&quot;:&quot;250&quot;,&quot;source&quot;:&quot;proc.go&quot;&#125;,&#123;&quot;func&quot;:&quot;goexit&quot;,&quot;line&quot;:&quot;1594&quot;,&quot;source&quot;:&quot;asm_amd64.s&quot;&#125;],&quot;error&quot;:&quot;file open failed!&quot;,&quot;time&quot;:&quot;2023-08-24T21:52:24+01:00&quot;,&quot;message&quot;:&quot;something happened!&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意，该 <code>stack</code> 属性如何包含一个 JSON
+格式的堆栈跟踪，该跟踪描述导致错误的程序执行。在调查应用程序中的意外错误时，此信息可能非常宝贵。</p>
+<p>还可以使用 <code>FATAL</code> 或 <code>PANIC</code>
+级别来记录应用程序无法恢复的特别严重的错误。请注意，<code>FATAL</code>
+级别在进行日志记录会导致程序立即退出，退出状态为 1。而
+<code>PANIC</code> 级别将调用 <code>panic()</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">err := errors.New(<span class="string">&quot;failed to connect to database&quot;</span>)</span><br><span class="line">logger.Fatal().Err(err).Msg(<span class="string">&quot;something catastrophic happened!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;fatal&quot;,&quot;error&quot;:&quot;failed to connect to database&quot;,&quot;time&quot;:&quot;2023-09-01T09:34:49+01:00&quot;,&quot;message&quot;:&quot;something catastrophic happened!&quot;&#125;</span><br><span class="line">exit status 1</span><br></pre></td></tr></table></figure>
+<p>如果要在不调用 <code>panic</code> 或者 <code>os.Exit(1)</code>
+的情况下记录 <code>FATAL</code> 或者 <code>PANIC</code>
+级别的消息，则必须使用如下所示 <code>WithLevel()</code> 的方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">err := errors.New(<span class="string">&quot;failed to connect to database&quot;</span>)</span><br><span class="line">logger.WithLevel(zerolog.FatalLevel).</span><br><span class="line">  Err(err).</span><br><span class="line">  Msg(<span class="string">&quot;something catastrophic happened!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>程序将不再立即退出，但事件仍记录在适当的级别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;fatal&quot;,&quot;error&quot;:&quot;failed to connect to database&quot;,&quot;time&quot;:&quot;2023-09-01T09:35:27+01:00&quot;,&quot;message&quot;:&quot;something catastrophic happened!&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="记录到文件">记录到文件</h2>
+<p>使用 <code>Zerolog</code>
+写入日志文件的选项与使用标准库日志包时的选项几乎相同。由于可以将实现
+<code>io.Writer</code> 接口的类型传递给 <code>zerolog.New()</code>
+方法，因此只要使用适当的权限打开文件，任何 <code>os.File</code>
+实例都将按预期工作。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    file, err := os.OpenFile(</span><br><span class="line">        <span class="string">&quot;myapp.log&quot;</span>,</span><br><span class="line">        os.O_APPEND|os.O_CREATE|os.O_WRONLY,</span><br><span class="line">        <span class="number">0664</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">defer</span> file.Close()</span><br><span class="line"></span><br><span class="line">    logger := zerolog.New(file).With().Timestamp().Logger()</span><br><span class="line"></span><br><span class="line">    logger.Info().Msg(<span class="string">&quot;Info message&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行上述程序后，您会注意到当前目录中存在一个 <code>myapp.log</code>
+文件。您可以查看其内容，以验证登录文件是否按预期工作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> myapp.log</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;:&quot;info&quot;,&quot;time&quot;:&quot;2023-08-27T11:38:27+01:00&quot;,&quot;message&quot;:&quot;Info message&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="在-web-应用程序中使用-zerolog">在 Web 应用程序中使用
+Zerolog</h2>
+<p>我们可以通过下面的方式来定义一个 <code>logger</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> logger</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;io&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">    <span class="string">&quot;runtime/debug&quot;</span></span><br><span class="line">    <span class="string">&quot;strconv&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/rs/zerolog/pkgerrors&quot;</span></span><br><span class="line">    <span class="string">&quot;gopkg.in/natefinch/lumberjack.v2&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> once sync.Once</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> log zerolog.Logger</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Get</span><span class="params">()</span></span> zerolog.Logger &#123;</span><br><span class="line">    once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack</span><br><span class="line">        zerolog.TimeFieldFormat = time.RFC3339Nano</span><br><span class="line"></span><br><span class="line">        logLevel, err := strconv.Atoi(os.Getenv(<span class="string">&quot;LOG_LEVEL&quot;</span>))</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            logLevel = <span class="type">int</span>(zerolog.InfoLevel) <span class="comment">// 默认为 INFO</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> output io.Writer = zerolog.ConsoleWriter&#123;</span><br><span class="line">            Out:        os.Stdout,</span><br><span class="line">            TimeFormat: time.RFC3339,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> os.Getenv(<span class="string">&quot;APP_ENV&quot;</span>) != <span class="string">&quot;development&quot;</span> &#123;</span><br><span class="line">            fileLogger := &amp;lumberjack.Logger&#123;</span><br><span class="line">                Filename:   <span class="string">&quot;demo.log&quot;</span>,</span><br><span class="line">                MaxSize:    <span class="number">5</span>,</span><br><span class="line">                MaxBackups: <span class="number">10</span>,</span><br><span class="line">                MaxAge:     <span class="number">14</span>,</span><br><span class="line">                Compress:   <span class="literal">true</span>,</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            output = zerolog.MultiLevelWriter(os.Stderr, fileLogger)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> gitRevision <span class="type">string</span></span><br><span class="line"></span><br><span class="line">        buildInfo, ok := debug.ReadBuildInfo()</span><br><span class="line">        <span class="keyword">if</span> ok &#123;</span><br><span class="line">            <span class="keyword">for</span> _, v := <span class="keyword">range</span> buildInfo.Settings &#123;</span><br><span class="line">                <span class="keyword">if</span> v.Key == <span class="string">&quot;vcs.revision&quot;</span> &#123;</span><br><span class="line">                    gitRevision = v.Value</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        log = zerolog.New(output).</span><br><span class="line">            Level(zerolog.Level(logLevel)).</span><br><span class="line">            With().</span><br><span class="line">            Timestamp().</span><br><span class="line">            Str(<span class="string">&quot;git_revision&quot;</span>, gitRevision).</span><br><span class="line">            Str(<span class="string">&quot;go_version&quot;</span>, buildInfo.GoVersion).</span><br><span class="line">            Logger()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> log</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此文件中，<code>Get()</code> 函数返回一个
+<code>zerolog.Logger</code> 实例，该实例已根据 <code>LOG_LEVEL</code>
+环境变量（如果存在且是有效数字）配置了最小级别，否则默认为
+<code>INFO</code> 级别。 <code>APP_ENV</code> 环境变量还用于指定
+<code>ConsoleWriter</code> API
+应用于仅在开发环境中美化日志输出（发送到标准错误）。在其他环境（如暂存或生产）中，通过使用
+<code>lumberjack</code> 库和 <code>zerolog.MultiLevelWriter()</code>
+方法，日志被记录为标准错误和 <code>demo.log</code> 滚动日志文件。</p>
+<p>请注意，<code>Logger</code> 初始化是在 <code>once.Do()</code>
+方法的函数参数中完成的，因此无论调用多少次 <code>Get()</code>
+，它都只初始化一次。</p>
+<p>接着，我们就可以在我们的应用程序中使用这个 <code>logger</code>
+了：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l := logger.Get()</span><br><span class="line">l.Fatal().Err(err).Msg(<span class="string">&quot;test message&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="创建日志记录中间件">创建日志记录中间件</h2>
+<p>现在我们的 <code>Logger</code>
+实例已经准备就绪，我们可以创建一个中间件函数，将所有传入的 HTTP
+请求记录到服务器。我们将使用它向每个日志条目添加上下文信息，例如请求数据、响应代码等。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">requestLogger</span><span class="params">(next http.Handler)</span></span> http.Handler &#123;</span><br><span class="line">    <span class="keyword">return</span> http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        start := time.Now()</span><br><span class="line"></span><br><span class="line">        l := logger.Get()</span><br><span class="line"></span><br><span class="line">        next.ServeHTTP(w, r)</span><br><span class="line"></span><br><span class="line">        l.</span><br><span class="line">            Info().</span><br><span class="line">            Str(<span class="string">&quot;method&quot;</span>, r.Method).</span><br><span class="line">            Str(<span class="string">&quot;url&quot;</span>, r.URL.RequestURI()).</span><br><span class="line">            Str(<span class="string">&quot;user_agent&quot;</span>, r.UserAgent()).</span><br><span class="line">            Dur(<span class="string">&quot;elapsed_ms&quot;</span>, time.Since(start)).</span><br><span class="line">            Msg(<span class="string">&quot;incoming request&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>requestLogger()</code> 函数返回一个 HTTP
+处理程序，该处理程序记录有关 HTTP 请求的多个详细信息，例如请求 URL、HTTP
+方法、客户端用户代理以及完成请求所花费的时间。您还可以 defer
+记录调用，以确保如果处理程序发生崩溃，仍会记录请求，以便找出导致崩溃的原因。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/15/golang/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%20pprof%20%E5%92%8C%20trace%20%E6%9D%A5%E8%AF%8A%E6%96%AD%E5%92%8C%E4%BF%AE%E5%A4%8D%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/" rel="prev" title="如何使用 pprof 和 trace 来诊断和修复性能问题">
+                  <i class="fa fa-angle-left"></i> 如何使用 pprof 和 trace 来诊断和修复性能问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/29/golang/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%20Golang%20%E9%AB%98%E6%80%A7%E8%83%BD%E6%97%A5%E5%BF%97%E5%BA%93%20-%20zap/" rel="next" title="一文搞懂 Golang 高性能日志库 - Zap">
+                  一文搞懂 Golang 高性能日志库 - Zap <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

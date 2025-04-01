@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Go 语言中的泛型是指一种语言特性，允许创建可以处理不同类型的函数、数据结构和接口。换句话说，泛型使得可以创建不受特定类型或数据结构限制的代码。如果我们此前有使用 Java 或者 C++ 的经验，那么会很好理解。 在 Go 语言引入泛型之前，开发人员必须编写多个函数来处理不同类型的数据。这种方法通常很繁琐，并导致代码重复。有了泛型，开发人员可以编写更简洁和可重用的代码，可以处理不同类型的数据。 G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 泛型入门指南">
+<meta property="og:url" content="https://eleven26.github.io/2024/02/02/golang/Golang%20%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="Go 语言中的泛型是指一种语言特性，允许创建可以处理不同类型的函数、数据结构和接口。换句话说，泛型使得可以创建不受特定类型或数据结构限制的代码。如果我们此前有使用 Java 或者 C++ 的经验，那么会很好理解。 在 Go 语言引入泛型之前，开发人员必须编写多个函数来处理不同类型的数据。这种方法通常很繁琐，并导致代码重复。有了泛型，开发人员可以编写更简洁和可重用的代码，可以处理不同类型的数据。 G">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-02T12:28:30.000Z">
+<meta property="article:modified_time" content="2024-02-02T03:02:30.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2024/02/02/golang/Golang%20%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2024/02/02/golang/Golang%20%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/","path":"2024/02/02/golang/Golang 泛型入门指南/","title":"Golang 泛型入门指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Golang 泛型入门指南 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#go-%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">Go 中的泛型是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">Go 中的泛型是如何工作的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">3.</span> <span class="nav-text">类型参数是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%B3%9B%E5%9E%8B%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">在泛型中使用类型参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E7%BA%A6%E6%9D%9F"><span class="nav-number">5.</span> <span class="nav-text">类型约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-golang-%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text">在 Golang 中使用泛型的示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">6.1.</span> <span class="nav-text">通用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.2.</span> <span class="nav-text">通用类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0%E7%9A%84%E7%BA%A6%E6%9D%9F"><span class="nav-number">6.3.</span> <span class="nav-text">类型参数的约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8A%A0%E6%B3%95"><span class="nav-number">6.4.</span> <span class="nav-text">支持多种数据类型的加法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map-%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B"><span class="nav-number">6.5.</span> <span class="nav-text">map 中的泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B"><span class="nav-number">6.6.</span> <span class="nav-text">结构体中的泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">6.7.</span> <span class="nav-text">多个泛型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%B9%B6%E9%9B%86"><span class="nav-number">6.8.</span> <span class="nav-text">类型并集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%BA%A4%E9%9B%86"><span class="nav-number">6.9.</span> <span class="nav-text">类型交集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%B3%9B%E5%9E%8B%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">6.10.</span> <span class="nav-text">泛型接口和泛型结构体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-%E6%8C%87%E5%AE%9A%E5%BA%95%E5%B1%82%E7%B1%BB%E5%9E%8B"><span class="nav-number">7.</span> <span class="nav-text">使用 ~ 指定底层类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">8.</span> <span class="nav-text">泛型的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2024/02/02/golang/Golang%20%E6%B3%9B%E5%9E%8B%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Golang 泛型入门指南 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Golang 泛型入门指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-02-02 20:28:30" itemprop="dateCreated datePublished" datetime="2024-02-02T20:28:30+08:00">2024-02-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Go
+语言中的泛型是指一种语言特性，允许创建可以处理不同类型的函数、数据结构和接口。换句话说，泛型使得可以创建不受特定类型或数据结构限制的代码。如果我们此前有使用
+Java 或者 C++ 的经验，那么会很好理解。</p>
+<p>在 Go
+语言引入泛型之前，开发人员必须编写多个函数来处理不同类型的数据。这种方法通常很繁琐，并导致代码重复。有了泛型，开发人员可以编写更简洁和可重用的代码，可以处理不同类型的数据。</p>
+<p>Go 语言中的泛型是在 2021 年 2 月发布的 1.18 版本中引入的。Go
+语言中的泛型实现是基于类型参数的概念。类型参数是传递给函数或数据结构的类型的占位符，使它们能够处理不同类型的数据。</p>
+<h2 id="go-中的泛型是什么">Go 中的泛型是什么？</h2>
+<p>泛型是一种代码，允许我们通过改变函数类型来在各种函数中使用它们。泛型的创建是为了使代码独立于类型和函数。</p>
+<p>泛型的主要目的是通过添加更少的代码行来实现更大的灵活性。</p>
+<p>为了更好地理解，看下面的例子。我们创建一个打印任何类型参数的函数，就像这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Print</span><span class="params">(s[] <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> s &#123;</span><br><span class="line">        fmt.Print(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，我们突然希望打印一个整数，所以我们相应地改变了代码。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Print</span><span class="params">(s[] <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> s &#123;</span><br><span class="line">        fmt.Print(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是每次像这样更改代码可能看起来令人生畏，这就是泛型发挥作用的地方。通过将任何类型分配给其泛型形式，我们可以将相同的代码用于不同的函数。看一下这个：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Print</span>[<span class="title">T</span> <span class="title">any</span>]<span class="params">(s[] T)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> s &#123;</span><br><span class="line">        fmt.Print(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里，我们将 <code>"T"</code> 定义为 <code>any</code>
+类型。这个任意类型允许我们在同一个函数中解析不同类型的变量。<code>S</code>
+是相应的变量，它是 <code>T</code>
+类型的一个切片。现在，调用该方法，我们可以在同一个函数中打印一个字符串和一个整数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    str := []<span class="type">string</span>&#123;<span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;Again Hello&quot;</span>&#125;</span><br><span class="line">    intArray := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">    Print(str)</span><br><span class="line">    Print(intArray)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="go-中的泛型是如何工作的">Go 中的泛型是如何工作的？</h2>
+<p>Go
+中的泛型是使用类型参数实现的，它允许创建可以在不同类型上操作的泛型函数和数据结构，而无需显式类型转换。</p>
+<p>考虑以下示例，其中类型参数 <code>“T”</code> 是使用 <code>“any”</code>
+关键字定义的，该关键字指定该函数可以与任何类型一起使用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Swap</span>[<span class="title">T</span> <span class="title">any</span>]<span class="params">(a, b * T)</span></span> &#123;</span><br><span class="line">    *a, *b = *b, *a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数体然后执行传入的两个指针指向的值的简单交换。</p>
+<p>当函数被调用时，编译器为与函数一起使用的类型生成特定版本的函数。例如，如果函数被用于两个整数指针，编译器会生成一个操作整数的函数版本。</p>
+<h2 id="类型参数是什么">类型参数是什么？</h2>
+<p>在 Go
+中，类型参数是使用方括号括起的类型参数列表来指定的，紧跟在函数、数据结构或接口名称之后。类型参数由单个大写字母或一系列大写字母表示，并用尖括号括起来。</p>
+<p>类型参数用于在 Go
+中创建通用函数、数据结构和接口。类型参数是在编译时确定的类型的占位符。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里的 T 是类型参数，any 是类型约束；</span></span><br><span class="line"><span class="comment">// 这里表示 T 可以是任何类型。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Print</span>[<span class="title">T</span> <span class="title">any</span>]<span class="params">(s []T)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> s &#123;</span><br><span class="line">        fmt.Print(v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    str := []<span class="type">string</span>&#123;<span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;Again Hello&quot;</span>&#125;</span><br><span class="line">    intArray := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">    Print(str)</span><br><span class="line">    Print(intArray)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例如，考虑上面的示例，显式了使用类型参数的函数声明。在这个函数中，类型参数由大写字母
+<code>"T"</code> 表示。<code>"any"</code>
+关键字表示函数可以使用任何类型。当调用此函数时，类型参数将被替换为传递给函数的实际类型。</p>
+<p>类型参数使得在 Go
+语言中可以创建更通用和可重用的代码，因为它允许函数和数据结构可以处理不同类型的数据。</p>
+<h2 id="在泛型中使用类型参数">在泛型中使用类型参数</h2>
+<p>在上面的例子中，我们看到了如何在同一个函数下结合多种类型的变量。</p>
+<p>在这个例子中，使用 <code>"any"</code> 关键字声明了一个带有类型参数
+<code>"T"</code> 的函数。<code>"any"</code>
+关键字表示该函数可以处理任何类型。该函数以类型 <code>"T"</code>
+的切片作为参数，并打印其内容。</p>
+<blockquote>
+<p><code>T</code> 是类型参数，<code>any</code> 是类型约束；这里表示
+<code>T</code> 可以是任何类型。</p>
+</blockquote>
+<p>要使用此功能，您可以使用下面给出的任何类型的切片来调用它：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">intSlice := []<span class="type">int</span>&#123;</span><br><span class="line">    <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,</span><br><span class="line">&#125;</span><br><span class="line">stringSlice := []<span class="type">string</span>&#123;</span><br><span class="line">    <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;cherry&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line">Print(intSlice)    <span class="comment">// prints 1 2 3 4 5</span></span><br><span class="line">Print(stringSlice) <span class="comment">// prints apple banana cherry</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>Print</code>
+函数被调用时使用了整数切片和字符串切片。类型参数 <code>"T"</code>
+被实际传递给函数的参数类型所替换。</p>
+<p>您还可以使用类型参数在 Go
+中创建通用数据结构和接口。以下是一个使用类型参数的通用数据结构示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stack[T any] <span class="keyword">struct</span> &#123;</span><br><span class="line">    items []T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Stack[T])</span></span> Push(item T) &#123;</span><br><span class="line">    s.items = <span class="built_in">append</span>(s.items, item)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Stack[T])</span></span> Pop() T &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(s.items) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(<span class="string">&quot;stack is empty&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    item := s.items[<span class="built_in">len</span>(s.items)<span class="number">-1</span>]</span><br><span class="line">    s.items = s.items[:<span class="built_in">len</span>(s.items)<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">return</span> item</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在这里，使用 <code>“any”</code> 关键字声明了带有类型参数
+<code>“T”</code> 的栈数据结构。</li>
+<li><code>Push</code> 方法接受类型为 <code>"T"</code>
+的项目作为参数，并将其添加到栈中。</li>
+<li><code>Pop</code> 方法从栈顶返回一个类型为 <code>"T"</code>
+的项目。</li>
+</ul>
+<p>要使用这种数据结构，您可以创建任何类型的栈：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">intStack := &amp;Stack[<span class="type">int</span>]&#123;&#125;</span><br><span class="line">stringStack := &amp;Stack[<span class="type">string</span>]&#123;&#125;</span><br><span class="line">intStack.Push(<span class="number">1</span>)</span><br><span class="line">intStack.Push(<span class="number">2</span>)</span><br><span class="line">intStack.Push(<span class="number">3</span>)</span><br><span class="line">stringStack.Push(<span class="string">&quot;apple&quot;</span>)</span><br><span class="line">stringStack.Push(<span class="string">&quot;banana&quot;</span>)</span><br><span class="line">stringStack.Push(<span class="string">&quot;cherry&quot;</span>)</span><br><span class="line">fmt.Println(intStack.Pop())    <span class="comment">// prints 3</span></span><br><span class="line">fmt.Println(stringStack.Pop()) <span class="comment">// prints cherry</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，创建了两个栈，一个是 <code>int</code> 类型，另一个是
+<code>string</code> 类型。类型参数 <code>“T”</code>
+被替换为创建栈的实际类型。</p>
+<h2 id="类型约束">类型约束</h2>
+<p>泛型中的类型约束定义了可以与泛型函数或数据结构一起使用的类型集合。类型约束允许编译器强制执行类型安全，并确保只有兼容的类型与泛型结构一起使用。</p>
+<p>类型约束使用 <code>"interface"</code>
+关键字指定，后跟接口的名称和类型必须实现的方法。例如，考虑以下使用类型约束的通用函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Equal</span>[<span class="title">T</span> <span class="title">comparable</span>]<span class="params">(a, b T)</span></span> T &#123;</span><br><span class="line">    <span class="keyword">if</span> a == b &#123;</span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，类型参数 <code>"T"</code> 受到
+<code>"comparable"</code> 接口的约束，该接口要求类型可以进行
+<code>==</code> 或 <code>!=</code>
+比较。这确保了函数只能被支持比较的类型调用。</p>
+<p><code>comparable</code>
+是一个内置接口，用于将泛型类型参数限制为仅支持比较运算符（!= ，和
+==）的类型。</p>
+<p><code>comparable</code> 接口是由 Go
+语言规范隐式定义的，并不需要在代码中显式定义。这意味着任何支持比较运算符的类型都可以作为
+<code>Equal</code> 函数的类型参数，而无需额外声明
+<code>comparable</code> 接口。</p>
+<p>类型约束也可以是用户定义的接口，它允许对可以与通用函数或数据结构一起使用的类型进行更具体的约束。例如，考虑以下用户定义的接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Number <span class="keyword">interface</span> &#123;</span><br><span class="line">    Add(other Number) Number</span><br><span class="line">    Sub(other Number) Number</span><br><span class="line">    Mul(other Number) Number</span><br><span class="line">    Div(other Number) Number</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该接口定义了一组方法，一个类型必须实现这些方法才能被视为
+<code>“Number”</code>。使用该接口作为类型约束的泛型函数或数据结构只能与实现了这些方法的类型一起使用，确保类型安全和兼容性。</p>
+<p>Go
+中的泛型类型约束提供了一种确保类型安全并限制可以与泛型结构一起使用的类型集的方法，同时仍然允许泛型提供的灵活性和可重用性。</p>
+<h2 id="在-golang-中使用泛型的示例">在 Golang 中使用泛型的示例</h2>
+<p>这里有一些在Go中使用泛型的例子：</p>
+<h3 id="通用函数">通用函数</h3>
+<p>该函数接受任何类型 <code>T</code> 的切片和类型 <code>T</code>
+的值，并返回该值在切片中的索引。类型参数中的 <code>any</code>
+关键字指定可以使用任何类型。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findIndex</span>[<span class="title">T</span> <span class="title">any</span>]<span class="params">(slice []T, value T)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i, v := <span class="keyword">range</span> slice &#123;</span><br><span class="line">        <span class="keyword">if</span> reflect.DeepEqual(v, value) &#123;</span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="通用类型">通用类型</h3>
+<p>这定义了一个通用的栈类型，可以保存任何类型 <code>T</code>
+的元素。关键字 <code>any</code> 指定任何类型都可以用作元素类型。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stack[T any] []T</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Stack[T])</span></span> Push(value T) &#123;</span><br><span class="line">    *s = <span class="built_in">append</span>(*s, value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Stack[T])</span></span> Pop() T &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(*s) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(<span class="string">&quot;Stack is empty&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    value := (*s)[<span class="built_in">len</span>(*s)<span class="number">-1</span>]</span><br><span class="line">    *s = (*s)[:<span class="built_in">len</span>(*s)<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="类型参数的约束">类型参数的约束</h3>
+<p>这定义了对类型参数 <code>T</code> 的类型约束，要求其实现
+<code>Equatable</code> 接口。这允许 <code>findIndex</code> 函数使用
+<code>Equals</code> 方法来比较类型T的值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Equatable <span class="keyword">interface</span> &#123;</span><br><span class="line">    Equals(other <span class="keyword">interface</span>&#123;&#125;) <span class="type">bool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findIndex</span>[<span class="title">T</span> <span class="title">Equatable</span>]<span class="params">(slice []T, value T)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i, v := <span class="keyword">range</span> slice &#123;</span><br><span class="line">        <span class="keyword">if</span> v.Equals(value) &#123;</span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="支持多种数据类型的加法">支持多种数据类型的加法</h3>
+<p>让我们编写一个函数 <code>SumGenerics</code>
+，它对各种数值类型进行加法操作，比如
+<code>int</code>，<code>int16</code>，<code>int32</code>，<code>int64</code>，<code>int8</code>，<code>float32</code>
+和 <code>float64</code>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SumGenerics</span>[<span class="title">T</span> <span class="title">int</span> | <span class="title">int16</span> | <span class="title">int32</span> | <span class="title">int64</span> | <span class="title">int8</span> | <span class="title">float32</span> | <span class="title">float64</span>]<span class="params">(a, b T)</span></span> T &#123;</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    sumInt := SumGenerics[<span class="type">int</span>](<span class="number">2</span>, <span class="number">3</span>)           <span class="comment">// returns 5</span></span><br><span class="line">    sumFloat := SumGenerics[<span class="type">float32</span>](<span class="number">2.5</span>, <span class="number">3.5</span>) <span class="comment">// returns 6.0</span></span><br><span class="line">    sumInt64 := SumGenerics[<span class="type">int64</span>](<span class="number">10</span>, <span class="number">20</span>)     <span class="comment">// returns 30</span></span><br><span class="line">    <span class="built_in">println</span>(sumInt, sumFloat, sumInt64)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，我们可以看到，在调用泛型函数时通过在方括号
+<code>[]</code>
+中指定类型参数，我们可以对不同的数值类型执行加法操作。类型约束确保只有指定的类型
+<code>[T int, int16, int32, int64, int8, float32, or float64]</code>
+可以用作类型参数。</p>
+<h3 id="map-中的泛型">map 中的泛型</h3>
+<p><code>map</code> 的泛型需要两种类型，一个 <code>key</code> 类型和一个
+<code>value</code> 类型。值类型没有任何限制，但键类型应该始终满足
+<code>comparable</code> 约束。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// keys 返回一个 map 的所有 key</span></span><br><span class="line"><span class="comment">// m 参数是使用了 K 和 V 泛型的 map</span></span><br><span class="line"><span class="comment">// K 是使用了 comparable 约束的泛型，也就是说 K 必须支持 != 和 == 操作</span></span><br><span class="line"><span class="comment">// V 是使用了 any 约束的泛型，也就是说 V 可以是任意类型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">keys</span>[<span class="title">K</span> <span class="title">comparable</span>, <span class="title">V</span> <span class="title">any</span>]<span class="params">(m <span class="keyword">map</span>[K]V)</span></span> []K &#123;</span><br><span class="line">    <span class="comment">// 创建一个长度为 map 长度的 K 类型的 slice</span></span><br><span class="line">    key := <span class="built_in">make</span>([]K, <span class="built_in">len</span>(m))</span><br><span class="line">    i := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> k, _ := <span class="keyword">range</span> m &#123;</span><br><span class="line">        key[i] = k</span><br><span class="line">        i++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> key</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="结构体中的泛型">结构体中的泛型</h3>
+<p>Go 允许使用类型参数定义 <code>struct</code>
+。语法类似于泛型函数。类型参数可用于结构体上的方法和数据成员。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// T 是类型参数，使用了 any 约束</span></span><br><span class="line"><span class="keyword">type</span> MyStruct[T any] <span class="keyword">struct</span> &#123;</span><br><span class="line">    inner T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 struct 方法中不允许使用新的类型参数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MyStruct[T])</span></span> Get() T &#123;</span><br><span class="line">    <span class="keyword">return</span> m.inner</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MyStruct[T])</span></span> Set(v T) &#123;</span><br><span class="line">    m.inner = v</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在结构体方法中不允许定义新的类型参数，但在结构体定义中定义的类型参数可以在方法中使用。</p>
+<h3 id="多个泛型参数">多个泛型参数</h3>
+<p>泛型可以嵌套在其他类型中。在函数或结构中定义的类型参数可以传递给具有类型参数的任何其他类型。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 拥有两个泛型类型的泛型 struct</span></span><br><span class="line"><span class="keyword">type</span> Entries[K comparable, V any] <span class="keyword">struct</span> &#123;</span><br><span class="line">    Key   K</span><br><span class="line">    Value V</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// entries 函数返回一个 Entries 的 slice，代表了传入的 map 的所有 key 和 value</span></span><br><span class="line"><span class="comment">// K 和 V 是泛型类型参数，K 有 comparable 约束，V 没有约束</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">entries</span>[<span class="title">K</span> <span class="title">comparable</span>, <span class="title">V</span> <span class="title">any</span>]<span class="params">(m <span class="keyword">map</span>[K]V)</span></span> []*Entries[K, V] &#123;</span><br><span class="line">    <span class="comment">// 创建一个 Entries 类型的 slice，传入 K 和 V 类型参数</span></span><br><span class="line">    e := <span class="built_in">make</span>([]*Entries[K, V], <span class="built_in">len</span>(m))</span><br><span class="line">    i := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> k, v := <span class="keyword">range</span> m &#123;</span><br><span class="line">        <span class="comment">// 定义一个 Entries 类型的变量</span></span><br><span class="line">        newEntry := <span class="built_in">new</span>(Entries[K, V])</span><br><span class="line">        newEntry.Key = k</span><br><span class="line">        newEntry.Value = v</span><br><span class="line">        e[i] = newEntry</span><br><span class="line">        i++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以通过逗号分隔多个类型参数来实现多个泛型参数。</p>
+<h3 id="类型并集">类型并集</h3>
+<p>我们知道，在以往的 <code>interface</code>
+定义中，往往都是只包含了方法定义的，如下面这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stringer <span class="keyword">interface</span> &#123;</span><br><span class="line">    String() <span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而现在，我们还可以在 <code>interface</code>
+中定义多个类型，如下面这样：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Number <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="type">int</span> | <span class="type">int8</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种带有类型的 <code>interface</code>
+可以帮助我们写出更加简洁的泛型代码，因为它可以用一个
+<code>intreface</code> 来表示多个不同的相似类型。
+<strong>但是这种带有类型的接口，不能用于定义变量，只能用于泛型的类型约束中。</strong></p>
+<p>在上面的泛型加法实现中，我们使用了
+<code>[T int | int16 | int32 | int64 | int8 | float32 | float64]</code>
+这种方式来给 <code>T</code> 定义了一个约束，
+但是这种方式并不是很优雅，我们可以将约束定义为一个
+<code>interface</code>，然后将 <code>interface</code> 作为约束。</p>
+<blockquote>
+<p>我们称通过 <code>|</code> 连接的多个类型的 <code>interface</code>
+为类型并集。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Number <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="type">int</span> | <span class="type">int8</span> | <span class="type">int16</span> | <span class="type">int32</span> | <span class="type">int64</span> | <span class="type">float32</span> | <span class="type">float64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>Number</code> 来作为泛型的约束：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// T 可以是任意 int 或 float 类型</span></span><br><span class="line"><span class="comment">// T 只能是支持算术运算的类型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Min</span>[<span class="title">T</span> <span class="title">Number</span>]<span class="params">(x, y T)</span></span> T &#123;</span><br><span class="line">    <span class="keyword">if</span> x &lt; y &#123;</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用多种类型的联合允许执行这些类型支持的常见操作，并编写适用于联合中所有类型的代码。</p>
+<p>这些只是一些示例，说明了在 Go
+中如何使用泛型来编写更灵活、可重用的代码。</p>
+<h3 id="类型交集">类型交集</h3>
+<p>类似的，还有一种类型交集的概念，它是通过在 <code>interface</code>
+中写多行类型来实现的：每一行定义了一种或多种类型的并集。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> AllInt <span class="keyword">interface</span> &#123;</span><br><span class="line">    ~<span class="type">int</span> | ~<span class="type">int8</span> | ~<span class="type">int16</span> | ~<span class="type">int32</span> | ~<span class="type">int64</span> | ~<span class="type">uint</span> | ~<span class="type">uint8</span> | ~<span class="type">uint16</span> | ~<span class="type">uint32</span> | ~<span class="type">uint64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Uint <span class="keyword">interface</span> &#123;</span><br><span class="line">    ~<span class="type">uint</span> | ~<span class="type">uint8</span> | ~<span class="type">uint16</span> | ~<span class="type">uint32</span> | ~<span class="type">uint64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，<code>AllInt</code>
+是一个类型并集，它包含了所有整数类型。<code>Uint</code>
+是一个类型并集，它包含了所有无符号整数类型。</p>
+<p>下面是一个使用类型交集的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取 AllInt 和 Uint 的交集</span></span><br><span class="line"><span class="comment">// 也就是：~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64</span></span><br><span class="line"><span class="keyword">type</span> Int <span class="keyword">interface</span> &#123;</span><br><span class="line">    AllInt</span><br><span class="line">	Uint</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实它的最终的结果等同于：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Int <span class="keyword">interface</span> &#123;</span><br><span class="line">	~<span class="type">uint</span> | ~<span class="type">uint8</span> | ~<span class="type">uint16</span> | ~<span class="type">uint32</span> | ~<span class="type">uint64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>除此之外，如果其中不同行之间没有任何交集，那么它们的交集就是空集。在现实中可能意义不大。</p>
+</blockquote>
+<h3 id="泛型接口和泛型结构体">泛型接口和泛型结构体</h3>
+<p>在 Go 中，<code>struct</code> 和 <code>interface</code>
+都可以使用泛型。</p>
+<p>例如，在下面的代码片段中，类型参数 <code>T</code> 的任何值只支持
+<code>String</code> 方法 - 您可以使用 <code>len()</code>
+或对其进行任何其他操作。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Stringer 是一个约束</span></span><br><span class="line"><span class="keyword">type</span> Stringer <span class="keyword">interface</span> &#123;</span><br><span class="line">    String() <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// T 需要实现 Stringer 接口，T 只能执行 Stringer 接口中定义的操作</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">stringer</span>[<span class="title">T</span> <span class="title">Stringer</span>]<span class="params">(s T)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> s.String()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再比如，下面的例子中，是一个使用了泛型的 <code>struct</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person[T <span class="type">int</span>] <span class="keyword">struct</span> &#123;</span><br><span class="line">	age T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person[T])</span></span> Age() T &#123;</span><br><span class="line">	<span class="keyword">return</span> p.age</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用这个 <code>struct</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p Person[<span class="type">int</span>]</span><br><span class="line">p.age = <span class="number">10</span></span><br><span class="line">fmt.Println(p.Age()) <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用-指定底层类型">使用 ~ 指定底层类型</h2>
+<p>在 Go 中，定义了一个 <code>cmp.Ordered</code> 接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Ordered <span class="keyword">interface</span> &#123;</span><br><span class="line">	~<span class="type">int</span> | ~<span class="type">int8</span> | ~<span class="type">int16</span> | ~<span class="type">int32</span> | ~<span class="type">int64</span> |</span><br><span class="line">		~<span class="type">uint</span> | ~<span class="type">uint8</span> | ~<span class="type">uint16</span> | ~<span class="type">uint32</span> | ~<span class="type">uint64</span> | ~<span class="type">uintptr</span> |</span><br><span class="line">		~<span class="type">float32</span> | ~<span class="type">float64</span> |</span><br><span class="line">		~<span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个声明表示 <code>Ordered</code>
+是所有整数、浮点数、和字符串类型的集合。</p>
+<p>对于类型约束，我们通常不关心特定类型，比如
+<code>string</code>，我们对所有字符串类型感兴趣，所以我们使用
+<code>~string</code> 来表示所有字符串类型的集合。 <code>~string</code>
+表达式表示所有底层类型为 <code>string</code> 的类型的集合，这包括类型
+<code>string</code> 本身以及所有使用如 <code>type MyString string</code>
+声明定义的类型。</p>
+<p>下面是一个错误的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Slice[T <span class="type">int</span>] <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s1 Slice[<span class="type">int</span>] <span class="comment">// 正确</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyInt <span class="type">int</span></span><br><span class="line"><span class="comment">// 错误。MyInt 类型底层类型是 int 但并不是 int 类型，不符合 Slice[T] 的类型约束</span></span><br><span class="line"><span class="keyword">var</span> s2 Slice[MyInt]</span><br></pre></td></tr></table></figure>
+<p>正确的做法是，将 <code>Slice</code> 的类型约束修改为
+<code>~int</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// T 的底层类型是 int 即可，不一定是 int 类型</span></span><br><span class="line"><span class="keyword">type</span> Slice[T ~<span class="type">int</span>] <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s1 Slice[<span class="type">int</span>] <span class="comment">// 正确</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyInt <span class="type">int</span></span><br><span class="line"><span class="comment">// 错误。MyInt 类型底层类型是 int 但并不是 int 类型，不符合 Slice[T] 的类型约束</span></span><br><span class="line"><span class="keyword">var</span> s2 Slice[MyInt]</span><br></pre></td></tr></table></figure>
+<p>使用 <code>~</code> 有个限制：</p>
+<ul>
+<li><code>~</code> 后面的类型不能为接口</li>
+<li><code>~</code> 后面的类型必须为基础类型</li>
+</ul>
+<p>比如，下面是一个错误的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误：Invalid use of ~ (&#x27;cmp.Ordered&#x27; is an interface)</span></span><br><span class="line"><span class="keyword">type</span> Ab[T ~cmp.Ordered] <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="泛型的限制">泛型的限制</h2>
+<p>尽管 Go
+语言中的泛型带来了许多好处和新的可能性，但它们的实现仍然存在一些限制和挑战。以下是
+Go 语言中泛型的一些主要限制：</p>
+<ul>
+<li>性能：在 Go
+语言中，泛型的一个主要问题是对性能的潜在影响。引入泛型后，Go
+编译器需要在编译时为不同类型生成代码，这可能导致更大的二进制文件和更慢的编译时间。</li>
+<li>类型约束：Go
+语言的泛型实现依赖于类型约束来确保类型安全。然而，这些约束可能会限制可以与泛型函数和数据结构一起使用的类型。</li>
+<li>语法复杂性：声明和使用泛型函数和数据结构的语法可能会很复杂，尤其对于初学者来说难以理解。</li>
+<li>错误消息：Go
+编译器生成的与泛型相关的问题的错误消息可能难以理解，使得调试和故障排除更具挑战性。</li>
+<li>代码可读性：在 Go
+中，泛型有时会使代码变得不太易读，更难理解，特别是在大量使用类型约束和类型参数的情况下。</li>
+<li>无法进行切换：当您想要从一个基础泛型类型切换到另一个时，使用泛型是不可能的。唯一的方法是使用接口，并在运行时运行类型切换函数。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>泛型为创建通用接口、结构体和函数提供了一种强大而简单的方法。</p>
+<p>它们可以减少冗余信息，并且至少在某些情况下，提供了一种比反射更优越的替代方案。</p>
+<p>当然，长时间以来，泛型受到激烈反对的主要原因是它们可能使代码更难阅读和解析，这似乎与
+Go 语言的简洁性相悖。
+鉴于此，本文也不会介绍太多复杂的泛型用法，上面提到的这些用法应该可以覆盖
+90% 以上的使用场景了，因为复杂的代码必然会牺牲不少代码的可维护性。</p>
+<p>另一方面，泛型是语言中的一个很好且必要的补充，如果明智地使用并且在有意义的地方使用的话。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/01/golang/Golang%20%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E5%B7%A5%E5%85%B7%20-%20golangci-lint%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" rel="prev" title="Golang 代码质量工具 - golangci-lint 不完全指南">
+                  <i class="fa fa-angle-left"></i> Golang 代码质量工具 - golangci-lint 不完全指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/04/golang/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%20Go%20%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91%20-%20%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" rel="next" title="一文搞懂 Go 跨平台编译 - 交叉编译">
+                  一文搞懂 Go 跨平台编译 - 交叉编译 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

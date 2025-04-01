@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="过去的一个星期里，一直在做一些重构工作（因为这部分代码年久失修导致出问题的时候排查非常困难），因为关联的业务逻辑比较多，加上业务流程太长等原因，费了好大的劲才把其中一部分逻辑从原来散落在各个 service 里面抽离出来。前两天把这部分代码重构完之后，一开始想着自己测试一遍，没问题就交给测试测，这是相对容易的一种方式。但其实重构后的代码还是有不少的问题，只不过没有原来那么大的问题，所以内心隐隐觉得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊单元测试">
+<meta property="og:url" content="https://eleven26.github.io/2021/08/11/tests/%E8%81%8A%E8%81%8A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="过去的一个星期里，一直在做一些重构工作（因为这部分代码年久失修导致出问题的时候排查非常困难），因为关联的业务逻辑比较多，加上业务流程太长等原因，费了好大的劲才把其中一部分逻辑从原来散落在各个 service 里面抽离出来。前两天把这部分代码重构完之后，一开始想着自己测试一遍，没问题就交给测试测，这是相对容易的一种方式。但其实重构后的代码还是有不少的问题，只不过没有原来那么大的问题，所以内心隐隐觉得">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-11T03:06:00.000Z">
+<meta property="article:modified_time" content="2021-08-11T03:09:03.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="单元测试">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2021/08/11/tests/%E8%81%8A%E8%81%8A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2021/08/11/tests/%E8%81%8A%E8%81%8A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/","path":"2021/08/11/tests/聊聊单元测试/","title":"聊聊单元测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>聊聊单元测试 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%86%99%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">为什么写单元测试？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E8%BF%87%E7%A8%8B%E5%8F%91%E7%8E%B0%E7%9A%84%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">写单元测试过程发现的一个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%90%8E"><span class="nav-number">3.</span> <span class="nav-text">单元测试之后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%81%8A%E8%81%8A%E6%9E%B6%E6%9E%84%E8%BF%99%E6%9C%AC%E4%B9%A6"><span class="nav-number">4.</span> <span class="nav-text">关于《聊聊架构》这本书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%88%86%E4%BA%AB%E4%B8%80%E4%B8%8B%E6%9C%80%E8%BF%91%E7%9C%8B%E7%9A%84%E5%85%B6%E4%BB%96%E4%B9%A6"><span class="nav-number">5.</span> <span class="nav-text">最后，分享一下最近看的其他书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">7.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/08/11/tests/%E8%81%8A%E8%81%8A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="聊聊单元测试 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          聊聊单元测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-11 11:06:00" itemprop="dateCreated datePublished" datetime="2021-08-11T11:06:00+08:00">2021-08-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>过去的一个星期里，一直在做一些重构工作（因为这部分代码年久失修导致出问题的时候排查非常困难），因为关联的业务逻辑比较多，加上业务流程太长等原因，费了好大的劲才把其中一部分逻辑从原来散落在各个
+service
+里面抽离出来。前两天把这部分代码重构完之后，一开始想着自己测试一遍，没问题就交给测试测，这是相对容易的一种方式。但其实重构后的代码还是有不少的问题，只不过没有原来那么大的问题，所以内心隐隐觉得后面如果这部分代码出
+bug 还是会不太好修。</p>
+<h2 id="为什么写单元测试">为什么写单元测试？</h2>
+<p>重构完这一部分代码之后，想着就按 plan A
+来测试吧，然后就跑去看了下《聊聊架构》，看到了里面第20章的单元测试之后，对于单元测试多年以来的一些困惑得到了答案。比如里面讲到的“单元测试测什么”，很简单的一句话，就是测软件工程师自己写的逻辑，对于服务代码、存储代码、别人写的代码是不需要测试的（这里的意思是在测自己的逻辑的时候，如果需要调用外部的方法，我们不需要再去验证这个外部调用是否正确，因为这一步验证是应该放在那个外部方法对应的单元测试里面实现，这也是书里一直强调的“权责对等”的问题）。</p>
+<p>其实一开始写现在重构的这部分代码的时候，就已经尝试过写“单元测试”，这里的单元测试是带有引号的，因为以前觉得那是的单元测试，但实际上那叫集成测试，那时候写的是对接口的测试，就是通过模拟请求，测试请求的结果准确性。这样做的问题是，先要生成模拟数据，但是这部分代码需要的关联实在是太多了，导致写完生成模拟数据的代码就已经花了很多时间了，而且这样有个问题是，对数据库强依赖，实在是难以处理，所以那时候的测试只写了一个版本，后续就没有维护了。毕竟实在是没法维护，依赖太多，耦合太多，流程太长，要做到响应需求的变化非常的困难。</p>
+<p>看完这书之后，加上前段时间看了《重构》，所以想着再尝试一下写写单元测试。毕竟《重构》里面提到“重构的第一块基石是自测试代码”（里面很多地方都提到这一点，而且里面介绍的重构步骤也频繁提到“重构-&gt;测试”这种模式），也就是说，如果你要对代码进行重构，你的代码首先要有对应的测试代码，这样才能保证你的每一步重构的操作不会对原有代码造成破坏，这样的重构才是真正的重构。</p>
+<p>另外一个原因是，用在代码维护的时间往往会比开发时间多很多，如果有了单元测试，可以在后续的维护过程中放心地做一些修改，因为单元测试会告诉你你的修改有没有影响到原有的代码，这也就省下了很多做回归测试的时间。这样可以释放一部分脑容量去思考一些更值得花时间思考的东西，同时我们只需要专注于新的代码，过去的代码不再对我们的思想造成负担。正如《聊聊架构》里面说为什么要做单元测试：“写的代码越多，不安全感累积会越多，最后会发觉自己对自己所写的代码完全没有把握，这是非常影响生活质量的”。</p>
+<h2 id="写单元测试过程发现的一个问题">写单元测试过程发现的一个问题</h2>
+<p>聊完为什么写单元测试之后，再聊聊这几天在单元测试上的一些实践及从中得到的一些启发吧。重构完之后，得到的代码总感觉有点不太完善，但是就是说不出来哪里不对。暂时先不管吧，先去写单元测试代码了。</p>
+<p>写单元测试的过程中，重构之后的那一部分代码的问题开始暴露出来了，比如，其中包含了不少对依赖类的属性的使用，大概格式如下面这种：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$obj</span>-&gt;a-&gt;b-&gt;c</span><br></pre></td></tr></table></figure>
+<p>又或者像下面这种，对依赖对象里面属性下方法的调用：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$obj</span>-&gt;a-&gt;<span class="title function_ invoke__">b</span>()</span><br></pre></td></tr></table></figure>
+<p>这样有什么问题呢？一眼看上去好像没有啥问题。但是在我写单元测试的时候发现一个问题，对于
+$obj-&gt;a-&gt;b-&gt;c
+这种代码，想给它们写测试的话，必须先进行一些复杂的 mock
+操作，但关键是，a 里面的 b 及 b 里面的 c
+属性都不是我当前类关注的内容，现在却要我去 mock
+依赖对象的内部实现细节。而且如果我另一个类也需要获取 c
+这个属性的时候，给这个新的类写单元测试又要 mock
+一堆对象，这明显就会导致产生重复的单元测试操作。如果多个类都需要用到这个
+c 属性，那样岂不是会产生一大堆重复的代码。</p>
+<p>现在来让我们概括一下，这里的问题就是我需要了解依赖内部才能用好这个依赖的对象。我本来只是想使用依赖的对象，但上面这一种写法却需要我们去了解依赖对象内部的结构，因为对于我来说，$obj
+是跟我直接交互的对象，你这个对象里面的细节我并不关心。也就是说，
+上面这种写法违背了面向对象封装的特性，主要影响就是，对象的细节实现散落在对象以外的地方，也就不是所谓高内聚的代码了。如果后续这个对象的细节需要改动的时候，就需要去找到所有用到了这个细节的地方去修改，改动的地方可能会非常多。另一方面，如果原来的代码缺乏单元测试，改动越多，改动带来的风险就越大，这些潜在的风险往往会给我们带来一些心智上的负担。可能也会在上线之后不定期给我们带来惊喜。</p>
+<p>也许可以用另外一个例子说明这个问题。我们去银行存钱的时候，跟我们交互的是银行的工作人员，具体怎么存我们不需要去干涉（我们也干涉不了），我们只需要告诉他们我要存钱然后将我们的钱和银行卡给工作人员，他们会帮我们完成具体的存钱操作（而不需要我们去告诉工作人员第一步怎么做，第二步怎么做，因为具体怎么操作是工作人员的职责范围内的事，我们不能去干涉）。其实归根到底还是
+SOLID 里面的 SRP（单一职责原则）。</p>
+<p>那该如果应对这种问题呢？目前我的做法是，将这些对依赖内部细节的实现挪动到对象本身里去，给它们定义对应的方法（它们配得上一个独立的方法）。这也是《聊聊架构》里面多次强调的权责对等，细节的东西本来属于你，现在只是把这一部分职责归还给了你。这样的结果就是，我们想了解的所有细节，都可以在一个地方找到，就是我们依赖的那个对象里面。对于外部来说，能看到的只是那个对象提供的功能（public
+方法），但是这就已经足够了。</p>
+<p>所以，单元测试一方面可以保证我们代码的可靠程度，同时在写测试的时候你会发现你代码设计得不好的地方。有个有趣的评判标准是，编写单元测试的难度与代码质量成反比。最近真的是深有体会。</p>
+<h2 id="单元测试之后">单元测试之后</h2>
+<p>准确来讲，这个操作是在我写单元测试的过程中完成的，多亏我们的运维同学，给
+gitlab 加上了 runner，让我得以实现在 ci 里面加上单元测试的操作（同时之前
+build 的 docker
+镜像又一次可以派上用场了）。这样一来，好像开始有那味了，多年以前的一些想法得以实现了。同时，看着
+gitlab ci 的 job 都 passed 蛮有意思的，哈哈。</p>
+<p>经历了重构、写单元测试、再重构的过程之后，感觉单元测试这件事也许没那么难，如果觉得单元测试写不出来，很可能是因为很多代码出现在了它们不该出现的地方。用专业一点的话来说就是，设计上有缺陷，对于这个目前也还不是太了解。不过有一条很基本的原则，可以做到的话，可能会给我们带来极大的好处，上面也有提到，就是
+SRP。个人感觉这可能是所有软件设计的最基本的原则吧。</p>
+<p>对个人而言，关于单元测试的很多困惑、认识上的误区已经解决了，接下来其实问题没那么多了，该写单元测试的时候可以写一写了，可以更好地保障一下代码质量了（但是对于生活，依然有很多困惑，诶）。</p>
+<h2 id="关于聊聊架构这本书">关于《聊聊架构》这本书</h2>
+<p>这本书之前听都没听过，在同事吹爆了之后，还是去看了，感觉还是有其独特的价值（可能对于很多不同角色的人都能在书里得到一些启发）。里面一些观点的角度都挺独特的，如果没有很深刻的经验、经历等想不到那些点，又或者可能是因为我读的书少吧。总之，可以一翻。</p>
+<h2 id="最后分享一下最近看的其他书">最后，分享一下最近看的其他书</h2>
+<p>《代码整洁之道》，这本书其实应该早点看的，操作性不强，但是看完之后会让你看到自己写的代码里面很多不太好的地方，也就是所谓的坏味道（code
+smells）。比如，之前总是强迫性地给每个方法、属性加上注释，读完之后发现很多注释是没有必要的，一方面可以通过好的命名解决，另一方面代码本身足够简单到不需要注释。</p>
+<p>《重构》，Martin Fowler
+的经典之作，看的是第二版，实操性很强，在我们需要重构的时候可以当做工具类的书籍来翻阅（不过目前他们有提供在线网站，上面也列出了所有的重构方法，可以直接到他们网站上看）。如果说《代码整洁之道》只是列出
+code smells 的话，那这本《重构》就是教你怎么去除这些 code
+smells。同样可以在本书里发现现有代码写法上的缺陷，因为里面每一种重构的方法都给出了重构的动机，也就是为什么要用那种重构方法。</p>
+<p>《编程的逻辑》，没有前面两本经典，但是里面讲到的从需求到最终实现的一些实践方法值得尝试一下。跟软件设计有点关系，但关注的是整一个流程，所以每一个点都不会太深入。</p>
+<h2 id="总结">总结</h2>
+<p>总结一下，聊了些什么东西。
+1、代码维护的时间远远大于开发的时间，单元测试的存在可以让我们放心地对代码进行一些修改。
+2、单元测试一方面可以保证我们代码的可靠程度，同时在写测试的时候你会发现你代码设计得不好的地方。</p>
+<p>其他，关于单元测试的一些认识误区，可以去《聊聊架构》里面看看单元测试这一章。</p>
+<h2 id="后记">后记</h2>
+<p>其实一个多星期之前就想写一下看完《重构》之后的一些想法，但是想着虽然看完了，但是还没有实践过，似乎不是太好。现在好歹也真正地实践过了，可以写一写了，但是之前关于重构的一些想法好像没有了。没有就没有了吧，也许这就是生活吧，有些东西失去了就再也找不回来了。</p>
+<p>另外，关于写代码这件事，真的需要很多考量的地方，需要抛却很多主观上的想法，然后对自己写的代码作出客观的评价，而这可能不是一件容易的事。不过是一件值得尝试的事。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 单元测试</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/10/linux/linux%20shell%20windows%E6%8D%A2%E8%A1%8C%E7%AC%A6%E8%AF%86%E5%88%AB%E4%B8%8D%E4%BA%86%E5%A4%84%E7%90%86/" rel="prev" title="linux shell windows 换行符识别不了处理">
+                  <i class="fa fa-angle-left"></i> linux shell windows 换行符识别不了处理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/24/prometheus/Prometheus%20%E6%9F%A5%E8%AF%A2%E7%A4%BA%E4%BE%8B/" rel="next" title="Prometheus 查询示例">
+                  Prometheus 查询示例 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

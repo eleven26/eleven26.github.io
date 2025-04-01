@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="写本文目的：网上讲解01背包问题的文章有很多，但看着这些文章感觉少了点什么，后来想想，好像都在讲解问题本身，然后给出答案，然后我们看这些文章的时候，好像都懂了，但是我们好像还是不知道什么是动态规划。因此本文就是要讲一讲01背包里面包含的动态规划思想。 什么是01背包问题 背包问题描述： 给定 n 件物品，物品的重量为 weights[i]，物品的价值为 values[i]。现挑选物品放入背包中，假">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01背包问题里的动态规划思想">
+<meta property="og:url" content="https://eleven26.github.io/2022/03/08/algorthim/01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E9%87%8C%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%80%9D%E6%83%B3/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="写本文目的：网上讲解01背包问题的文章有很多，但看着这些文章感觉少了点什么，后来想想，好像都在讲解问题本身，然后给出答案，然后我们看这些文章的时候，好像都懂了，但是我们好像还是不知道什么是动态规划。因此本文就是要讲一讲01背包里面包含的动态规划思想。 什么是01背包问题 背包问题描述： 给定 n 件物品，物品的重量为 weights[i]，物品的价值为 values[i]。现挑选物品放入背包中，假">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/algo/fib.png">
+<meta property="og:image" content="https://eleven26.github.io/images/algo/01.png">
+<meta property="article:published_time" content="2022-03-08T12:48:02.000Z">
+<meta property="article:modified_time" content="2022-06-15T09:19:00.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="背包问题">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="01背包">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/algo/fib.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2022/03/08/algorthim/01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E9%87%8C%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%80%9D%E6%83%B3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2022/03/08/algorthim/01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E9%87%8C%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%80%9D%E6%83%B3/","path":"2022/03/08/algorthim/01背包问题里的动态规划思想/","title":"01背包问题里的动态规划思想"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>01背包问题里的动态规划思想 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">什么是01背包问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AB01%E8%83%8C%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">01背包为什么叫01背包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91"><span class="nav-number">3.</span> <span class="nav-text">什么是动态规划（维基百科）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">递归算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E4%B8%8E%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="nav-number">5.</span> <span class="nav-text">递归与动态规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E7%9A%84%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B"><span class="nav-number">6.</span> <span class="nav-text">01背包的决策过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E9%87%8C%E9%9D%A2%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="nav-number">7.</span> <span class="nav-text">01背包问题里面的动态规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E9%87%8C%E9%9D%A2%E7%9A%84%E9%87%8D%E5%8F%A0%E5%AD%90%E9%97%AE%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">01背包里面的重叠子问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%98%AF%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%E9%87%8D%E5%8F%A0%E5%AD%90%E9%97%AE%E9%A2%98%E7%9A%84"><span class="nav-number">9.</span> <span class="nav-text">动态规划是怎么处理重叠子问题的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2022/03/08/algorthim/01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%E9%87%8C%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%80%9D%E6%83%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="01背包问题里的动态规划思想 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          01背包问题里的动态规划思想
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-08 20:48:02" itemprop="dateCreated datePublished" datetime="2022-03-08T20:48:02+08:00">2022-03-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>写本文目的：网上讲解01背包问题的文章有很多，但看着这些文章感觉少了点什么，后来想想，好像都在讲解问题本身，然后给出答案，然后我们看这些文章的时候，好像都懂了，但是我们好像还是不知道什么是动态规划。因此本文就是要讲一讲01背包里面包含的动态规划思想。</p>
+<h2 id="什么是01背包问题">什么是01背包问题</h2>
+<p>背包问题描述：</p>
+<p>给定 <code>n</code> 件物品，物品的重量为
+<code>weights[i]</code>，物品的价值为
+<code>values[i]</code>。现挑选物品放入背包中，假定背包能承受的最大重量为
+<code>W</code>，问应该如何选择装入背包中的物品，使得装入背包中物品的总价值最大？</p>
+<p>01背包问题算是动态规划里面的基础问题了，网上已经有很多讲解01背包问题的文章了，而且讲得也很好。比如：</p>
+<p><a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/FwIiPPmR18_AJO5eiidT6w">动态规划：关于01背包问题，你该了解这些！</a>
+<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/M4uHxNVKRKm5HPjkNZBnFA">动态规划：关于01背包问题，你该了解这些！（滚动数组）</a>
+<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/MgNGAWfKp9O0j4lwsx4qLA">图解 |
+你管这破玩意叫动态规划</a></p>
+<p>还有就是《算法图解》里面的 9.1
+背包问题，虽然标题是背包问题，但讲解的依然是01背包，算法图解里面的讲解算是很形象了。</p>
+<blockquote>
+<p>如果完全不了解01背包问题的可以看上面几篇文章，讲得都挺好的，这里没有必要再讲一遍了。</p>
+</blockquote>
+<h2 id="背包为什么叫01背包">01背包为什么叫01背包</h2>
+<p>想象一下，我们现在有一个背包，然后对于摆在我们面前的 n
+件物品，我们都有两个选择，选或者不选，没有其他的选择了。</p>
+<p>我们就可以使用 01 来表示这两种状态，0 表示不选择，1
+表示选择。假设我们有 3 件物品，那么 <code>[0, 1, 0]</code>
+就表示我们只选择了第 2 件物品。</p>
+<p>也就是说，最终下来所有可能的不同组合情况共有 <code>2^n</code> 种（n
+位，每位有两种可能，0 或 1）。</p>
+<blockquote>
+<p>如果通过遍历所有可能的组合来求解 01背包
+问题，那么时间复杂度将会是指数级别的。</p>
+</blockquote>
+<h2 id="什么是动态规划维基百科">什么是动态规划（维基百科）</h2>
+<blockquote>
+<p>这里照搬一下维基百科关于动态规划的一些描述。</p>
+</blockquote>
+<p>动态规划（英语：Dynamic
+programming，简称DP）是一种在数学、管理科学、计算机科学、经济学和生物信息学中使用的，通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
+<p>动态规划在查找有很多重叠子问题的情况的最优解时有效。它将问题重新组合成子问题。为了避免多次解决这些子问题，它们的结果都逐渐被计算并被保存，从简单的问题直到整个问题都被解决。因此，动态规划保存递归时的结果，因而不会在解决同样的问题时花费时间。</p>
+<p>动态规划只能应用于有最优子结构的问题。最优子结构的意思是局部最优解能决定全局最优解（对有些问题这个要求并不能完全满足，故有时需要引入一定的近似）。简单地说，问题能够分解成子问题来解决。</p>
+<p>动态规划的适用情况：</p>
+<ol type="1">
+<li>最优子结构性质。如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质（即满足最优化原理）。最优子结构性质为动态规划算法解决问题提供了重要线索。</li>
+<li>无后效性。即子问题的解一旦确定，就不再改变，不受在这之后、包含它的更大的问题的求解决策影响。</li>
+<li>子问题重叠性质。子问题重叠性质是指在用递归算法自顶向下对问题进行求解时，每次产生的子问题并不总是新问题，有些子问题会被重复计算多次。动态规划算法正是利用了这种子问题的重叠性质，对每一个子问题只计算一次，然后将其计算结果保存在一个表格中，当再次需要计算已经计算过的子问题时，只是在表格中简单地查看一下结果，从而获得较高的效率，降低了时间复杂度。</li>
+</ol>
+<h2 id="递归算法">递归算法</h2>
+<p>在讲解01背包跟动态规划的关系之前，很有必要先看看递归算法是如何执行的，了解了递归算法的执行过程之后，后面我们就能知道动态规划的优势了。</p>
+<p>说到递归，我们很容易想到斐波那契数列，因为斐波那契数列很容易地通过递归算法实现，如下，就几行代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">f</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span> || n == <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> f(n - <span class="number">1</span>) + f(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是虽然它的代码很简单，但是执行的过程并没有那么简单。</p>
+<p>我们可以将递归的执行过程想象成一个树状的结构，递归的执行过程如下图，因为
+<code>f(0)</code> 和 <code>f(1)</code> 是已知的，所以叶子结点到
+<code>f(0)</code> 或者 <code>f(1)</code> 的时候就结束了。</p>
+<figure>
+<img src="/images/algo/fib.png" alt="fib.png" />
+<figcaption aria-hidden="true">fib.png</figcaption>
+</figure>
+<p>简单来讲，就是在求解的过程中，由大到小，依次求解，求解完左边之后，再求解右边，又进行一次由大到小的求解。在到达边界的时候，依次返回。</p>
+<p>然后我们可以很容易发现，其实在递归的过程中，<code>f(2)</code> 和
+<code>f(3)</code>
+都被重复计算了，而且，我们的递归层数越多，被重复计算的子问题就越多。</p>
+<blockquote>
+<p>递归有个问题是，子问题会被多次重复求解，这样会导致有很多时间浪费在做一些重复计算上。</p>
+</blockquote>
+<h2 id="递归与动态规划">递归与动态规划</h2>
+<p>对于斐波那契数列，有没有方法可以做到 <code>f(2)</code> 和
+<code>f(3)</code> 只求解一次呢？</p>
+<p>有的，先求解子问题即可，从斐波那契数列的定义，我们可以知道
+<code>f(n) + f(n + 1) = f(n + 2)</code>，那么，如果我们要求
+<code>f(5)</code>，我们可以从 <code>f(0)</code> 求解到
+<code>f(5)</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f(2) = f(0) + f(1)，f(0) 和 f(1) 不需要求解，可以直接得出</span><br><span class="line">f(3) = f(1) + f(2)，上一步我们已经求解了 f(2) 了，我们加上 f(1) 就得到 f(3) 了，这一步利用了上一步的计算结果</span><br><span class="line">f(4) = f(2) + f(3)，上一步我们已经求解了 f(3) 了，而且我们的 f(2) 在第一步已经求解了，我们这里直接利用了前两次计算的结果</span><br><span class="line">f(5) = f(3) + f(4)，同理，这里利用了前两次计算的结果</span><br></pre></td></tr></table></figure>
+<p>代码实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">f</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;</span><br><span class="line">      </span><br><span class="line">    <span class="type">int</span>[] dp = <span class="keyword">new</span> <span class="title class_">int</span>[n + <span class="number">1</span>];</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">2</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        dp[i] = dp[i - <span class="number">1</span>] + dp[i - <span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dp[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以这里的关键是什么呢？</p>
+<ol type="1">
+<li>先求解子问题，记录下子问题的答案。</li>
+<li>逐步求解更大的问题，这个更大的问题可以直接利用前面的计算结果。</li>
+</ol>
+<p>这跟动态规划有什么关系？就从动态规划的适用情况说吧：</p>
+<ol type="1">
+<li>最优子结构：我们从小到大求解 <code>f(n)</code> 的过程中，每一个
+<code>f(i)</code>
+可以看作最优子结构，当然这里实际上并没有优劣一说，我们每一个
+<code>f(i)</code> 都是唯一的（对于 01背包
+这种就有最优子结构的说法了）。</li>
+<li>无后效性：我们在求解 <code>f(i)</code> 的时候，并不关心
+<code>f(i - 1)</code> 和 <code>f(i - 2)</code>
+是怎么得到的，我们只需要知道前面求解的结果，并不关系其过程。</li>
+<li>子问题重叠：我们在递归求解 <code>f(5)</code> 的时候，发现
+<code>f(2)</code> 和 <code>f(3)</code> 都被重复计算了，<code>f(2)</code>
+和 <code>f(3)</code> 就是重叠子问题。</li>
+</ol>
+<blockquote>
+<p>所以我们可以看到，动态规划的关键是，先求解子问题，得到子问题的解，然后逐步求解更大的问题，对于更大的问题，直接利用子问题的结果（子问题的结果都是最优结果），不需要再次计算。逐步求解，直到我们得到最终问题的答案。</p>
+</blockquote>
+<h2 id="背包的决策过程">01背包的决策过程</h2>
+<p>假设我们有一个容量为 4 的背包，有三件物品，物品0重量为 1、价值为
+15，物品1重量为 3、价值为 20，物品2重量为 4、价值为 30。</p>
+<p>然后使用 <code>dp[i]</code>
+表示不同的背包容量下所能获得的最大价值。我们的背包容量为
+4，所以只需要计算到 <code>dp[4]</code> 即可。</p>
+<ol type="1">
+<li><p>对于第一件物品，<code>dp[1]</code>、<code>dp[2]</code>、<code>dp[3]</code>、<code>dp[4]</code>
+都是 15，因为只有容量大于等于 1
+的时候我们才能装得下这件物品，然后可以获得其价值。</p></li>
+<li><p>对于第二件物品，<code>dp[1]</code>、<code>dp[2]</code> 依然是
+15，因为只有容量为 3 的背包才能放得下第二件物品。</p></li>
+</ol>
+<ol type="a">
+<li>对于 <code>dp[3]</code>，容量为 3 的时候，有两种情况</li>
+</ol>
+<ul>
+<li>不放入这件物品，那么所能获得的价值依然是 15。</li>
+<li>放入这件物品。但是放入之后，就要占据背包全部容量了，之前的所有物品都放不下了，但是我们可以获得更大的价值
+20。因此 <code>dp[3] = 20</code></li>
+</ul>
+<p><strong>因此在背包容量为
+3，有前两件物品选择的情况下，我们所能获得的最大价值是 20。</strong></p>
+<ol start="2" type="a">
+<li>对于 <code>dp[4]</code>，容量为 4
+的时候，我们可以选择不放入这件物品，那么所能获得的价值依然是 15。</li>
+</ol>
+<ul>
+<li>不放入这件物品，那么所能获得的价值依然是 15。</li>
+<li>放入这件物品。放入之后，我们的背包还剩容量 1，在之前的物品中，容量 1
+所能获得的最大价值是 15。</li>
+</ul>
+<p><strong>因此在背包容量为
+4，有前两件物品选择的情况下，我们所能获得的最大价值是
+<code>20 + 15 = 35</code>，20 是当前物品的价值，15
+是剩余背包容量所能获得的最大价值。</strong></p>
+<ol start="3" type="1">
+<li>对于第三件物品的分析过程类似在对第二件物品做决策的过程，不再赘述。</li>
+</ol>
+<blockquote>
+<p>我们在决策的过程中，需要根据之前物品选择之后，不同背包容量的所能获得的最大价值来进行决定是否选择当前物品。这样就能保证我们每次选择都是最优的结果。</p>
+</blockquote>
+<h2 id="背包问题里面的动态规划">01背包问题里面的动态规划</h2>
+<p>我们可以从动态规划适用情况来看01背包问题：</p>
+<ol type="1">
+<li>最优子结构</li>
+</ol>
+<p>在 <code>0~i</code>
+件物品选择之后，不同背包容量下所能获得的最大价值就是一个最优子结构。我们并不需要知道前面的
+<code>0~i</code>
+件物品具体是怎样选择的，我们只需要知道选择的最优结果即可。</p>
+<blockquote>
+<p>之所以需要计算不同容量，是因为如果我们当前剩余背包容量放不下当前物品的时候，就需要求解放入当前物品后，剩余的背包容量的最大价值，然后加上当前物品的价值，就是放入当前物品所能获得的最大价值。</p>
+</blockquote>
+<ol start="2" type="1">
+<li>无后效性</li>
+</ol>
+<p>对于 <code>0~i</code>
+件物品具体怎么选择，我们在决定要不要放入当前物品的时候，并不关心，我们只需要知道有某一种方案可以使得获得当前最大价值就行了，同时我们后面不管怎么选择都影响不到之前选择得到的最优结果。</p>
+<ol start="3" type="1">
+<li>重叠子问题</li>
+</ol>
+<p>我们在选择一件物品的时候，假设要放入当前物品，那就需要知道剩余背包容量的在之前的物品选择中所能获得的最大价值。而之前的物品选择中，不同容量下所能获得的最大价值就是子问题。</p>
+<h2 id="背包里面的重叠子问题">01背包里面的重叠子问题</h2>
+<p>下面的讲解跟回溯相关，想详细了解回溯的朋友可以看看这一篇文章：<a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/7MXxslDUp_zSiUg9aQOzeg">回溯算法理论基础！</a></p>
+<p>如果直接从动态规划的角度来思考01背包问题里面的重叠子问题可能会比较困难。</p>
+<p>但是还有一种算法可以求解01背包问题的，那就是回溯（本质是递归），但是上面也说了，时间复杂度太高了，指数级别的。但是从回溯的角度来看，就很好理解01背包里面的重叠子问题。</p>
+<p>现在，假设我们有一个容量为 <code>W</code> 的背包，有 3 件物品
+A、B、C，需要从这 3
+件物品里面选取不同的物品加入背包，使得加入背包的价值最大。我们使用一个长度为
+3 的数组来记录每一种不同的组合，数组的每一个元素使用 0
+代替没有选中的状态，使用 1 来代替选中的状态。</p>
+<p><strong>用回溯算法的处理过程如下，下图的每一个节点里面，我们都计算从
+<code>0~W</code> 的容量下，当前的组合能获得的最大价值。</strong></p>
+<figure>
+<img src="/images/algo/01.png" alt="01.png" />
+<figcaption aria-hidden="true">01.png</figcaption>
+</figure>
+<p>从上图看来，我们不管是否选择了 A，都要再针对 B 和 C
+做出同样的组合判断，<strong>但是我们要知道，对于不同的背包容量，B 和 C
+组合能得到的最大价值都是固定的，跟 A 并没有关系。</strong></p>
+<p>所以如果使用回溯算法，对于选不选 A，后面对于 B 和 C
+的组合我们都做了重复的计算了。</p>
+<p><strong>上图上色的部分就是重复计算的部分，当然还有其他的重复计算，这些重复计算的地方就是01背包里面的重叠子问题了。</strong></p>
+<blockquote>
+<p>所以01背包里面的重叠子问题就是，i
+个物品在不同背包容量下的最大价值。</p>
+</blockquote>
+<h2
+id="动态规划是怎么处理重叠子问题的">动态规划是怎么处理重叠子问题的</h2>
+<p>我们再回忆一下上面提到的斐波那契数列的优化写法，我们是通过计算更小的斐波那契数列，逐步计算到我们需要的那个数
+<code>n</code>，在这个计算过程中我们可以直接使用前面的计算结果。</p>
+<p>因此，对于01背包问题，我们其实也可以先求解重叠的子问题，然后将这些子问题的解保存下来，在解决更大的问题的时候直接使用前面计算的结果。</p>
+<p>具体来说，可以怎么做呢？</p>
+<p>就是每次做判断的时候，我们都去计算将这个物品加入背包或者不加入背包的情况下，<code>0~W</code>
+不同的背包容量下所能获得的最大价值。</p>
+<p>然后我们在对下一个物品进行选择的时候，可以用背包容量减去当前物品重量，得到一个一个剩余的背包容量，我们看剩余背包容量在前面物品的选择中最大价值是多少，加上当前物品的价值，就是加入当前物品之后所能获得的最大价值。</p>
+<p>我们需要注意的是，加入这件物品之后，得到的最大价值未必比不加入这件物品的价值更大，这个时候就需要对比一下两种情况，哪一种情况能获得的价值最大，就是当前选择过的物品不同组合下所能获得的最大价值了。</p>
+<blockquote>
+<p>在01背包里面，我们可以直接利用 <code>0~i-1</code>
+件物品的选择结果，来判断是否将第 i 件物品加入到背包。</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>01背包里面的动态规划思想（假设我们已经选择了 <code>0~i-1</code>
+件物品，<code>W</code> 是背包容量）：</p>
+<ol type="1">
+<li>最优子结构：<code>0~i-1</code>
+件物品在不同的背包容量下能获得的最大价值是一个最优子结构。</li>
+<li>无后效性：我们在决定放不放第 <code>i</code> 件物品的时候，前面的
+<code>0~i-1</code> 件物品是如何组合得到那个最大价值完全没影响。</li>
+<li>重叠子问题：在 <code>0~i-1</code>
+件物品的不同组合中，<code>0~W</code> 所能获得的最大价值。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+              <a href="/tags/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" rel="tag"><i class="fa fa-tag"></i> 背包问题</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"><i class="fa fa-tag"></i> 动态规划</a>
+              <a href="/tags/01%E8%83%8C%E5%8C%85/" rel="tag"><i class="fa fa-tag"></i> 01背包</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/02/swoole/swoole%20%E8%BF%9B%E7%A8%8B%E9%97%B4%E5%85%B3%E7%B3%BB/" rel="prev" title="swoole 进程间关系">
+                  <i class="fa fa-angle-left"></i> swoole 进程间关系
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/06/06/algorthim/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/" rel="next" title="差分数组">
+                  差分数组 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

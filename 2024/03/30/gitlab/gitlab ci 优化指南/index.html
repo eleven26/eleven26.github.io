@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在之前的《gitlab ci cd 不完全指南》一文中，我们讲了 gitlab ci 中的一些基本用法。 本文会继续介绍一些在使用 gitlab ci 过程中的优化方法，帮助大家减少在 gitlab ci 上的等待时间。 本文会从以下几个方面来介绍 gitlab ci 的优化方法：  gitlab runner 的配置优化：包括 executor 的选择、concurrent 的设置等 依赖缓存：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gitlab ci 优化指南">
+<meta property="og:url" content="https://eleven26.github.io/2024/03/30/gitlab/gitlab%20ci%20%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="在之前的《gitlab ci cd 不完全指南》一文中，我们讲了 gitlab ci 中的一些基本用法。 本文会继续介绍一些在使用 gitlab ci 过程中的优化方法，帮助大家减少在 gitlab ci 上的等待时间。 本文会从以下几个方面来介绍 gitlab ci 的优化方法：  gitlab runner 的配置优化：包括 executor 的选择、concurrent 的设置等 依赖缓存：">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-30T12:01:00.000Z">
+<meta property="article:modified_time" content="2024-03-31T02:22:52.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="gitlab">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2024/03/30/gitlab/gitlab%20ci%20%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2024/03/30/gitlab/gitlab%20ci%20%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97/","path":"2024/03/30/gitlab/gitlab ci 优化指南/","title":"gitlab ci 优化指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>gitlab ci 优化指南 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gitlab-runner-%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">gitlab runner 的配置优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#concurrent-%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">concurrent 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#executor-%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">1.2.</span> <span class="nav-text">executor 的选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-executor-%E7%9A%84-pull-policy"><span class="nav-number">1.3.</span> <span class="nav-text">docker executor 的 pull
+policy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E7%BC%93%E5%AD%98"><span class="nav-number">2.</span> <span class="nav-text">依赖缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E7%9A%84%E6%BA%90"><span class="nav-number">3.</span> <span class="nav-text">依赖使用国内的源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA-job-%E5%90%8C%E6%97%B6%E6%89%A7%E8%A1%8C%E4%B8%80%E4%B8%AA-stage-%E7%9A%84%E5%A4%9A%E4%B8%AA-job"><span class="nav-number">4.</span> <span class="nav-text">多个 job 同时执行：一个
+stage 的多个 job</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#job-%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">job 配置优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cache-policy"><span class="nav-number">5.1.</span> <span class="nav-text">cache policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git_strategy-none"><span class="nav-number">5.2.</span> <span class="nav-text">GIT_STRATEGY: none</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dependencies"><span class="nav-number">5.3.</span> <span class="nav-text">dependencies: []</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">网络优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7-gitlab-%E5%8F%8A-runner-%E7%89%88%E6%9C%AC"><span class="nav-number">7.</span> <span class="nav-text">升级 gitlab 及 runner 版本</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2024/03/30/gitlab/gitlab%20ci%20%E4%BC%98%E5%8C%96%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="gitlab ci 优化指南 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          gitlab ci 优化指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-03-30 20:01:00" itemprop="dateCreated datePublished" datetime="2024-03-30T20:01:00+08:00">2024-03-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在之前的<a
+target="_blank" rel="noopener" href="https://blog.baiguiren.com/2023/04/16/gitlab/gitlab%20ci%20cd%20%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">《gitlab
+ci cd 不完全指南》</a>一文中，我们讲了 gitlab ci 中的一些基本用法。
+本文会继续介绍一些在使用 gitlab ci 过程中的优化方法，帮助大家减少在
+gitlab ci 上的等待时间。</p>
+<p>本文会从以下几个方面来介绍 gitlab ci 的优化方法：</p>
+<ol type="1">
+<li>gitlab runner 的配置优化：包括 executor 的选择、concurrent
+的设置等</li>
+<li>依赖缓存：如何使用 cache 来加速构建</li>
+<li>依赖使用国内的源：如何使用国内的源来加速依赖的下载</li>
+<li>多个 job 同时执行</li>
+<li>job 配置优化：cache policy、GIT_STRATEGY、dependencies</li>
+<li>网络优化：减少同步代码的时间</li>
+<li>升级 gitlab 及 runner 版本</li>
+</ol>
+<h2 id="gitlab-runner-的配置优化">gitlab runner 的配置优化</h2>
+<h3 id="concurrent-配置">concurrent 配置</h3>
+<p>gitlab runner 中有一个很重要的配置是 <code>concurrent</code>，它表示
+gitlab runner 同时运行的 job 数量。默认情况下，<code>concurrent</code>
+的值是 1，也就是说 gitlab runner 同时只能运行一个 job。如果你的 gitlab
+runner 有多个 executor，那么可以将 <code>concurrent</code> 设置为大于 1
+的值，这样可以让 gitlab runner 同时运行多个 job，从而减少等待时间。</p>
+<p>具体可参考：https://docs.gitlab.com/runner/configuration/advanced-configuration.html</p>
+<h3 id="executor-的选择">executor 的选择</h3>
+<p>比较常见的是 docker 和 shell 类型的 executor，docker executor
+的优势是可以在不同的环境中运行 job，比如在不同的镜像中运行
+job，这样可以避免环境的不一致性。 而 shell executor 的优势是可以直接在
+gitlab runner 的机器上运行 job，不需要额外的环境，在较老的 gitlab
+版本中，shell executor 是很快的，但 shell executor 的可靠性较低，依赖于
+gitlab runner 的机器，如果机器出现问题，那么 job 就会失败。</p>
+<p>在 16.10 版本的实际使用中，docker executor
+的速度有了明显提升，所以不必为了速度而选择 shell executor。</p>
+<p>具体可参考：https://docs.gitlab.com/runner/executors/</p>
+<h3 id="docker-executor-的-pull-policy">docker executor 的 pull
+policy</h3>
+<p>docker executor 在运行 job 时，会拉取 docker
+镜像，这个过程会耗费一些时间。我们可以通过设置 <code>pull_policy</code>
+来控制是否每次都拉取镜像。默认情况下，<code>pull_policy</code> 的值是
+<code>always</code>，也就是每次都会拉取镜像。
+如果我们的镜像不经常更新（比如那种用来 build 项目的 job
+所依赖的镜像），那么可以将 <code>pull_policy</code> 设置为
+<code>if-not-present</code>，这样只有在本地没有镜像的时候才会拉取镜像。</p>
+<p>可选值：</p>
+<ul>
+<li><code>always</code>: 每次都拉取镜像</li>
+<li><code>if-not-present</code>: 本地没有镜像的时候才会拉取镜像</li>
+<li><code>never</code>: 从不拉取镜像</li>
+</ul>
+<p>具体可参考：https://docs.gitlab.com/runner/executors/docker.html#configure-how-runners-pull-images</p>
+<h2 id="依赖缓存">依赖缓存</h2>
+<p>如果我们的项目需要下载一些第三方依赖，比如 npm、composer、go mod
+等，那么我们可以使用 cache 来加速构建。cache 会将我们下载的依赖缓存到
+gitlab runner 中，下次构建时就不需要重新下载依赖了。</p>
+<p>下面是一个前端项目的例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">build:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">  <span class="attr">cache:</span></span><br><span class="line">    <span class="attr">key:</span></span><br><span class="line">      <span class="attr">files:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">package.json</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">package-lock.json</span></span><br><span class="line">    <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">node_modules/</span></span><br></pre></td></tr></table></figure>
+<p>上面这个例子的含义是：</p>
+<ul>
+<li>当 package.json 或 package-lock.json
+文件发生变化时，就会重新下载依赖（不使用缓存）</li>
+<li>将 node_modules 目录缓存到 gitlab runner 中</li>
+</ul>
+<p>具体可参考：https://docs.gitlab.com/ee/ci/caching/</p>
+<p>需要注意的是：<strong>通过监测多个文件的变动来决定是否使用缓存的这个配置，在较新版本的
+gitlab 中才有，具体忘记什么版本开始支持</strong></p>
+<h2 id="依赖使用国内的源">依赖使用国内的源</h2>
+<p>还是拿部署前端项目作为例子，我们在下载依赖时，可以使用国内的源来加速下载。比如使用淘宝的
+npm 镜像：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">build:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">npm</span> <span class="string">config</span> <span class="string">set</span> <span class="string">sass_binary_site</span> <span class="string">https://npmmirror.com/mirrors/node-sass</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">npm</span> <span class="string">config</span> <span class="string">set</span> <span class="string">registry</span> <span class="string">https://registry.npmmirror.com</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br></pre></td></tr></table></figure>
+<p>实际上其实就是我们在 <code>npm install</code> 之前设置了一下
+registry，这样就会使用国内的源来下载依赖。</p>
+<p>类似的，其他常用语言的包管理工具一般都有国内源，比如 go mod
+有七牛云、composer 有阿里云的源等。</p>
+<h2 id="多个-job-同时执行一个-stage-的多个-job">多个 job 同时执行：一个
+stage 的多个 job</h2>
+<p>这里说的是那种没有相互依赖的
+job，可以同时执行。比如在我们的后端项目中，<code>build</code> 这个
+<code>stage</code> 中有两个 job，一个是用来生成 api
+文档的，另一个是用来安装依赖的。
+因为生成文档这个操作只是依赖于源码本身，不需要等到依赖安装完成，所以可以同时执行。</p>
+<p>这种情况实际上就是把多个 job 放到一个 stage 中，这样 gitlab ci
+就会同时执行这些 job：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">stages:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line"></span><br><span class="line"><span class="attr">composer:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">composer</span> <span class="string">install</span></span><br><span class="line"></span><br><span class="line"><span class="attr">apidoc:</span></span><br><span class="line"><span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">php</span> <span class="string">artisan</span> <span class="string">apidoc</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意：如果 job
+之间有依赖，或者可能会读写相同的文件，那么可能会有异常。</strong></p>
+<h2 id="job-配置优化">job 配置优化</h2>
+<h3 id="cache-policy">cache policy</h3>
+<p>这在之前那篇文章有说过，这里再重复一下。默认是 pull-push。意思是在
+job 开始时拉取缓存，push 是在 job 结束时推送缓存，这样会保留我们在 job
+执行过程中对缓存目录的变更。</p>
+<p>但是实际上有时候我们是不需要在 job 结束的时候更新缓存的，比如我们的
+job 不会更新缓存目录，那么我们可以设置为 pull，这样在 job
+结束的时候就不会推送缓存了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只是拉取缓存，然后同步到服务器的 job，不会更新缓存</span></span><br><span class="line"><span class="attr">sync:</span></span><br><span class="line">  <span class="attr">cache:</span></span><br><span class="line">    <span class="attr">key:</span></span><br><span class="line">      <span class="attr">files:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">composer.json</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">composer.lock</span></span><br><span class="line">    <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;vendor/&quot;</span></span><br><span class="line">    <span class="attr">policy:</span> <span class="string">pull</span></span><br></pre></td></tr></table></figure>
+<h3 id="git_strategy-none">GIT_STRATEGY: none</h3>
+<p>跟上面这一小点类似，如果我们的 job 并不需要拉取代码，那么可以设置
+<code>GIT_STRATEGY</code> 为
+<code>none</code>，这样就不会拉取代码了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">variables:</span></span><br><span class="line">    <span class="attr">GIT_STRATEGY:</span> <span class="string">none</span></span><br></pre></td></tr></table></figure>
+<p>在实际中的应用场景是：部署跟发布分离的时候，发布的 job
+并不需要拉取代码，只需要通过远程 ssh 命令执行发布的脚本即可。如果我们的
+git 仓库比较大，那么这样可以减少一些时间。</p>
+<h3 id="dependencies">dependencies: []</h3>
+<p>我们知道，gitlab ci 中的 job 可以产出一些构建的产物，比如前端项目
+build 出来的静态文件、go 项目编译出来的二进制文件等，这些产物可以被其他
+job 使用，只要我们通过 <code>artifacts</code> 配置即可。</p>
+<p>但并不是所有的 job 都需要这些 <code>artifacts</code>
+的，这个时候我们可以通过 <code>dependencies: []</code> 来告诉 gitlab ci
+这个 job 不需要依赖其他 job 的产物。</p>
+<p>这样就可以节省下下载 <code>artifacts</code> 的时间。</p>
+<h2 id="网络优化">网络优化</h2>
+<p>网络状况的好坏直接影响了同步代码的时间，这也是最容易做到的优化方式了。如果我们需要同步的机器比较多，而且同步的文件比较大的时候，网络优化带来的效果就更加明显了。</p>
+<h2 id="升级-gitlab-及-runner-版本">升级 gitlab 及 runner 版本</h2>
+<p>最近将 gitlab 从 15.9 升级到 16.10 后，发现使用 docker 的 executor
+的时候，初始化容器的速度相比旧版本有明显了提升。这也说明了 gitlab
+在不断的优化中，所以及时升级 gitlab 及 runner
+版本也是一个不错的选择。</p>
+<blockquote>
+<p>原来可能要 5~10s，如果 job 的数量多，这点提升就会比较明显了。</p>
+</blockquote>
+<p>当然我们可以选择一个 stage 多个 job，但是有很多时候一些 job
+是没有办法并行的，因为会相互影响。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/gitlab/" rel="tag"><i class="fa fa-tag"></i> gitlab</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/28/gitlab/gitlab%2015.9%20%E5%8D%87%E7%BA%A7%E5%88%B0%2016.10/" rel="prev" title="gitlab 15.9 升级到 16.10">
+                  <i class="fa fa-angle-left"></i> gitlab 15.9 升级到 16.10
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/05/JavaScript/pm2%20%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E/" rel="next" title="pm2 配置文件说明">
+                  pm2 配置文件说明 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="有时候需要根据需要对 MongoDB 的集合进行分集合存储（类似 MySQL 的分表），这样一来 db 下就产生了很多相同前缀的集合，这样一来，我们想知道这一批集合的一些关键状态信息的时候就比较不便，比如想知道某一个前缀所有集合的总大小等等。 一个可行的方法是，通过找到一个模式前缀的所有集合，然后逐个调用 MongoDB 的 collStats 命令来获取单个集合的状态，然后做一个聚合，下面是基于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenssegers laravel-mongodb 根据集合前缀聚合状态数据">
+<meta property="og:url" content="https://eleven26.github.io/2021/06/08/mongodb/jenssegers%20laravel-mongodb%20%E6%A0%B9%E6%8D%AE%E9%9B%86%E5%90%88%E5%89%8D%E7%BC%80%E8%81%9A%E5%90%88%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="有时候需要根据需要对 MongoDB 的集合进行分集合存储（类似 MySQL 的分表），这样一来 db 下就产生了很多相同前缀的集合，这样一来，我们想知道这一批集合的一些关键状态信息的时候就比较不便，比如想知道某一个前缀所有集合的总大小等等。 一个可行的方法是，通过找到一个模式前缀的所有集合，然后逐个调用 MongoDB 的 collStats 命令来获取单个集合的状态，然后做一个聚合，下面是基于">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-08T01:12:00.000Z">
+<meta property="article:modified_time" content="2021-06-09T06:16:26.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="MongoDB">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2021/06/08/mongodb/jenssegers%20laravel-mongodb%20%E6%A0%B9%E6%8D%AE%E9%9B%86%E5%90%88%E5%89%8D%E7%BC%80%E8%81%9A%E5%90%88%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2021/06/08/mongodb/jenssegers%20laravel-mongodb%20%E6%A0%B9%E6%8D%AE%E9%9B%86%E5%90%88%E5%89%8D%E7%BC%80%E8%81%9A%E5%90%88%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE/","path":"2021/06/08/mongodb/jenssegers laravel-mongodb 根据集合前缀聚合状态数据/","title":"jenssegers laravel-mongodb 根据集合前缀聚合状态数据"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jenssegers laravel-mongodb 根据集合前缀聚合状态数据 | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1-product-%E5%BA%93%E4%B8%8B-xx_-%E5%89%8D%E7%BC%80%E7%9A%84%E6%89%80%E6%9C%89%E9%9B%86%E5%90%88%E7%9A%84%E5%A4%A7%E5%B0%8F%E7%AD%89"><span class="nav-number">1.</span> <span class="nav-text">统计 product 库下
+xx_ 前缀的所有集合的大小等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2021/06/08/mongodb/jenssegers%20laravel-mongodb%20%E6%A0%B9%E6%8D%AE%E9%9B%86%E5%90%88%E5%89%8D%E7%BC%80%E8%81%9A%E5%90%88%E7%8A%B6%E6%80%81%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="jenssegers laravel-mongodb 根据集合前缀聚合状态数据 | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jenssegers laravel-mongodb 根据集合前缀聚合状态数据
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-08 09:12:00" itemprop="dateCreated datePublished" datetime="2021-06-08T09:12:00+08:00">2021-06-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>有时候需要根据需要对 MongoDB 的集合进行分集合存储（类似 MySQL
+的分表），这样一来 db
+下就产生了很多相同前缀的集合，这样一来，我们想知道这一批集合的一些关键状态信息的时候就比较不便，比如想知道某一个前缀所有集合的总大小等等。</p>
+<p>一个可行的方法是，通过找到一个模式前缀的所有集合，然后逐个调用
+MongoDB 的 <a
+target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/reference/command/collStats/">collStats</a>
+命令来获取单个集合的状态，然后做一个聚合，下面是基于 <a
+target="_blank" rel="noopener" href="https://github.com/jenssegers/laravel-mongodb">jenssegers
+mongodb</a> 的一个实现：</p>
+<h2 id="统计-product-库下-xx_-前缀的所有集合的大小等">统计 product 库下
+xx_ 前缀的所有集合的大小等</h2>
+<p>输出的字段说明：</p>
+<ul>
+<li><code>collection_count</code>: <code>xx_</code>
+前缀的集合总数量</li>
+<li><code>total_document_count</code>: <code>xx_</code>
+前缀文档总数量</li>
+<li><code>total_size</code>: <code>xx_</code> 前缀集合总大小</li>
+<li><code>avg_obj_size</code>: <code>xx_</code>
+前缀集合平均单个文档的大小</li>
+<li><code>total_storage_size</code>: <code>xx_</code>
+前缀集合占的总存储大小</li>
+<li><code>total_index_size</code>: <code>xx_</code>
+前缀集合索引总大小</li>
+<li><code>total_bytes_in_cache</code>: <code>xx_</code>
+前缀集合数据当前占用的缓存大小</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$patterns</span> = [</span><br><span class="line">    <span class="string">&#x27;product.xx_&#x27;</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format</span>(<span class="params"><span class="variable">$bytes</span></span>): <span class="title">string</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$bytes</span> &lt; <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> bytes&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$bytes</span> &lt; <span class="number">1024</span> * <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="variable">$bytes</span> = <span class="title function_ invoke__">round</span>(<span class="variable">$bytes</span> / <span class="number">1024</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> Kb&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$bytes</span> &lt; <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="variable">$bytes</span> = <span class="title function_ invoke__">round</span>(<span class="variable">$bytes</span> / <span class="number">1024</span> / <span class="number">1024</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> Mb&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$bytes</span> = <span class="title function_ invoke__">round</span>(<span class="variable">$bytes</span> / <span class="number">1024</span> / <span class="number">1024</span> / <span class="number">1024</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;<span class="subst">&#123;$bytes&#125;</span> Gb&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CollectionStats</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$stats</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$stats</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;stats = <span class="variable">$stats</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toArray</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;collection&#x27;</span>     =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;ns&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;size&#x27;</span>           =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;size&#x27;</span>]),</span><br><span class="line">            <span class="string">&#x27;count&#x27;</span>          =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;avgObjSize&#x27;</span>     =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;avgObjSize&#x27;</span>] ?? <span class="number">0</span>),</span><br><span class="line">            <span class="string">&#x27;storageSize&#x27;</span>    =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;storageSize&#x27;</span>]),</span><br><span class="line">            <span class="string">&#x27;totalIndexSize&#x27;</span> =&gt; <span class="title function_ invoke__">format</span>(<span class="variable">$this</span>-&gt;stats[<span class="string">&#x27;totalIndexSize&#x27;</span>]),</span><br><span class="line"></span><br><span class="line">            <span class="string">&#x27;raw&#x27;</span> =&gt; [</span><br><span class="line">                <span class="string">&#x27;count&#x27;</span>          =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;size&#x27;</span>           =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;size&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;avgObjSize&#x27;</span>     =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;avgObjSize&#x27;</span>] ?? <span class="number">0</span>,</span><br><span class="line">                <span class="string">&#x27;storageSize&#x27;</span>    =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;storageSize&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;totalIndexSize&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;totalIndexSize&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;bytes_in_cache&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;stats[<span class="string">&#x27;wiredTiger&#x27;</span>][<span class="string">&#x27;cache&#x27;</span>][<span class="string">&#x27;bytes currently in the cache&#x27;</span>],</span><br><span class="line">            ],</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$patterns</span> <span class="keyword">as</span> <span class="variable">$pattern</span>) &#123;</span><br><span class="line">    <span class="comment">// $connectionName 连接名</span></span><br><span class="line">    <span class="comment">// $collectionPrefix Collection 前缀</span></span><br><span class="line">    [<span class="variable">$connectionName</span>, <span class="variable">$collectionPrefix</span>] = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;.&#x27;</span>, <span class="variable">$pattern</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="title function_ invoke__">compact</span>(<span class="string">&#x27;connectionName&#x27;</span>, <span class="string">&#x27;collectionPrefix&#x27;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="variable">$collections</span> = <span class="title function_ invoke__">get_collection_names</span>(<span class="variable">$connectionName</span>);</span><br><span class="line">    <span class="variable">$collections</span> = <span class="title function_ invoke__">collect</span>(<span class="variable">$collections</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">filter</span>(function (<span class="variable">$collection</span>) <span class="keyword">use</span> ($<span class="title">collectionPrefix</span>) &#123;</span><br><span class="line">            <span class="title">return</span> <span class="title">Str</span>::<span class="title">startsWith</span>($<span class="title">collection</span>, $<span class="title">collectionPrefix</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">values</span>()</span><br><span class="line">        -&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查看 Collection 的状态：</span></span><br><span class="line">    <span class="comment">// https://docs.mongodb.com/manual/reference/command/</span></span><br><span class="line">    <span class="comment">// https://docs.mongodb.com/manual/reference/command/collStats/#mongodb-dbcommand-dbcmd.collStats</span></span><br><span class="line"></span><br><span class="line">    <span class="variable">$result</span> = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$collections</span> <span class="keyword">as</span> <span class="variable">$collection</span>) &#123;</span><br><span class="line">        <span class="variable">$cursor</span> = DB::<span class="title function_ invoke__">connection</span>(<span class="variable">$connectionName</span>)-&gt;<span class="title function_ invoke__">getMongoDB</span>()-&gt;<span class="title function_ invoke__">command</span>([<span class="string">&#x27;collStats&#x27;</span> =&gt; <span class="variable">$collection</span>]);</span><br><span class="line">        <span class="variable">$res</span>     = <span class="title function_ invoke__">json_decode</span>(<span class="title function_ invoke__">json_encode</span>(<span class="variable">$cursor</span>-&gt;<span class="title function_ invoke__">toArray</span>()[<span class="number">0</span>]), <span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$reply</span>   = <span class="title function_ invoke__">json_encode</span>(<span class="variable">$res</span>, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$result</span>[] = (<span class="keyword">new</span> <span class="title class_">CollectionStats</span>(<span class="variable">$res</span>))-&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$results</span> = <span class="title function_ invoke__">collect</span>(<span class="variable">$result</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;collection_count: &#x27;</span> . <span class="variable">$results</span>-&gt;<span class="title function_ invoke__">count</span>());</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_document_count: &#x27;</span> . <span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.count&#x27;</span>));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.size&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;avg_obj_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">avg</span>(<span class="string">&#x27;raw.avgObjSize&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_storage_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.storageSize&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_index_size: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.totalIndexSize&#x27;</span>)));</span><br><span class="line">    <span class="title function_ invoke__">dump</span>(<span class="string">&#x27;total_bytes_in_cache: &#x27;</span> . <span class="title function_ invoke__">format</span>(<span class="variable">$results</span>-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;raw.bytes_in_cache&#x27;</span>)));</span><br><span class="line">    <span class="keyword">echo</span> PHP_EOL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array:2 [</span><br><span class="line">  &quot;connectionName&quot; =&gt; &quot;product&quot;</span><br><span class="line">  &quot;collectionPrefix&quot; =&gt; &quot;xx_&quot;</span><br><span class="line">]</span><br><span class="line">&quot;collection_count: 222&quot;</span><br><span class="line">&quot;total_document_count: 1664601&quot;</span><br><span class="line">&quot;total_size: 2.24 Gb&quot;</span><br><span class="line">&quot;avg_obj_size: 1.4 Kb&quot;</span><br><span class="line">&quot;total_storage_size: 996.66 Mb&quot;</span><br><span class="line">&quot;total_index_size: 156.34 Mb&quot;</span><br><span class="line">&quot;total_bytes_in_cache: 3.17 Gb&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="其他">其他</h2>
+<p>这个例子是基于 Laravel 的一个库来实现的，不过只是简单地调用了一个
+<code>command</code> 方法，其他语言利用 MongoDB
+提供的库也比较容易可以实现。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MongoDB/" rel="tag"><i class="fa fa-tag"></i> MongoDB</a>
+              <a href="/tags/Laravel/" rel="tag"><i class="fa fa-tag"></i> Laravel</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/03/linux/linux%20%E5%85%B1%E4%BA%AB%E5%BA%93%E6%89%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="linux 共享库找不到的问题">
+                  <i class="fa fa-angle-left"></i> linux 共享库找不到的问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/08/laravel/Laravel%205.5%20%E5%85%B3%E8%81%94%20MongoDB%20whereHas%20%E6%9F%A5%E8%AF%A2%E4%B8%8D%E5%88%B0%E6%95%B0%E6%8D%AE%E7%9A%84%E9%97%AE%E9%A2%98/" rel="next" title="Laravel 5.5 关联 MongoDB whereHas 查询不到数据的问题">
+                  Laravel 5.5 关联 MongoDB whereHas 查询不到数据的问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

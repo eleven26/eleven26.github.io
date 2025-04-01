@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="go 里面，在实际程序运行的过程中，往往会有很多协程在执行，通过启动多个协程的方式，我们可以更高效地利用系统资源。 而不同协程之间往往需要进行通信，不同于以往多线程程序的那种通信方式，在 go 里面是通过 channel （也就是 chan 类型）来进行通信的， 实现的方式简单来说就是，一个协程往 channel 里面写数据，然后其他的协程可以从 channel 中将其读取出来。 （注意：文中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 go chan">
+<meta property="og:url" content="https://eleven26.github.io/2022/11/26/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20chan/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="go 里面，在实际程序运行的过程中，往往会有很多协程在执行，通过启动多个协程的方式，我们可以更高效地利用系统资源。 而不同协程之间往往需要进行通信，不同于以往多线程程序的那种通信方式，在 go 里面是通过 channel （也就是 chan 类型）来进行通信的， 实现的方式简单来说就是，一个协程往 channel 里面写数据，然后其他的协程可以从 channel 中将其读取出来。 （注意：文中的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan1.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan2.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan10.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan5.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan3.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan4.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan6.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan7.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan8.png">
+<meta property="og:image" content="https://eleven26.github.io/images/go/channel/chan9.png">
+<meta property="article:published_time" content="2022-11-26T12:08:30.000Z">
+<meta property="article:modified_time" content="2022-11-28T08:37:53.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/go/channel/chan1.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2022/11/26/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20chan/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2022/11/26/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20chan/","path":"2022/11/26/golang/深入理解 go chan/","title":"深入理解 go chan"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入理解 go chan | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E9%81%93chan%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">通道（chan）的模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">2.</span> <span class="nav-text">多线程为什么不安全？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A7%8D%E5%8F%AF%E8%A1%8C%E7%9A%84%E5%8A%9E%E6%B3%95---%E9%94%81"><span class="nav-number">3.</span> <span class="nav-text">一种可行的办法 - 锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-%E4%B8%AD%E7%9A%84%E5%A4%84%E7%90%86%E5%8A%9E%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">go 中的处理办法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="nav-number">5.</span> <span class="nav-text">进程的几种状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81%E8%B7%9F-channel-%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB"><span class="nav-number">6.</span> <span class="nav-text">进程的几种状态跟 channel
+有什么关系？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#channel-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">7.</span> <span class="nav-text">channel 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-channel"><span class="nav-number">8.</span> <span class="nav-text">如何使用 channel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-chan"><span class="nav-number">8.1.</span> <span class="nav-text">创建 chan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chan-%E8%AF%BB%E5%86%99%E7%9A%84%E5%87%A0%E7%A7%8D%E6%93%8D%E4%BD%9C"><span class="nav-number">8.2.</span> <span class="nav-text">chan 读写的几种操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%86%B2-chan-%E4%B8%8E%E9%9D%9E%E7%BC%93%E5%86%B2-chan"><span class="nav-number">8.3.</span> <span class="nav-text">缓冲 chan 与非缓冲 chan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E7%BC%93%E5%86%B2-chan"><span class="nav-number">8.4.</span> <span class="nav-text">无缓冲 chan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%BC%93%E5%86%B2-chan"><span class="nav-number">8.5.</span> <span class="nav-text">有缓冲 chan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nil-chan"><span class="nav-number">8.6.</span> <span class="nav-text">nil chan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#len-%E5%92%8C-cap"><span class="nav-number">8.7.</span> <span class="nav-text">len 和 cap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#chan-%E7%9A%84%E6%96%B9%E5%90%91"><span class="nav-number">8.8.</span> <span class="nav-text">chan 的方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%98%BB%E5%A1%9E%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%B8%8D%E9%98%BB%E5%A1%9E"><span class="nav-number">9.</span> <span class="nav-text">什么时候阻塞？什么时候不阻塞？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%8F%AA%E6%98%AF%E8%AF%AD%E6%B3%95%E7%B3%96"><span class="nav-number">10.</span> <span class="nav-text">&lt;- 操作符只是语法糖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for...range-%E8%AF%AD%E6%B3%95%E7%B3%96"><span class="nav-number">10.1.</span> <span class="nav-text">for...range 语法糖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select-%E8%AF%AD%E5%8F%A5%E9%87%8C%E9%9D%A2%E4%BD%BF%E7%94%A8-chan"><span class="nav-number">11.</span> <span class="nav-text">select 语句里面使用 chan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">12.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2022/11/26/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20chan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入理解 go chan | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入理解 go chan
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-11-26 20:08:30" itemprop="dateCreated datePublished" datetime="2022-11-26T20:08:30+08:00">2022-11-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>go
+里面，在实际程序运行的过程中，往往会有很多协程在执行，通过启动多个协程的方式，我们可以更高效地利用系统资源。
+而不同协程之间往往需要进行通信，不同于以往多线程程序的那种通信方式，在
+go 里面是通过 <code>channel</code> （也就是 <code>chan</code>
+类型）来进行通信的， 实现的方式简单来说就是，一个协程往
+<code>channel</code> 里面写数据，然后其他的协程可以从
+<code>channel</code> 中将其读取出来。 （注意：文中的 <code>chan</code>
+表示是 go 语言里面的 <code>chan</code> 关键字，而 <code>channel</code>
+只是我们描述它的时候用的一个术语）</p>
+<h2 id="通道chan的模型">通道（chan）的模型</h2>
+<p>在开始讲 <code>channel</code>
+之前，也许了解一下它要解决什么样的问题会比较好，所以先来聊聊一些背景知识。</p>
+<p>关于通道，一个比较潦草的图大概是下面这个样子的：</p>
+<p><img src="/images/go/channel/chan1.png" /></p>
+<p>在图中，协程 <code>A</code> 将消息 <code>msg</code> 写入到
+<code>channel</code> 中，然后协程 <code>B</code> 从 <code>channel</code>
+中读取消息，如果 <code>B</code> 没来得及从中读取消息，那么消息会在
+<code>chan</code> 中存留。</p>
+<p>这就是 go
+的哲学：<strong>通过通信来实现共享内存</strong>。这不同于以往的多线程程序，在多线程程序中，往往是一块内存在不同线程之间进行共享，
+然后通过一些保护机制，保证不允许多个线程同时对这块内存进行读写，比如通过
+<code>synchronized</code> 关键字。
+可能很多人都没有真正写过多线程的程序，但好像我们都有一种共识，多线程不安全。</p>
+<h2 id="多线程为什么不安全">多线程为什么不安全？</h2>
+<p>这是因为我们的程序除了通过共享一段内存之外，每一个 CPU
+核心都有它本地的缓存，而 CPU 上的缓存是不共享的， 而线程可以同时在不同的
+CPU 上执行。CPU 的执行过程是，先从内存中读取数据到 CPU 中，CPU
+做完计算再更新到内存中。
+这样一来，就有可能存在不同线程对同一段内存同时读写的问题。</p>
+<p>这是什么问题呢？比如，<code>A</code>
+线程计算完了但是还没有写回内存的时候，<code>B</code> 线程从内存读取出了
+<code>A</code> 线程写入计算结果前的数据，
+但是按我们的逻辑，<code>B</code> 应该是拿 <code>A</code>
+线程的结算结果来进行逻辑运算的，这样就会出现数据不一致了，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="type">Main</span> <span class="variable">main</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Main</span>();</span><br><span class="line">        main.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 a 加 1</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;</span><br><span class="line">        a++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="comment">// 启动两个线程来对 a 进行加 1 的操作</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">                add();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">                add();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">// 启动线程</span></span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 等待线程结束</span></span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 我们的预期结果是 20000，但是实际运行显示了 14965</span></span><br><span class="line">        System.out.println(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，我们预期的运行结果是 <code>20000</code>
+的，但是实际得到了
+<code>14965</code>（实际上，每次执行结果都会不一样），这也就是我上面所说的问题，
+其中有一个线程读取到了另一个线程的计算结果写入内存前的数据，也就是说，这个线程的计算结果被覆盖了，
+因为线程将计算结果写回内存的时候是相互覆盖的。</p>
+<blockquote>
+<p>所以我们可以回答刚才的问题了，多线程不安全是因为多个线程可以对同一段内存进行读写，这就存在其中一个线程还没来得及更新内存，
+然后另一个线程读取到的数据是旧的。（也即数据竞争的问题）</p>
+</blockquote>
+<p>具体可以看下图：</p>
+<p><img src="/images/go/channel/chan2.png" /></p>
+<blockquote>
+<p>CPU 执行的时候，会需要将数据从内存读取到 CPU
+中，计算完毕之后，再更新内存里面的数据。</p>
+</blockquote>
+<p>错乱发生的过程大概如下：</p>
+<ol type="1">
+<li><code>CPU 1</code> 先计算完了，计算的结果是
+<code>a = 3</code>，但是还没来得及写入内存</li>
+<li><code>CPU 2</code> 也从内存里面获取 <code>a</code>
+来进行计算，但是这个时候 <code>a</code> 还没有被 <code>CPU 1</code>
+更新，所以 <code>CPU 2</code> 拿到的还是 2</li>
+<li><code>CPU 2</code> 进行计算的时候，<code>CPU 1</code>
+将它的计算结果写入了内存，所以这个时候内存中的 <code>a</code> 是 3</li>
+<li><code>CPU 2</code> 计算完毕，将等于 2 的变量 <code>a</code> 加 1
+得到结果 3</li>
+<li><code>CPU 2</code> 将结果 3 写入到内存，这个时候 <code>a</code>
+的内存被更新，但是结果依然是 3</li>
+</ol>
+<h2 id="一种可行的办法---锁">一种可行的办法 - 锁</h2>
+<p>其中一种可行的办法就是，给 <code>add</code> 方法加上
+<code>synchronized</code> 关键字：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;</span><br><span class="line">    a++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个时候，在我们的代码中，对 <code>a</code> 读写的代码都被
+<code>synchronized</code>
+保护起来了，在这段更新之后的代码中，我们得到了正确的结果
+<code>20000</code>。</p>
+<blockquote>
+<p><code>a++</code> 其实包含了读和写两个操作，程序运行的时候，会先将 a
+读取出来，将其加上 1，然后写回到内存中。</p>
+</blockquote>
+<p><code>synchronized</code>
+是同步锁，它修饰的方法不允许多个线程同时执行。<code>synchronized</code>
+锁的粒度可大可小，粒度太大的话对性能影响也较大。</p>
+<blockquote>
+<p>正如我们所看到的那样，<code>synchronized</code>
+允许修饰一段代码，但是在实际中我们往往只是想保护其中某一个变量而已，
+如果直接使用 <code>synchronized</code>
+关键字来修饰一大段代码，那就意味着一个线程在执行这段代码的时候，其他线程就只能等待，
+但是实际上，其中那些不涉及数据竞争的代码我们也无法执行，这样效率自然会降低，具体降低多少，取决于我们
+<code>synchronized</code> 块的代码有多大。</p>
+</blockquote>
+<h2 id="go-中的处理办法">go 中的处理办法</h2>
+<p>上面我们说到的多线程是通过共享内存来进行通信的，而在 go 里面，采用了
+CSP（communicating sequential processes）并发模型， CSP
+模型用于描述两个独立的并发实体通过共享
+<code>channel</code>（管道）进行通信的并发模型。</p>
+<p>CSP 是一套很复杂的东西，go 语言并没有完全实现它，仅仅是实现了
+<code>process</code> 和 <code>channel</code>
+这两个概念。<code>process</code> 就是 go 语言 中的
+<code>goroutine</code>，每个 <code>goroutine</code> 之间是通过
+<code>channel</code> 通讯来实现数据共享的。</p>
+<p>然后我们上面说到，java 里面的 <code>synchronized</code>
+关键字的粒度可能会比较大，这个是相比 go 里面的 <code>channel</code>
+而言的， 在 go 里面，我们的代码在通信过程中很常见的一种阻塞场景是：</p>
+<ul>
+<li><code>goroutine</code> 需要从 <code>channel</code>
+读取数据才能继续执行，但是 <code>channel</code> 里面还没数据，这个时候
+<code>goroutine</code> 需要等待（会阻塞）另一个 <code>goroutine</code>
+往 <code>channel</code> 写入数据。</li>
+</ul>
+<p>对于这种场景，它隐含的逻辑是，阻塞的这个 <code>goroutine</code>
+需要等待其他 <code>goroutine</code> 的结果才能继续往下执行，也就是 CSP
+中的 <code>sequential</code>。下图是实际运行中的 <code>chan</code>：</p>
+<p><img src="/images/go/channel/chan10.png" /></p>
+<p>我们上面的 <code>chan</code>
+模型那个图，读和写都只有一个协程，但在实际中，读 <code>chan</code> 和写
+<code>chan</code> 的协程都有一个队列来保存。
+我们需要明确的一点事实是：<strong>队列中的协程会一个接一个执行，队列头的协程先执行，然后我们对
+<code>chan</code> 的读写是按顺序来读写的，先取 <code>chan</code>
+队列头的元素，然后下一个元素</strong>。</p>
+<p>对应到上面 java 这个例子，我们在 go
+里面可以怎么做呢？我们先把没有锁的 java 代码先写成 go 的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(ch <span class="keyword">chan</span> <span class="type">int</span>, done <span class="keyword">chan</span>&lt;- <span class="keyword">struct</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">		a++</span><br><span class="line">	&#125;</span><br><span class="line">	done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ch 充当协程之间同步的角色</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">	<span class="comment">// 这里可以传任意数字</span></span><br><span class="line">	ch &lt;- <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> add(ch, done)</span><br><span class="line">	<span class="keyword">go</span> add(ch, done)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 等待 2 个协程执行完毕</span></span><br><span class="line">	&lt;-done</span><br><span class="line">	&lt;-done</span><br><span class="line">	fmt.Println(a) <span class="comment">// 15504 每次结果不一样</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 go 里面，我们可以把 add 方法改成下面这个样子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(ch <span class="keyword">chan</span> <span class="type">int</span>, done <span class="keyword">chan</span>&lt;- <span class="keyword">struct</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">		<span class="comment">// 阻塞，只有另外一个协程往 ch 里面写入数据的时候，</span></span><br><span class="line">		<span class="comment">// &lt;-ch 才得以解除阻塞状态</span></span><br><span class="line">		&lt;-ch</span><br><span class="line">		<span class="comment">// 这一行同一时刻只能一个协程执行</span></span><br><span class="line">		a++</span><br><span class="line">		<span class="comment">// 往 ch 写入数据，</span></span><br><span class="line">		<span class="comment">// 等待从 ch 中读取数据的协程得以继续执行</span></span><br><span class="line">		ch &lt;- i</span><br><span class="line">	&#125;</span><br><span class="line">	done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种写法看起来很笨拙，我们在实际使用中可能会稍有不同，所以不需要太纠结这个例子的合理性，这里想表达的是：<strong>在
+go 中，我们的协程使用 <code>chan</code> 的时候只会阻塞在
+<code>chan</code>
+读写的地方，其他代码不受影响，当然，这个例子也没能很好体现。</strong></p>
+<blockquote>
+<p>假设我们有很大一段代码，但是涉及到数据竞争的时候，协程只会阻塞在
+<code>chan</code>
+读写的那一行代码上。这样一来我们就不用通过锁来覆盖一大段代码。</p>
+</blockquote>
+<p>这里，我们可以看到 <code>chan</code>
+其中一个很明显的优势是，我们没有了 <code>synchronized</code>
+那种大粒度的锁，我们的 <code>goroutine</code> 只会阻塞在某一个
+<code>channel</code> 上， 在读取 <code>channel</code>
+之前的代码，<code>goroutine</code>
+都是可以执行的，这样就在语言层面帮我们解决了一个很大的问题，
+因为粒度更小，我们的代码自然也就能处理更大的并发请求了。</p>
+<h2 id="进程的几种状态">进程的几种状态</h2>
+<p>在开始讲述 <code>channel</code>
+之前，再来回忆一下进程的几种状态会便于我们理解。</p>
+<p>我们知道，我们的电脑上，同一时刻会有很多进程一直在运行，但是我们也发现很多进程的
+CPU 占用其实都是 <code>0%</code>，也就是不占用 CPU。
+其实进程会有几种状态，进程不是一直在运行的，一般来说，会有
+<code>执行</code>、<code>阻塞</code>、<code>就绪</code>
+几种状态，进程不是运行态的时候，那它就不会占用你的 CPU，因此会看到 CPU
+占用是 <code>0%</code>，它们之间的转换如下图：</p>
+<p><img src="/images/go/channel/chan5.png" /></p>
+<ul>
+<li><code>执行</code>：这表示进程正在运行中，是正在使用 CPU
+的进程。在就绪状态的进程会在得到 <code>CPU</code>
+时间片的时候得以执行。</li>
+<li><code>阻塞</code>：这表示进程因为某些需要的资源得不到满足而挂起了（比如，正在进行磁盘读写），这种状态下，是不用占用
+<code>CPU</code> 资源的。</li>
+<li><code>就绪</code>：这表示一个状态所需要的资源都准备好了，可以继续执行了。</li>
+</ul>
+<h2 id="进程的几种状态跟-channel-有什么关系">进程的几种状态跟 channel
+有什么关系？</h2>
+<p>在 go
+里面，其实协程也存在类似的调度机制，在协程需要的资源得不到满足的时候，也会被阻塞，然后协程调度器会去执行其他可以执行的协程。</p>
+<p>比如下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">	<span class="comment">// 这个协程在 main 协程序阻塞的时候依然在执行</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// 陷入睡眠状态</span></span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">		<span class="comment">// 往 done 这个 chan 写入数据</span></span><br><span class="line">		done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="comment">// main 协程陷入阻塞状态</span></span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中 <code>done &lt;- struct&#123;&#125;&#123;&#125;</code> 这一行往
+<code>done</code> 这个 <code>chan</code> 写入了数据，之前一直在等待
+<code>chan</code> 的 <code>main</code>
+协程的阻塞状态解除，得以继续执行。</p>
+<blockquote>
+<p>goroutine 在等待 chan 返回数据的时候，会陷入阻塞状态。一个因为读取
+chan 陷入阻塞状态的 goroutine 在获取到数据的时候，会继续往后执行。</p>
+</blockquote>
+<h2 id="channel-是什么">channel 是什么？</h2>
+<p>我们在文章开头的第一张图，其实不是很准确。在 go
+里面，<code>channel</code>
+实际上是一个队列（准确来说是环形队列），大概长得像下面这样：</p>
+<p><img src="/images/go/channel/chan3.png" /></p>
+<p>队列我们都知道，我们可以从队列头读取数据，也可以将数据推入到队列尾。上图中，<code>1</code>
+是队列头，当我们从 <code>channel</code> 读取数据的时候， 读取到的是
+<code>1</code>，<code>6</code> 是队列尾，当我们往 <code>channel</code>
+中写入数据的时候，写入的位置是 <code>6</code> 后面的那个空间。</p>
+<blockquote>
+<p><code>channel</code> 是一个环形队列，goroutine 通过 channel
+通信的方式是，一个 goroutine 将数据写入队列尾，然后另一个 goroutine
+将数据从队列头读数据。</p>
+</blockquote>
+<h2 id="如何使用-channel">如何使用 channel</h2>
+<p>我们再仔细看看上面的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">		<span class="comment">// 发送取消信号</span></span><br><span class="line">		done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="comment">// 等待结束信号</span></span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里面包含了使用 <code>channel</code> 的基本用法：</p>
+<ul>
+<li><code>done := make(chan struct&#123;&#125;)</code>：创建
+<code>channel</code>，在 go 里面是使用 <code>chan</code>
+关键字来代表一个 <code>channel</code> 的。而在这个语句中，创建了一个接收
+<code>struct&#123;&#125;</code> 类型数据的 <code>chan</code>。</li>
+<li><code>done &lt;- struct&#123;&#125;&#123;&#125;</code>：写入到
+<code>chan</code>，这里，我们创建了一个空结构体，然后通过
+<code>&lt;-</code> 操作符将这个空结构体写入到了 <code>chan</code>
+中。</li>
+<li><code>&lt;-done</code>：从 <code>chan</code> 中读取数据，也是使用了
+<code>&lt;-</code> 操作符，然后我们丢弃了它的返回结果。</li>
+</ul>
+<p>这段代码的执行过程如下图：</p>
+<p><img src="/images/go/channel/chan4.png" /></p>
+<ol type="1">
+<li><code>CPU 1</code> 上启动了 <code>main</code> 协程</li>
+<li>接着在 <code>main</code> 协程中通过 <code>go func</code>
+启动了一个新的协程，go 的调度机制允许不同的协程在不同的线程上执行，所以
+<code>main</code> 执行的时候，<code>go func</code> 也在执行，然后，因为
+<code>done</code> 这个 <code>chan</code> 中没有数据，所以
+<code>main</code> 协程陷入阻塞。</li>
+<li><code>go func</code> 在短暂的睡眠之后，输出了
+<code>done</code>，然后向名字为 <code>done</code> 这个 <code>chan</code>
+中发送了一个空结构体实例。</li>
+<li>在 <code>done</code> 里面没有写入数据之前，<code>main</code>
+一直阻塞，在 <code>go func</code> 写入数据之后，<code>main</code> 的
+<code>&lt;-done</code>，解除了阻塞状态，得以继续执行</li>
+<li><code>5</code> 和 <code>6</code>
+因为可能是在不同的线程上执行的，所以哪一个先结束其实不一定。</li>
+</ol>
+<p>下面详细说说 <code>channel</code> 的具体用法</p>
+<h3 id="创建-chan">创建 chan</h3>
+<blockquote>
+<p><code>chan</code> 是 go 的关键字，<code>channel</code> 是我用来描述
+<code>chan</code> 所表示的东西的一个术语而已，我们在 go
+里面使用的话还是得用 <code>chan</code> 关键字。</p>
+</blockquote>
+<p>创建 <code>chan</code> 是通过 <code>make</code> 关键字创建的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+<p><code>make</code> 函数的参数是 <code>chan</code>
+然后加一个数据类型，这个数据类型是我们的 <code>chan</code>
+这个环形队列里面所能存储的数据类型。 不能传递不同的类型进一个
+<code>chan</code> 里面。</p>
+<p>也可以传递第二个参数作为 <code>chan</code> 的容量，比如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>这里第二个参数表明了 <code>ch</code> 这个 <code>chan</code>
+到底能存储多少个 <code>int</code> 类型的数据。</p>
+<blockquote>
+<p>不传递或者传 0 表示 <code>chan</code> 本身不能存储数据，go
+底层会直接在两个 goroutine 之间传递，而不经过 <code>chan</code> 的复制。
+（如果第二个参数大于 0，我们往 <code>chan</code>
+写数据的时候，会先复制到 <code>chan</code> 这个数据结构，然后其他的
+<code>goroutine</code> 从 <code>chan</code>
+中读取数据的时候，<code>chan</code> 会将数据复制到这个
+<code>goroutine</code> 中）</p>
+</blockquote>
+<h3 id="chan-读写的几种操作">chan 读写的几种操作</h3>
+<ul>
+<li>写：<code>ch &lt;- x</code>，将 <code>x</code> 发送到 channel
+中</li>
+<li>读：<code>x = &lt;-ch</code>，从 <code>channel</code> 中接收，保存到
+<code>x</code> 中</li>
+<li>读，但是忽略返回值（用作协程同步，上面的例子就是）：<code>&lt;-ch</code>，从
+<code>ch</code> 中接收，但是忽略接收到的结果</li>
+<li>读，并且判断是否是关闭前发送的：<code>x, ok := &lt;-ch</code>，这里使用了两个返回值接收，第二个返回值表明了接收到的
+<code>x</code> 是不是 <code>chan</code>
+关闭之前发送进去的，<code>true</code> 就代表是。</li>
+</ul>
+<p>需要注意的是 <code>&lt;-ch</code> 和 <code>ch&lt;-</code>
+这两个看起来好像一样，但是效果是完全不同的，<code>ch</code> 位于
+<code>&lt;-</code> 操作符右边的时候， 表示是</p>
+<blockquote>
+<p>有一个简单区分的方法是，将 &lt;-
+想象为数据流动的方向，具体来说就是看数据是流向 chan 还是从 chan
+流出，流向 chan 就是写入到 chan，从 chan 流出就是读取。</p>
+</blockquote>
+<h3 id="缓冲-chan-与非缓冲-chan">缓冲 chan 与非缓冲 chan</h3>
+<p>上面我们说到，创建 <code>chan</code> 的时候可以传递第二个参数表示
+<code>chan</code> 的容量是多少，这个容量表示的是， 在没有 goroutine
+从这个 <code>chan</code> 读取数据的时候，<code>chan</code>
+能存放多少数据，也就是 <code>chan</code> 底层环形队列的长度。</p>
+<p>下面描述了缓冲的实际场景：</p>
+<h3 id="无缓冲-chan">无缓冲 chan</h3>
+<p>还是用我们上面的那段代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;done&quot;</span>)</span><br><span class="line">		done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里 <code>make(chan struct&#123;&#125;)</code>，只有一个参数，所以
+<code>done</code> 是一个无缓冲的 <code>chan</code>，这种
+<code>chan</code> 会在发送的时候阻塞，直到有另一个协程从
+<code>chan</code> 中获取数据。</p>
+<p><img src="/images/go/channel/chan6.png" /></p>
+<h3 id="有缓冲-chan">有缓冲 chan</h3>
+<p>有缓冲的 <code>chan</code>
+在协程往里面写入数据的时候，可以进行缓冲。<strong>缓冲的作用是，在需要读取
+<code>chan</code> 的 goroutine 的处理速度比较慢的时候，写入
+<code>chan</code> 的 goroutine 也可以持续运行，直到写满
+<code>chan</code> 的缓冲区</strong></p>
+<p><img src="/images/go/channel/chan7.png" /></p>
+<p>上图的 <code>chan</code> 是一个有缓冲的 <code>chan</code>，在
+<code>chan</code> 里面的数据还没来得及被接收的时候，<code>chan</code>
+可以充当一个缓冲的角色。但是，如果 <code>chan</code>
+的数据一直没有被接收，然后满了的时候，往 <code>chan</code>
+写入数据的协程依然会陷入阻塞。但这种阻塞状态会在 <code>chan</code>
+的数据被读取的时候解除。</p>
+<p>下面是一个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">	<span class="comment">// 定义一个缓冲数量为 2 的 chan</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">2</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="comment">// 模拟比较慢的处理速度</span></span><br><span class="line">			time.Sleep(time.Second)</span><br><span class="line"></span><br><span class="line">			i, ok := &lt;-ch</span><br><span class="line">			<span class="comment">// ok 为 false 表示 ch 已经关闭并且数据已经被读取完</span></span><br><span class="line">			<span class="comment">// 这个时候中断循环</span></span><br><span class="line">			<span class="keyword">if</span> !ok &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			fmt.Printf(<span class="string">&quot;[%d] get from ch: %d\n&quot;</span>, time.Now().Unix(), i)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 处理完数据之后，发送结束的信号</span></span><br><span class="line">		done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// 在循环结束之后关闭 chan</span></span><br><span class="line">		<span class="keyword">defer</span> <span class="built_in">close</span>(ch)</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">			<span class="comment">// 在写入 2 个数之后，会陷入阻塞状态</span></span><br><span class="line">			<span class="comment">// 直到上面那个协程从 ch 读取出数据，ch 才会有空余的地方可以继续接收数据</span></span><br><span class="line">			ch &lt;- i</span><br><span class="line">			fmt.Printf(<span class="string">&quot;[%d] write to ch: %d\n&quot;</span>, time.Now().Unix(), i)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="comment">// 收到结束信号，解除阻塞状态，继续往下执行</span></span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1669381752] write to ch: 0</span><br><span class="line">[1669381752] write to ch: 1</span><br><span class="line">[1669381753] get from ch: 0</span><br><span class="line">[1669381753] write to ch: 2</span><br><span class="line">[1669381754] get from ch: 1</span><br><span class="line">[1669381755] get from ch: 2</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，写入 <code>chan</code> 的协程在 <code>1669381752</code>
+的时候没有写入了，然后在读取 <code>chan</code> 的协程从
+<code>chan</code> 中读取了一个数出来后才能继续写入。</p>
+<h3 id="nil-chan">nil chan</h3>
+<p><code>chan</code> 的零值是 <code>nil</code>，<code>close</code> 一个
+<code>nil</code> 通道会引发 <code>panic</code>。往 <code>nil</code>
+通道写入或从中读取数据会永久阻塞：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> ch <span class="keyword">chan</span> <span class="type">int</span></span><br><span class="line">	&lt;-ch</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行的时候会报错：<code>fatal error: all goroutines are asleep - deadlock!</code></p>
+<h3 id="len-和-cap">len 和 cap</h3>
+<ul>
+<li><code>len</code>：通过 <code>len</code> 我们可以查询一个
+<code>chan</code> 的长度，也就是有多少被发送到这个 <code>chan</code>
+但是还没有被接收的值。</li>
+<li><code>cap</code>：通过 <code>cap</code>
+可以查询一个容道的容量，也就是我们传给 <code>make</code>
+函数的第二个参数，它表示 <code>chan</code> 最多可以容纳多少数据。</li>
+</ul>
+<blockquote>
+<p>如果 <code>chan</code> 是 <code>nil</code>，那么 <code>len</code> 和
+<code>cap</code> 都会返回 0。</p>
+</blockquote>
+<h3 id="chan-的方向">chan 的方向</h3>
+<p><code>chan</code>
+还有一个非常重要的特性就是它是可以有方向的，这里说的方向指的是，数据的流向。在我们上面的例子中，数据既可以流入
+<code>chan</code>，也可以从 <code>chan</code>
+中流出，因为我们没有指定方向，没有指定那么 <code>chan</code>
+就是双向的。</p>
+<p>具体来说，有以下几种情况：</p>
+<ul>
+<li><code>chan</code>，没有指定方向，既可以读又可以写。</li>
+<li><code>chan&lt;-</code>，只写 <code>chan</code>，只能往
+<code>chan</code> 中写入数据，如果从中读数据的话，编译不会通过。</li>
+<li><code>&lt;-chan</code>，只读 <code>chan</code>，只能从
+<code>chan</code>
+中读取数据，如果往其中写入数据的话，编译不会通过。</li>
+</ul>
+<p>另外，<strong>无方向的 <code>chan</code> 可以转换为
+<code>chan&lt;-</code> 或者
+<code>&lt;-chan</code>，但是反过来不行</strong></p>
+<p>在实际使用 <code>chan</code> 的时候，在某些地方我们其实是只允许往
+<code>chan</code> 里面写数据，然后另一个地方只允许从 <code>chan</code>
+中读数据。比如下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> done = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ch 是只写 chan，如果在这个函数里面从 ch 读取数据编译不会通过</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">producer</span><span class="params">(ch <span class="keyword">chan</span>&lt;- <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">		ch &lt;- i</span><br><span class="line">		fmt.Printf(<span class="string">&quot;produce %d\n&quot;</span>, i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 发送 3 个数之后，关闭 chan</span></span><br><span class="line">	<span class="built_in">close</span>(ch)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ch 是只读 chan，如果在这个函数里往 ch 写入数据编译不会通过</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">consumer</span><span class="params">(ch &lt;-<span class="keyword">chan</span> <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		i, ok := &lt;-ch</span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			<span class="comment">// chan 的数据已经被全部接收完，</span></span><br><span class="line">			<span class="comment">// 发送 done 信号</span></span><br><span class="line">			done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;consume %d\n&quot;</span>, i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	nums := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">10</span>)</span><br><span class="line">	<span class="keyword">go</span> producer(nums)</span><br><span class="line">	<span class="keyword">go</span> consumer(nums)</span><br><span class="line">	<span class="comment">// 收到结束信号之后继续往下执行</span></span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>producer</code> 这个协程里面往 <code>chan</code>
+写入数据，写入 3 个数之后关闭，然后 <code>consumer</code> 这个协程序从
+<code>chan</code> 读取数据， 在读取完所有数据之后，发送结束信号（通过
+<code>done</code> 这个 <code>chan</code>），最后 <code>main</code>
+协程收到 <code>done</code> 信号后退出。</p>
+<blockquote>
+<p>这样有个好处就是，从语法层面限制了对 chan
+的读写操作。而不用担心有误操作。</p>
+</blockquote>
+<h2 id="什么时候阻塞什么时候不阻塞">什么时候阻塞？什么时候不阻塞？</h2>
+<p>在开始这个话题之前，很有必要说一下，go 里面 <code>chan</code>
+的一些实现原理，在 <code>chan</code> 的实现中，维护了三个队列：</p>
+<ul>
+<li>数据缓冲队列（<code>chan</code>）：也就是上面说的环形队列，是一种先进先出结构（<code>FIFO</code>，"First
+In, First Out"），它的长度是 <code>chan</code>
+的容量。此队列存放的都是同一种类型的元素。</li>
+<li>接收数据<strong>协程</strong>队列（<code>recvq</code>）：当
+<code>chan</code>
+里面没有数据可以读取的时候，这个队列会有数据，这个队列中的协程都在等待从
+<code>chan</code> 中读取数据。</li>
+<li>发送数据<strong>协程</strong>队列（<code>sendq</code>）：当数据缓冲队列满了的时候（又或者如果是一个无缓冲的
+<code>chan</code>），那么这个队列不为空，这个队列中的协程都在等待往
+<code>chan</code> 中写入数据。</li>
+</ul>
+<p>大家在实际使用的时候可以参考一下下图，下图列出了对 <code>chan</code>
+操作的所有场景：</p>
+<p><img src="/images/go/channel/chan8.png" /></p>
+<p>对于阻塞或者非阻塞，其实有一个很简单的判断标准，下面描述了所有会阻塞的情况：</p>
+<ul>
+<li><strong>发送：如果没有地方能存放发送的数据，则阻塞</strong>，具体有下面几种情况：
+<ul>
+<li><code>nil chan</code></li>
+<li>有缓冲但是缓冲满了</li>
+<li>无缓冲并且没有协程在等待从 <code>chan</code> 中读取数据</li>
+</ul></li>
+<li><strong>接收：如果没有可以读取的数据，则阻塞</strong>，具体有下面几种情况：
+<ul>
+<li><code>nil chan</code></li>
+<li>有缓冲，但是缓冲区空的</li>
+<li>无缓冲，但是没有协程正在往 <code>chan</code> 中发送数据</li>
+</ul></li>
+</ul>
+<p>大家觉得抽象可以结合下面这个图想象一下：</p>
+<p><img src="/images/go/channel/chan9.png" /></p>
+<p>结合现实场景想象一下，我们可以把 <code>chan</code>
+想象成为配送员，<code>sendq</code> 想象为商家，<code>recvq</code>
+想象成用户，配送员装餐点的箱子想象成缓冲区：</p>
+<p>一个假设的前提：假设商家只能在送出去一份餐点后，才能开始制作下一份餐点。</p>
+<ul>
+<li>发送
+<ul>
+<li><code>nil chan</code>。没有配送员了，商家的餐点肯定是送不出去了，商家只能等着关门大吉了。</li>
+<li>有缓冲但是缓冲满了。配送员会有一个箱子（缓冲区）来存放外卖，但是这个箱子现在满了，虽然接了一个单，但是没有办法再从商家那里取得外卖来送了</li>
+<li>无缓冲并且没有协程在等待从 <code>chan</code>
+中读取数据。这个外卖是用户自取的订单，但是用户联系不上。（当然现实中商家不用等，我们假设现在商家只能送出去一份后才能开始制作下一份）</li>
+</ul></li>
+<li>接收
+<ul>
+<li><code>nil chan</code>。没有配送员，用户的餐没人送，用户只能等着饿死了。</li>
+<li>有缓冲，但是缓冲区空的。商家还没制作好餐点，配送员没有取到餐，这个时候用户打电话给配送员叫他快点送，但是这个时候配送员也没有办法，因为他也没有拿到用户的餐点。这个时候用户快饿死了，但也没有办法，只有干等着，先吃饱才能搬砖。</li>
+<li>无缓冲，但是没有协程正在往 <code>chan</code>
+中发送数据。这天，用户是下了自取的订单，然后去到店里的时候，商家还没做好，这个时候，用户啥事也干不了，也只能等了。</li>
+</ul></li>
+</ul>
+<p><strong>需要注意的是，上图中发送和接收只有一个协程，但是在实际中，正如这一节开头讲的那样，发送和接收都维护了一个队列的。</strong>
+对应到上面那个现实的例子，那就是配送员可以同时从多个商家那里取餐，也可以同时给多个用户送餐，这个过程，有可能多个商家在制作需要这个配送员配送的餐点，也有可能有多个用户在等着这个配送员送餐。</p>
+<h2 id="操作符只是语法糖">&lt;- 操作符只是语法糖</h2>
+<p>在 go 里面我们操作 <code>chan</code> 的方式好像非常简单，就通过
+<code>&lt;-</code> 操作符就已经绰绰有余了，这也是 go
+的设计理念吧，尽量把语言设计得简单。
+（但是，<strong>简单并不容易</strong>）但是，从另外一个角度看，go 把对
+<code>chan</code> 的操作简化成我们现在看到的这个样子，也说明了
+<code>chan</code> 在 go 里面的地位（一等公民）。</p>
+<p>在 go 中，<code>chan</code>
+实际上是一个结构体（<code>runtime/chan.go</code> 里面的
+<code>hchan</code>
+结构体），而且，还是一个非常复杂的结构体，但是我们在使用的时候却非常简单，
+这其实是 go
+设计者给开发者提供的一种语法糖，直接在语法层面极大地简化了开发者对
+<code>chan</code> 的使用，</p>
+<p>如果没有这个语法糖，那就需要开发者自己去创建 <code>hchan</code>
+结构体，然后发送或者接收的时候还需要调用这个结构体的方法。
+相比之下，<code>&lt;-</code>
+就写一个操作符就行了，而且这个符号还非常形象，指向哪就代表了数据是流向
+<code>chan</code> （写）还是从 <code>chan</code> 流出（读）。</p>
+<h3 id="for...range-语法糖">for...range 语法糖</h3>
+<p>我们上面说过了，从 <code>chan</code>
+读取数据的时候，可能需要用两个值来接收 <code>chan</code>
+的返回值，第二个值用来判断接收到的值是否是 <code>chan</code>
+关闭之前发送的。</p>
+<p>而 <code>for...range</code> 语法也可以用来从 <code>chan</code>
+中读取数据，它会循环，直到 <code>chan</code>
+关闭，这样直接免去了我们判断的操作，比如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	nums := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;send %d\n&quot;</span>, i)</span><br><span class="line">			nums &lt;- i</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(nums)</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="comment">// 传统写法</span></span><br><span class="line">		<span class="comment">//for &#123;</span></span><br><span class="line">		<span class="comment">//	num, ok := &lt;-nums</span></span><br><span class="line">		<span class="comment">//	if !ok &#123;</span></span><br><span class="line">		<span class="comment">//		break</span></span><br><span class="line">		<span class="comment">//	&#125;</span></span><br><span class="line">		<span class="comment">//	fmt.Printf(&quot;receive %d\n&quot;, num)</span></span><br><span class="line">		<span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// range 语法糖</span></span><br><span class="line">		<span class="keyword">for</span> num := <span class="keyword">range</span> nums &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;receive %d\n&quot;</span>, num)</span><br><span class="line">		&#125;</span><br><span class="line">		done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="select-语句里面使用-chan">select 语句里面使用 chan</h2>
+<p>go 里面有一个关键字 <code>select</code>，可以让我们同时监听几个
+<code>chan</code>，在任意一个 <code>chan</code>
+有数据的时候，<code>select</code> 里面的 <code>case</code>
+块得以执行：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	ch2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ch1 会先收到数据</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		ch1 &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second * <span class="number">2</span>)</span><br><span class="line">		ch2 &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// select 会阻塞，直到其中某一个分支收到数据</span></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">		<span class="comment">// 执行这一行代码</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;from ch1&quot;</span>)</span><br><span class="line">	<span class="keyword">case</span> &lt;-ch2:</span><br><span class="line">		<span class="comment">// 这一行不会被执行</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;from ch2&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>select-case</code> 的用法类似于
+<code>switch-case</code>，也有一个 <code>default</code> 语句，在
+<code>select</code> 里面</p>
+<ul>
+<li>如果 <code>default</code> 之前的 <code>case</code> 都不满足，则执行
+<code>default</code> 块的代码。</li>
+<li>如果没有 <code>default</code> 语句，则会一直阻塞，直到某一个
+<code>case</code> 上面的 <code>chan</code> 返回（有数据、或者
+<code>chan</code> 被关闭都会返回）</li>
+</ul>
+<p>当然，<code>case</code> 后面可以从 <code>chan</code>
+读取数据，也可以往 <code>chan</code> 写数据，比如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="comment">// 往 nil chan 写入数据会阻塞</span></span><br><span class="line">	<span class="keyword">var</span> ch2 <span class="keyword">chan</span> <span class="type">int</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// ch1 会先收到数据</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		ch1 &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 会阻塞，直到其中一个 case 返回</span></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">		<span class="comment">// 执行这一行代码</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;from ch1&quot;</span>)</span><br><span class="line">	<span class="keyword">case</span> ch2 &lt;- <span class="number">1</span>: <span class="comment">// 永远不会满足，因为 ch2 是 nil</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;from ch2&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>select</code> 的另外一种很常见的用法是，等待一个
+<code>chan</code> 和一个定时器（实现控制超时的功能），比如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ch1 一秒后才收到数据</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		ch1 &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">		fmt.Println(<span class="string">&quot;from ch1&quot;</span>)</span><br><span class="line">	<span class="keyword">case</span> &lt;-time.After(time.Millisecond * <span class="number">100</span>):</span><br><span class="line">		<span class="comment">// 执行如下代码，因为这个 case 在 100ms 后就返回了</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;from ch2&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们需要控制某些操作的超时时间，那么就可以在时间到了之后，做一些清理操作，然后终止一些工作，最后退出协程。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>go 里面通过 <code>chan</code>
+来实现协程之间的通信，<code>chan</code>
+大概就是一个协程给另一个协程发送信息的代理。</li>
+<li>多线程程序执行的时候，因为有 CPU
+缓存，然后需要对同一块内存进行并发读写，可能会导致数据竞争的问题。</li>
+<li>在很多语言中，都提供了锁的机制，来保护一片内存同一时刻只能一个线程操作，比如
+java 里面的 <code>synchronized</code> 关键字。</li>
+<li>go 里面很多情况下，在不同协程之间通信都是使用 <code>chan</code>
+来实现的。</li>
+<li>进程会有阻塞态、运行态，go
+里面的协程也有阻塞的状态，当需要的资源得不到满足的时候就会陷入阻塞。比如等待别的协程往
+<code>chan</code> 里面写入数据。</li>
+<li><code>chan</code> 的几种常见操作：<code>make</code>
+创建、<code>&lt;-chan</code> 读、<code>chan&lt;-</code>
+写、<code>len</code> 获取 <code>chan</code>
+中未读取的元素个数、<code>cap</code> 获取 <code>chan</code>
+的缓冲区容量。</li>
+<li><code>chan</code> <strong>类型</strong>上不加 <code>&lt;-</code>
+表示是一个可读可写的 <code>chan</code>，<code>&lt;-chan T</code>
+表示只读 <code>chan</code>，<code>chan&lt;- T</code> 表示只写
+<code>chan</code>，双向的 <code>chan</code> 可以转换为只读或者只写
+<code>chan</code>，但是反过来不行，只读 <code>chan</code> 和只写
+<code>chan</code> 之间也不能相互转换。</li>
+<li>协程的阻塞跟不阻塞，很简单的判断方式就是，发送的时候就看有没有地方能接得住，接收的时候就看有没有数据可以拿，没有则陷入阻塞。</li>
+<li><code>&lt;-</code> 是 go
+语言在设计层面提供给开发者的一种语法糖，<code>chan</code>
+底层是一个很复杂的结构体。</li>
+<li><code>for...range</code> 结构在遍历 <code>chan</code>
+的时候不用判断返回值是否有效，因为返回值无效的时候会退出循环。</li>
+<li>我们可以通过 <code>select</code> 来同时等待多个 <code>chan</code>
+的操作返回。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/23/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20unsafe/" rel="prev" title="深入理解 go unsafe">
+                  <i class="fa fa-angle-left"></i> 深入理解 go unsafe
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/11/30/golang/go%20chan%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" rel="next" title="go chan 设计与实现">
+                  go chan 设计与实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

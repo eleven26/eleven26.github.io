@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"eleven26.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文基于 Go 1.19。  go 里面的 WaitGroup 是非常常见的一种并发控制方式，它可以让我们的代码等待一组 goroutine 的结束。 比如在主协程中等待几个子协程去做一些耗时的操作，如发起几个 HTTP 请求，然后等待它们的结果。 WaitGroup 示例 下面的代码展示了一个 goroutine 等待另外 2 个 goroutine 结束的例子： 12345678910111">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 go sync.Waitgroup">
+<meta property="og:url" content="https://eleven26.github.io/2022/12/27/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.WaitGroup/index.html">
+<meta property="og:site_name" content="eleven26">
+<meta property="og:description" content="本文基于 Go 1.19。  go 里面的 WaitGroup 是非常常见的一种并发控制方式，它可以让我们的代码等待一组 goroutine 的结束。 比如在主协程中等待几个子协程去做一些耗时的操作，如发起几个 HTTP 请求，然后等待它们的结果。 WaitGroup 示例 下面的代码展示了一个 goroutine 等待另外 2 个 goroutine 结束的例子： 12345678910111">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://eleven26.github.io/images/go/sync/waitgroup_1.png">
+<meta property="article:published_time" content="2022-12-27T12:28:30.000Z">
+<meta property="article:modified_time" content="2022-12-28T00:39:13.000Z">
+<meta property="article:author" content="eleven26">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://eleven26.github.io/images/go/sync/waitgroup_1.png">
+
+
+<link rel="canonical" href="https://eleven26.github.io/2022/12/27/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.WaitGroup/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://eleven26.github.io/2022/12/27/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.WaitGroup/","path":"2022/12/27/golang/深入理解 go sync.WaitGroup/","title":"深入理解 go sync.Waitgroup"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入理解 go sync.Waitgroup | eleven26</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">eleven26</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">100</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">346</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#waitgroup-%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">WaitGroup 示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#waitgroup-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">WaitGroup 基本原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86"><span class="nav-number">3.</span> <span class="nav-text">背景知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#waitgroup-%E4%B8%AD%E7%9A%84%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">3.2.</span> <span class="nav-text">WaitGroup 中的信号量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#waitgroup-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">WaitGroup 数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nocopy"><span class="nav-number">4.1.</span> <span class="nav-text">noCopy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#state"><span class="nav-number">4.2.</span> <span class="nav-text">state</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sema"><span class="nav-number">4.3.</span> <span class="nav-text">sema</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#waitgroup-%E7%9A%84%E4%B8%89%E4%B8%AA%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">WaitGroup 的三个基本操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#waitgroup-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.</span> <span class="nav-text">WaitGroup 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.1.</span> <span class="nav-text">Add 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#done-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.2.</span> <span class="nav-text">Done 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.3.</span> <span class="nav-text">Wait 的实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">eleven26</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/eleven26" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;eleven26" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://eleven26.github.io/2022/12/27/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.WaitGroup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="eleven26">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="eleven26">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入理解 go sync.Waitgroup | eleven26">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入理解 go sync.Waitgroup
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-12-27 20:28:30" itemprop="dateCreated datePublished" datetime="2022-12-27T20:28:30+08:00">2022-12-27</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>本文基于 Go 1.19。</p>
+</blockquote>
+<p>go 里面的 <code>WaitGroup</code>
+是非常常见的一种并发控制方式，它可以让我们的代码等待一组 goroutine
+的结束。 比如在主协程中等待几个子协程去做一些耗时的操作，如发起几个 HTTP
+请求，然后等待它们的结果。</p>
+<h2 id="waitgroup-示例">WaitGroup 示例</h2>
+<p>下面的代码展示了一个 goroutine 等待另外 2 个 goroutine
+结束的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestWaitgroup</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	<span class="comment">// 计数器 +2</span></span><br><span class="line">	wg.Add(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		sendHttpRequest(<span class="string">&quot;https://baidu.com&quot;</span>)</span><br><span class="line">		<span class="comment">// 计数器 -1</span></span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		sendHttpRequest(<span class="string">&quot;https://baidu.com&quot;</span>)</span><br><span class="line">		<span class="comment">// 计数器 -1</span></span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 阻塞。计数器为 0 的时候，Wait 返回</span></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发起 HTTP GET 请求</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendHttpRequest</span><span class="params">(url <span class="type">string</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	method := <span class="string">&quot;GET&quot;</span></span><br><span class="line"></span><br><span class="line">	client := &amp;http.Client&#123;&#125;</span><br><span class="line">	req, err := http.NewRequest(method, url, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	res, err := client.Do(req)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> res.Body.Close()</span><br><span class="line"></span><br><span class="line">	body, err := io.ReadAll(res.Body)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="type">string</span>(body), err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们做了如下事情：</p>
+<ul>
+<li>定义了一个 <code>WaitGroup</code> 对象 <code>wg</code>，调用
+<code>wg.Add(2)</code> 将其计数器 <code>+2</code>。</li>
+<li>启动两个新的 goroutine，在这两个 goroutine 中，使用
+<code>sendHttpRequest</code> 函数发起了一个 HTTP 请求。</li>
+<li>在 HTTP 请求返回之后，调用 <code>wg.Done</code> 将计数器
+<code>-1</code>。</li>
+<li>在函数的最后，我们调用了 <code>wg.Wait</code>，这个方法会阻塞，直到
+<code>WaitGroup</code> 的计数器的值为 0 才会解除阻塞状态。</li>
+</ul>
+<h2 id="waitgroup-基本原理">WaitGroup 基本原理</h2>
+<p><code>WaitGroup</code>
+内部通过一个计数器来统计有多少协程被等待。这个计数器的值在我们启动
+goroutine 之前先写入（使用 <code>Add</code> 方法）， 然后在 goroutine
+结束的时候，将这个计数器减 1（使用 <code>Done</code>
+方法）。除此之外，在启动这些 goroutine 的协程中， 会调用
+<code>Wait</code> 来进行等待，在 <code>Wait</code>
+调用的地方会阻塞，直到 <code>WaitGroup</code> 内部的计数器减到 0。
+<strong>也就实现了等待一组 goroutine 的目的</strong></p>
+<h2 id="背景知识">背景知识</h2>
+<p>在操作系统中，有多种实现进程/线程间同步的方式，如：<code>test_and_set</code>、<code>compare_and_swap</code>、互斥锁等。
+除此之外，还有一种是<strong>信号量</strong>，它的功能类似于互斥锁，但是它能提供更为高级的方法，以便进程能够同步活动。</p>
+<h3 id="信号量">信号量</h3>
+<p>一个<strong>信号量（semaphore）S</strong>是一个整型变量，它除了初始化外只能通过两个标准的原子操作：<code>wait()</code>
+和 <code>signal()</code> 来访问。 操作 <code>wait()</code> 最初称为
+<code>P</code>（荷兰语 <code>proberen</code>，测试）；操作
+<code>signal()</code> 最初称为 <code>V</code>（荷兰语
+<code>verhogen</code>，增加），可按如下来定义 <code>wait()</code>：</p>
+<blockquote>
+<p>PV 原语。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wait(S) &#123;</span><br><span class="line">    while (S &lt;= 0)</span><br><span class="line">        ; // 忙等待</span><br><span class="line">    S--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可按如下来定义 <code>signal()</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">signal(S) &#123;</span><br><span class="line">    S++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>wait()</code> 和 <code>signal()</code>
+操作中，信号量整数值的修改应不可分割地执行。也就是说，当一个进程修改信号量值时，没有其他进程能够同时修改同一信号量的值。</p>
+<p>简单来说，信号量实现的功能是：</p>
+<ul>
+<li>当信号量&gt;0 时，表示资源可用，则 <code>wait</code>
+会对信号量执行减 1 操作。</li>
+<li>当信号量&lt;=0
+时，表示资源暂时不可用，获取信号量时，当前的进程/线程会阻塞，直到信号量为正时被唤醒。</li>
+</ul>
+<h3 id="waitgroup-中的信号量">WaitGroup 中的信号量</h3>
+<p>在 <code>WaitGroup</code> 中，使用了信号量来实现 goroutine
+的阻塞以及唤醒：</p>
+<ul>
+<li>在调用 <code>Wait</code> 的地方，goroutine
+会陷入阻塞，直到信号量大于等于 0 的时候解除阻塞状态，得以继续执行。</li>
+<li>在调用 <code>Done</code> 的时候，如果 <code>WaitGroup</code>
+内的等待协程的计数器减到 0
+的时候，信号量会进行递增，这样那些阻塞的协程会进行执行下去。</li>
+</ul>
+<h2 id="waitgroup-数据结构">WaitGroup 数据结构</h2>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> WaitGroup <span class="keyword">struct</span> &#123;</span><br><span class="line">	noCopy noCopy</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 高 32 位为计数器，低 32 位为等待者数量</span></span><br><span class="line">	state atomic.Uint64</span><br><span class="line">	sema  <span class="type">uint32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="nocopy">noCopy</h3>
+<p>我们发现，<code>WaitGroup</code> 中有一个字段
+<code>noCopy</code>，顾名思义，它的目的是防止复制。
+这个字段在运行时是没有什么影响的，但是我们通过 <code>go vet</code>
+可以发现我们对 <code>WaitGroup</code> 的复制。
+为什么不能复制呢？因为一旦复制，<code>WaitGroup</code>
+内的计数器就不再准确了，比如下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">(wg sync.WaitGroup)</span></span> &#123;</span><br><span class="line">	wg.Done()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestWaitGroup</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	test(wg)</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>go 里面的函数参数传递是值传递。调用 test(wg) 的时候将
+<code>WaitGroup</code> 复制了一份。</p>
+</blockquote>
+<p>在这个例子中，程序会永远阻塞下去，因为 <code>test</code> 中调用
+<code>wg.Done()</code> 的时候，只是将 <code>WaitGroup</code>
+副本的计数器减去了 1， 而 <code>TestWaitGroup</code> 里面的
+<code>WaitGroup</code> 的计数器并没有发生改变，因此 <code>Wait</code>
+会永远阻塞。</p>
+<p>我们如果需要将 <code>WaitGroup</code> 作为参数，请传递指针：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">(wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">	wg.Done()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>传递指针之后，我们在 <code>test</code> 中调用 <code>wg.Done()</code>
+修改的就是 <code>TestWaitGroup</code> 里面同一个
+<code>WaitGroup</code>。 从而，<code>Wait</code> 方法可以正常返回。</p>
+<h3 id="state">state</h3>
+<p><code>WaitGroup</code> 里面的 <code>state</code> 是一个 64 位的
+<code>atomic.Uint64</code> 类型，它的高 32 位用来保存
+<code>counter</code>（也就是上面说的计数器），低 32 位用来保存
+<code>waiter</code>（也就是阻塞在 <code>Wait</code> 上的 goroutine
+数量。）</p>
+<figure>
+<img src="/images/go/sync/waitgroup_1.png" alt="waitgroup_1" />
+<figcaption aria-hidden="true">waitgroup_1</figcaption>
+</figure>
+<h3 id="sema">sema</h3>
+<p><code>WaitGroup</code> 通过 <code>sema</code> 来记录信号量：</p>
+<ul>
+<li><code>runtime_Semrelease</code> 表示将信号量递增（对应信号量中的
+<code>signal</code> 操作）</li>
+<li><code>runtime_Semacquire</code> 表示将信号量递减（对应信号量中的
+<code>wait</code> 操作）</li>
+</ul>
+<p>简单来说，在调用 <code>runtime_Semacquire</code> 的时候 goroutine
+会阻塞，而调用 <code>runtime_Semrelease</code>
+会唤醒阻塞在同一个信号量上的 goroutine。</p>
+<h2 id="waitgroup-的三个基本操作">WaitGroup 的三个基本操作</h2>
+<ul>
+<li><code>Add</code>: 这会将 <code>WaitGroup</code> 里面的
+<code>counter</code> 加上一个整数（也就是传递给 <code>Add</code>
+的函数参数）。</li>
+<li><code>Done</code>: 这会将 <code>WaitGroup</code> 里面的
+<code>counter</code> 减去 1。</li>
+<li><code>Wait</code>: 这会将 <code>WaitGroup</code> 里面的
+<code>waiter</code> 加上 1，并且调用 <code>Wait</code>
+的地方会阻塞。（<strong>有可能会有多个 goroutine 等待一个
+<code>WaitGroup</code></strong>）</li>
+</ul>
+<h2 id="waitgroup-的实现">WaitGroup 的实现</h2>
+<h3 id="add-的实现">Add 的实现</h3>
+<p><code>Add</code> 做了下面两件事：</p>
+<ol type="1">
+<li>将 <code>delta</code> 加到 <code>state</code> 的高 32 位上</li>
+<li>如果 <code>counter</code> 为 <code>0</code> 了，并且
+<code>waiter</code> 大于 0，表示所有被等待的 goroutine
+都完成了，而还有在等待的 goroutine，这会唤醒那些阻塞在 <code>Wait</code>
+上的 goroutine。</li>
+</ol>
+<p>源码实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span></span> Add(delta <span class="type">int</span>) &#123;</span><br><span class="line">	<span class="comment">// wg.state 的计数器加上 delta</span></span><br><span class="line">	<span class="comment">//（加到 state 的高 32 上）</span></span><br><span class="line">	state := wg.state.Add(<span class="type">uint64</span>(delta) &lt;&lt; <span class="number">32</span>) <span class="comment">// 高 32 位加上 delta</span></span><br><span class="line">	v := <span class="type">int32</span>(state &gt;&gt; <span class="number">32</span>)                    <span class="comment">// 高 32 位（counter）</span></span><br><span class="line">	w := <span class="type">uint32</span>(state)                         <span class="comment">// 低 32 位（waiter）</span></span><br><span class="line">	<span class="comment">// 计数器不能为负数（加上 delta 之后不能为负数，最小只能到 0）</span></span><br><span class="line">	<span class="keyword">if</span> v &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;sync: negative WaitGroup counter&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 正常使用情况下，是先调用 Add 再调用 Wait 的，这种情况下，w 是 0，v &gt; 0</span></span><br><span class="line">	<span class="keyword">if</span> w != <span class="number">0</span> &amp;&amp; delta &gt; <span class="number">0</span> &amp;&amp; v == <span class="type">int32</span>(delta) &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;sync: WaitGroup misuse: Add called concurrently with Wait&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// v &gt; 0，计数器大于 0</span></span><br><span class="line">	<span class="comment">// w == 0，没有在 Wait 的协程</span></span><br><span class="line">	<span class="comment">// 说明还没有到唤醒 waiter 的时候</span></span><br><span class="line">	<span class="keyword">if</span> v &gt; <span class="number">0</span> || w == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Add 负数的时候，v 会减去对应的数值，减到最后 v 是 0。</span></span><br><span class="line">	<span class="comment">// 计数器是 0，并且有等待的协程，现在要唤醒这些协程。</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 存在等待的协程时，goroutine 已将计数器设置为0。</span></span><br><span class="line">	<span class="comment">// 现在不可能同时出现状态突变：</span></span><br><span class="line">	<span class="comment">// - Add 不能与 Wait 同时发生，</span></span><br><span class="line">	<span class="comment">// - 如果看到计数器==0，则 Wait 不会增加等待的协程。</span></span><br><span class="line">	<span class="comment">// 仍然要做一个廉价的健康检查，以检测 WaitGroup 的误用。</span></span><br><span class="line">	<span class="keyword">if</span> wg.state.Load() != state &#123; <span class="comment">// 不能在 Add 的同时调用 Wait</span></span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;sync: WaitGroup misuse: Add called concurrently with Wait&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 将等待的协程数量设置为 0。</span></span><br><span class="line">	wg.state.Store(<span class="number">0</span>)</span><br><span class="line">	<span class="keyword">for</span> ; w != <span class="number">0</span>; w-- &#123;</span><br><span class="line">		<span class="comment">// signal，调用 Wait 的地方会解除阻塞</span></span><br><span class="line">		runtime_Semrelease(&amp;wg.sema, <span class="literal">false</span>, <span class="number">0</span>) <span class="comment">// goyield</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="done-的实现">Done 的实现</h3>
+<p><code>WaitGroup</code> 里的 <code>Done</code> 其实只是对
+<code>Add</code> 的调用，但是它的效果是，<strong>将计数器的值减去
+<code>1</code></strong>。
+背后的含义是：<strong>一个被等待的协程执行完毕了</strong>。</p>
+<h3 id="wait-的实现">Wait 的实现</h3>
+<p><code>Wait</code> 主要功能是阻塞当前的协程：</p>
+<ol type="1">
+<li><code>Wait</code> 会先判断计数器是否为 <code>0</code>，为
+<code>0</code> 说明没有任何需要等待的协程，那么就可以直接返回了。</li>
+<li>如果计数器还不是 <code>0</code>，说明有协程还没执行完，那么调用
+<code>Wait</code> 的地方就需要被阻塞起来，等待所有的协程完成。</li>
+</ol>
+<p>源码实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span></span> Wait() &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">// 获取当前计数器</span></span><br><span class="line">		state := wg.state.Load()</span><br><span class="line">		<span class="comment">// 计数器</span></span><br><span class="line">		v := <span class="type">int32</span>(state &gt;&gt; <span class="number">32</span>)</span><br><span class="line">		<span class="comment">// waiter 数量</span></span><br><span class="line">		w := <span class="type">uint32</span>(state)</span><br><span class="line">		<span class="comment">// v 为 0，不需要等待，直接返回</span></span><br><span class="line">		<span class="keyword">if</span> v == <span class="number">0</span> &#123;</span><br><span class="line">			<span class="comment">// 计数器是 0，不需要等待</span></span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 增加 waiter 数量。</span></span><br><span class="line">		<span class="comment">// 调用一次 Wait，waiter 数量会加 1。</span></span><br><span class="line">		<span class="keyword">if</span> wg.state.CompareAndSwap(state, state+<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="comment">// 这会阻塞，直到 sema (信号量)大于 0</span></span><br><span class="line">			runtime_Semacquire(&amp;wg.sema) <span class="comment">// goparkunlock</span></span><br><span class="line">			<span class="comment">// state 不等 0</span></span><br><span class="line">			<span class="comment">// wait 还没有返回又继续使用了 WaitGroup</span></span><br><span class="line">			<span class="keyword">if</span> wg.state.Load() != <span class="number">0</span> &#123;</span><br><span class="line">				<span class="built_in">panic</span>(<span class="string">&quot;sync: WaitGroup is reused before previous Wait has returned&quot;</span>)</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 解除阻塞状态了，可以返回了</span></span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 状态没有修改成功（state 没有成功 +1），开始下一次尝试。</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<ul>
+<li><code>WaitGroup</code>
+使用了信号量来实现了并发资源控制，<code>sema</code>
+字段表示信号量。</li>
+<li>使用 <code>runtime_Semacquire</code> 会使得 goroutine
+阻塞直到计数器减少至 <code>0</code>，而使用
+<code>runtime_Semrelease</code>
+会使得信号量递增，这等于是通知之前阻塞在信号量上的协程，告诉它们可以继续执行了。</li>
+<li><code>WaitGroup</code>
+作为参数传递的时候，需要传递指针作为参数，否则在被调用函数内对
+<code>Add</code> 或者 <code>Done</code> 的调用，在 <code>caller</code>
+里面调用的 <code>Wait</code> 会观测不到。</li>
+<li><code>WaitGroup</code> 使用一个 64 位的数来保存计数器（高 32 位）和
+<code>waiter</code>（低 32 位，正在等待的协程的数量）。</li>
+<li><code>WaitGroup</code> 使用 <code>Add</code> 增加计数器，使用
+<code>Done</code> 来将计数器减 <code>1</code>，使用 <code>Wait</code>
+来等待 goroutine。<code>Wait</code> 会阻塞直到计数器减少到
+<code>0</code>。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/26/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20sync.Once/" rel="prev" title="深入理解 go sync.Once">
+                  <i class="fa fa-angle-left"></i> 深入理解 go sync.Once
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/12/31/golang/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20go%20reflect%20-%20%E5%8F%8D%E5%B0%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/" rel="next" title="深入理解 go reflect - 反射基本原理">
+                  深入理解 go reflect - 反射基本原理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">eleven26</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/eleven26" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
